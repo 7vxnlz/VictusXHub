@@ -220,6 +220,35 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     }
 
     [Fact]
+    public void HpDiagnosticRuntimeActions_UseStaClipboardAndOmitRedundantMainButton()
+    {
+        string settings = ReadRepositoryFile("app", "Settings.cs");
+        string program = ReadRepositoryFile("app", "Program.cs").Replace("\r\n", "\n");
+
+        Assert.Contains("[STAThread]\n        public static void Main(string[] args)", program, StringComparison.Ordinal);
+        Assert.Contains("Clipboard.SetText(BuildHpDiagnosticSummary());", settings, StringComparison.Ordinal);
+        Assert.Contains("HpDiagnosticDashboardFormatter.BuildCompleteSummary", settings, StringComparison.Ordinal);
+        Assert.DoesNotContain("CreateHpDiagnosticActionButton(\"Main\"", settings, StringComparison.Ordinal);
+        Assert.DoesNotContain("ButtonHpDiagnosticMain_Click", settings, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void HpDiagnosticLiveSummary_UpdatesValueLabelsWithoutRebuildingTheTable()
+    {
+        string settings = ReadRepositoryFile("app", "Settings.cs");
+        int start = settings.IndexOf("private void PopulateHpUserDiagnosticSummary", StringComparison.Ordinal);
+        int end = settings.IndexOf("private void UpdateHpDiagnosticHealthSummary", start, StringComparison.Ordinal);
+        Assert.True(start >= 0 && end > start);
+        string updateMethod = settings[start..end];
+
+        Assert.Contains("hpUserDiagnosticValueLabels", updateMethod, StringComparison.Ordinal);
+        Assert.Contains("TryGetValue", updateMethod, StringComparison.Ordinal);
+        Assert.Contains("if (!string.Equals(valueLabel.Text, row.Value, StringComparison.Ordinal))", updateMethod, StringComparison.Ordinal);
+        Assert.DoesNotContain("Controls.Clear()", updateMethod, StringComparison.Ordinal);
+        Assert.DoesNotContain("RowStyles.Clear()", updateMethod, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void HpMode_UsesDisabledInheritedShellWithFooterDiagnosticAction()
     {
         string settings = ReadRepositoryFile("app", "Settings.cs");

@@ -37,8 +37,8 @@ namespace GHelper
         TableLayoutPanel? hpReadOnlyTelemetryDetails;
         Panel? hpReadOnlyTelemetryAdvanced;
         RButton? hpReadOnlyTelemetryAdvancedToggle;
-        string? hpLastUserDiagnosticSummarySignature;
         HpDiagnosticUserSummaryInput hpCurrentUserDiagnosticSummary = new();
+        readonly Dictionary<(string Section, string Label), Label> hpUserDiagnosticValueLabels = [];
         Label? hpReadOnlyTelemetrySource;
         Label? hpReadOnlyTelemetryHealth;
         HpDiagnosticReportLoadResult? hpCachedDiagnosticReport;
@@ -842,13 +842,13 @@ namespace GHelper
                 Padding = new Padding(10, 0, 10, 5),
                 WrapContents = true
             };
-            actions.Controls.Add(CreateHpDiagnosticActionButton("Main", ButtonHpDiagnosticMain_Click));
             actions.Controls.Add(CreateHpDiagnosticActionButton("Copy summary", ButtonHpDiagnosticCopy_Click));
             actions.Controls.Add(CreateHpDiagnosticActionButton("Reload cached report", ButtonHpDiagnosticReload_Click));
             actions.Controls.Add(CreateHpDiagnosticActionButton("Open diagnostic folder", ButtonHpDiagnosticOpenReportFolder_Click));
             actions.Controls.Add(CreateHpDiagnosticActionButton("Export diagnostic report", ButtonHpDiagnosticExport_Click));
 
             hpReadOnlyTelemetrySummary = userSummary;
+            hpUserDiagnosticValueLabels.Clear();
             hpReadOnlyTelemetryDetails = details;
             hpReadOnlyTelemetryAdvanced = advancedPanel;
             ReloadHpCachedDiagnosticReport();
@@ -867,11 +867,6 @@ namespace GHelper
         private void ButtonHpDiagnostic_Click(object? sender, EventArgs e)
         {
             ShowHpReadOnlyDiagnostic();
-        }
-
-        private void ButtonHpDiagnosticMain_Click(object? sender, EventArgs e)
-        {
-            ShowHpReadOnlyMainShell();
         }
 
         private void ButtonHpDiagnosticAdvanced_Click(object? sender, EventArgs e)
@@ -1116,22 +1111,33 @@ namespace GHelper
             if (hpReadOnlyTelemetrySummary is null) return;
 
             IReadOnlyList<HpDiagnosticDashboardSection> sections = HpDiagnosticDashboardFormatter.BuildUserSummary(input);
-            string signature = string.Join(Environment.NewLine,
-                sections.SelectMany(section => section.Rows).Select(row => row.Label + "=" + row.Value));
-            if (string.Equals(hpLastUserDiagnosticSummarySignature, signature, StringComparison.Ordinal)) return;
-
-            hpLastUserDiagnosticSummarySignature = signature;
-            hpReadOnlyTelemetrySummary.SuspendLayout();
-            hpReadOnlyTelemetrySummary.Controls.Clear();
-            hpReadOnlyTelemetrySummary.RowStyles.Clear();
-            hpReadOnlyTelemetrySummary.RowCount = 0;
-            foreach (HpDiagnosticDashboardSection section in sections)
+            if (hpUserDiagnosticValueLabels.Count == 0)
             {
-                AddHpTelemetrySection(hpReadOnlyTelemetrySummary, section.Title);
-                foreach (HpDiagnosticDashboardRow row in section.Rows)
-                    AddHpTelemetryRow(hpReadOnlyTelemetrySummary, row);
+                hpReadOnlyTelemetrySummary.SuspendLayout();
+                foreach (HpDiagnosticDashboardSection section in sections)
+                {
+                    AddHpTelemetrySection(hpReadOnlyTelemetrySummary, section.Title);
+                    foreach (HpDiagnosticDashboardRow row in section.Rows)
+                    {
+                        hpUserDiagnosticValueLabels[(section.Title, row.Label)] =
+                            AddHpTelemetryRow(hpReadOnlyTelemetrySummary, row);
+                    }
+                }
+                hpReadOnlyTelemetrySummary.ResumeLayout();
+                return;
             }
-            hpReadOnlyTelemetrySummary.ResumeLayout();
+
+            foreach (HpDiagnosticDashboardSection section in sections)
+            foreach (HpDiagnosticDashboardRow row in section.Rows)
+            {
+                if (!hpUserDiagnosticValueLabels.TryGetValue((section.Title, row.Label), out Label? valueLabel)) continue;
+                if (!string.Equals(valueLabel.Text, row.Value, StringComparison.Ordinal))
+                    valueLabel.Text = row.Value;
+
+                Color valueColor = GetHpDiagnosticValueColor(row.Status);
+                if (valueLabel.ForeColor != valueColor)
+                    valueLabel.ForeColor = valueColor;
+            }
         }
 
         private void UpdateHpDiagnosticHealthSummary(HpDiagnosticDashboardInput input)
@@ -1237,7 +1243,7 @@ namespace GHelper
             details.SetColumnSpan(label, 2);
         }
 
-        private void AddHpTelemetryRow(TableLayoutPanel details, HpDiagnosticDashboardRow row)
+        private Label AddHpTelemetryRow(TableLayoutPanel details, HpDiagnosticDashboardRow row)
         {
             int layoutRow = details.RowCount++;
             details.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -1248,14 +1254,16 @@ namespace GHelper
                 Margin = new Padding(6, 2, 12, 2),
                 Text = row.Label + ":"
             }, 0, layoutRow);
-            details.Controls.Add(new Label
+            var valueLabel = new Label
             {
                 AutoSize = true,
                 ForeColor = GetHpDiagnosticValueColor(row.Status),
                 Margin = new Padding(0, 2, 0, 2),
                 MaximumSize = new Size(560, 0),
                 Text = row.Value
-            }, 1, layoutRow);
+            };
+            details.Controls.Add(valueLabel, 1, layoutRow);
+            return valueLabel;
         }
 
         private Color GetHpDiagnosticValueColor(HpDiagnosticDashboardStatus status)

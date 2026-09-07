@@ -15,7 +15,7 @@ Updated: 2026-09-08
 ## Verification Baseline
 
 - Branch: `main` tracking `origin/main`.
-- Last verified: `dotnet build VictusX.sln --no-restore` passed with zero warnings; `dotnet test VictusX.sln --no-build` passed 425/425. No hardware, vendor-write, or real display-mode command was run.
+- Last verified: `dotnet build VictusX.sln --no-restore` passed with zero warnings; `dotnet test VictusX.sln --no-build` passed 427/427. No hardware, vendor-write, or real display-mode command was run.
 - NU1900 is not suppressed. The last network-capable audit found no vulnerable packages; repeat against the exact release candidate.
 
 ## Context Routing

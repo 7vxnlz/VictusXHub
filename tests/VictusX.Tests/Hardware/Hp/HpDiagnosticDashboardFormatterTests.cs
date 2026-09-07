@@ -22,10 +22,12 @@ public sealed class HpDiagnosticDashboardFormatterTests
             RefreshRate = "144Hz",
             CpuTemperature = "Unavailable",
             FanRpm = "Unavailable",
+            PerformanceMode = "Unavailable",
             GpuSwitchingCapability = "Supported",
-            KeyboardBacklightCapability = "Supported, state unavailable",
-            BatteryCareCapability = "Unavailable",
-            FanControlStatus = "NO-GO"
+            KeyboardBacklightCapability = "Supported",
+            BatteryCareCapability = "Supported · Enabled",
+            FanControlStatus = "Blocked",
+            DisplayControlStatus = "Supported"
         });
 
         Assert.Equal(["Device", "Live status", "Capabilities"], summary.Select(section => section.Title));
@@ -35,12 +37,19 @@ public sealed class HpDiagnosticDashboardFormatterTests
         Assert.Contains(device.Rows, row => row.Label == "SKU" && row.Value == "7Z5Z2EA#AB8");
         Assert.Contains(device.Rows, row => row.Label == "Fan count" && row.Value == "2 fans");
         Assert.Contains(device.Rows, row => row.Label == "Thermal policy" && row.Value == "V1");
-        Assert.Contains(live.Rows, row => row.Label == "CPU Load" && row.Value == "24%" && row.Status == HpDiagnosticDashboardStatus.Ready);
-        Assert.Contains(live.Rows, row => row.Label == "Refresh Rate" && row.Value == "144Hz" && row.Status == HpDiagnosticDashboardStatus.Ready);
-        Assert.Contains(live.Rows, row => row.Label == "CPU Temp" && row.Value == "Unavailable" && row.Status == HpDiagnosticDashboardStatus.Normal);
+        Assert.Equal(["Model", "SKU", "BIOS", "HP/Victus detection", "Thermal policy", "Fan count"], device.Rows.Select(row => row.Label));
+        Assert.Equal(["CPU load", "CPU temperature", "GPU temperature", "Battery / AC / charging", "Refresh rate", "Fan RPM"], live.Rows.Select(row => row.Label));
+        Assert.Equal(["Performance Mode", "GPU Switching", "Keyboard Lighting", "Battery Care", "Fan Control", "Display Control"], capabilities.Rows.Select(row => row.Label));
+        Assert.Contains(live.Rows, row => row.Label == "CPU load" && row.Value == "24%" && row.Status == HpDiagnosticDashboardStatus.Ready);
+        Assert.Contains(live.Rows, row => row.Label == "Refresh rate" && row.Value == "144Hz" && row.Status == HpDiagnosticDashboardStatus.Ready);
+        Assert.Contains(live.Rows, row => row.Label == "CPU temperature" && row.Value == "Unavailable" && row.Status == HpDiagnosticDashboardStatus.Normal);
         Assert.Contains(live.Rows, row => row.Label == "Fan RPM" && row.Value == "Unavailable" && row.Status == HpDiagnosticDashboardStatus.Normal);
-        Assert.Contains(capabilities.Rows, row => row.Label == "Fan Control" && row.Value == "NO-GO" && row.Status == HpDiagnosticDashboardStatus.Blocked);
+        Assert.Contains(capabilities.Rows, row => row.Label == "Performance Mode" && row.Value == "Unavailable" && row.Status == HpDiagnosticDashboardStatus.Normal);
         Assert.Contains(capabilities.Rows, row => row.Label == "GPU Switching" && row.Value == "Supported" && row.Status == HpDiagnosticDashboardStatus.Ready);
+        Assert.Contains(capabilities.Rows, row => row.Label == "Keyboard Lighting" && row.Value == "Supported" && row.Status == HpDiagnosticDashboardStatus.Ready);
+        Assert.Contains(capabilities.Rows, row => row.Label == "Battery Care" && row.Value == "Supported · Enabled" && row.Status == HpDiagnosticDashboardStatus.Ready);
+        Assert.Contains(capabilities.Rows, row => row.Label == "Fan Control" && row.Value == "Blocked" && row.Status == HpDiagnosticDashboardStatus.Blocked);
+        Assert.Contains(capabilities.Rows, row => row.Label == "Display Control" && row.Value == "Supported" && row.Status == HpDiagnosticDashboardStatus.Ready);
         Assert.DoesNotContain(summary.SelectMany(section => section.Rows), row => row.Label.Contains("Payload", StringComparison.OrdinalIgnoreCase));
         Assert.DoesNotContain(summary.SelectMany(section => section.Rows), row => row.Label.Contains("DeviceValidatedInputLength", StringComparison.Ordinal));
     }
@@ -55,6 +64,25 @@ public sealed class HpDiagnosticDashboardFormatterTests
         Assert.Contains(device.Rows, row => row.Label == "Fan count" && row.Value == "Unavailable");
         Assert.Contains(device.Rows, row => row.Label == "Thermal policy" && row.Value == "Unavailable");
         Assert.Contains(capabilities.Rows, row => row.Label == "GPU Switching" && row.Value == "Unavailable");
+        Assert.Contains(capabilities.Rows, row => row.Label == "Performance Mode" && row.Value == "Unavailable" && row.Status == HpDiagnosticDashboardStatus.Normal);
+        Assert.Contains(capabilities.Rows, row => row.Label == "Display Control" && row.Value == "Unavailable" && row.Status == HpDiagnosticDashboardStatus.Normal);
+    }
+
+    [Theory]
+    [InlineData(null, "Unavailable", HpDiagnosticDashboardStatus.Normal)]
+    [InlineData("Unavailable", "Unavailable", HpDiagnosticDashboardStatus.Normal)]
+    [InlineData("Not supported", "Not supported", HpDiagnosticDashboardStatus.Normal)]
+    [InlineData("Supported", "Supported", HpDiagnosticDashboardStatus.Ready)]
+    [InlineData("Supported · Enabled", "Supported · Enabled", HpDiagnosticDashboardStatus.Ready)]
+    public void UserSummary_UsesConsistentNeutralAndPositiveCapabilityStates(
+        string? value, string expectedValue, HpDiagnosticDashboardStatus expectedStatus)
+    {
+        HpDiagnosticDashboardSection capabilities = Assert.Single(
+            HpDiagnosticDashboardFormatter.BuildUserSummary(new() { DisplayControlStatus = value }),
+            section => section.Title == "Capabilities");
+
+        Assert.Contains(capabilities.Rows,
+            row => row.Label == "Display Control" && row.Value == expectedValue && row.Status == expectedStatus);
     }
 
     [Fact]
@@ -90,7 +118,7 @@ public sealed class HpDiagnosticDashboardFormatterTests
         IReadOnlyList<HpDiagnosticDashboardSection> sections = HpDiagnosticDashboardFormatter.BuildSections(new());
 
         HpDiagnosticDashboardSection metadata = Assert.Single(sections, section => section.Title == "Report metadata");
-        HpDiagnosticDashboardSection guidance = Assert.Single(sections, section => section.Title == "Missing-data guidance");
+        HpDiagnosticDashboardSection guidance = Assert.Single(sections, section => section.Title == "Diagnostic boundaries");
         Assert.Contains(metadata.Rows, row => row.Label == "Schema version" && row.Value == HpDiagnosticDashboardFormatter.LegacyReportSchema);
         Assert.Contains(guidance.Rows, row => row.Label == "Explicit probe data" && row.Value == HpDiagnosticStatusText.NormalHpModeDoesNotRunExplicitProbes);
         Assert.Contains(guidance.Rows, row => row.Label == "Developer-only tests" && row.Value == HpDiagnosticStatusText.ExplicitTestsAreDeveloperOnly);
@@ -112,17 +140,54 @@ public sealed class HpDiagnosticDashboardFormatterTests
     }
 
     [Fact]
-    public void SafetySection_KeepsNoGoAndNoControlWording()
+    public void AdvancedSections_PreserveSetFanMaxAndSetFanLevelSafetyEvidence()
     {
         IReadOnlyList<HpDiagnosticDashboardSection> sections = HpDiagnosticDashboardFormatter.BuildSections(new()
         {
             SetFanMaxWriteAllowed = "Blocked"
         });
 
-        HpDiagnosticDashboardSection safety = Assert.Single(sections, section => section.Title == "Safety / NO-GO status");
-        Assert.Contains(safety.Rows, row => row.Label == "Fan control" && row.Value == HpDiagnosticDashboardFormatter.FanControlStatus);
-        Assert.Contains(safety.Rows, row => row.Label == "SetFanMax" && row.Value == HpDiagnosticDashboardFormatter.SetFanMaxStatus);
-        Assert.Contains(safety.Rows, row => row.Label == "SetFanMax write allowed" && row.Value == "Blocked" && row.Status == HpDiagnosticDashboardStatus.Blocked);
+        HpDiagnosticDashboardSection setFanMax = Assert.Single(sections, section => section.Title == "SetFanMax evidence readiness");
+        HpDiagnosticDashboardSection setFanLevel = Assert.Single(sections, section => section.Title == "SetFanLevel research");
+        HpDiagnosticDashboardSection boundaries = Assert.Single(sections, section => section.Title == "Diagnostic boundaries");
+        Assert.Contains(setFanMax.Rows, row => row.Label == "Safety boundary" && row.Value == HpDiagnosticDashboardFormatter.SetFanMaxStatus && row.Status == HpDiagnosticDashboardStatus.Blocked);
+        Assert.Contains(setFanMax.Rows, row => row.Label == "Fan write allowed" && row.Value == "False - blocked" && row.Status == HpDiagnosticDashboardStatus.Blocked);
+        Assert.Contains(setFanLevel.Rows, row => row.Label == "Current status" && row.Value == HpDiagnosticDashboardFormatter.SetFanLevelStatus && row.Status == HpDiagnosticDashboardStatus.Blocked);
+        Assert.Contains(setFanLevel.Rows, row => row.Label == "Dry-run / preflight" && row.Value == HpDiagnosticDashboardFormatter.SetFanLevelDryRunStatus);
+        Assert.Contains(setFanLevel.Rows, row => row.Label == "DeviceValidatedInputLength" && row.Value == HpDiagnosticDashboardFormatter.SetFanMaxInputLengthUnset);
+        Assert.Contains(setFanLevel.Rows, row => row.Label == "Recovery evidence" && row.Value == HpDiagnosticDashboardFormatter.SetFanMaxEvidenceMissing);
+        Assert.Contains(boundaries.Rows, row => row.Label == "Hardware actions" && row.Value == HpDiagnosticDashboardFormatter.NoDiagnosticHardwareActions);
+    }
+
+    [Fact]
+    public void CompleteSummary_PreservesUserStatusLiveEvidenceAndAdvancedEvidence()
+    {
+        string summary = HpDiagnosticDashboardFormatter.BuildCompleteSummary(
+            new()
+            {
+                Model = "HP Victus 16-s0035nt",
+                BatteryCareCapability = "Supported · Enabled",
+                DisplayControlStatus = "Supported"
+            },
+            new()
+            {
+                RootWmiReadiness = "Ready",
+                SetFanMaxDeviceValidatedInputLength = null,
+                FanProofGapFanGetLevelDecision = HpFanProofGapAnalyzer.FanGetLevelRawOnly
+            },
+            "CPU temperature: Unavailable; no verified driver-free package sensor.\nFan RPM: Unavailable; no verified V1 tachometer source.");
+
+        Assert.Contains("User summary", summary, StringComparison.Ordinal);
+        Assert.Contains("Device" + Environment.NewLine + "Model: HP Victus 16-s0035nt", summary, StringComparison.Ordinal);
+        Assert.Contains("Battery Care: Supported · Enabled", summary, StringComparison.Ordinal);
+        Assert.Contains("Display Control: Supported", summary, StringComparison.Ordinal);
+        Assert.Contains("Advanced live-status evidence", summary, StringComparison.Ordinal);
+        Assert.Contains("no verified driver-free package sensor", summary, StringComparison.Ordinal);
+        Assert.Contains("Advanced diagnostics", summary, StringComparison.Ordinal);
+        Assert.Contains("WMI readiness" + Environment.NewLine + @"root\wmi: Ready", summary, StringComparison.Ordinal);
+        Assert.Contains("FanGetLevel interpretation: " + HpFanProofGapAnalyzer.FanGetLevelRawOnly, summary, StringComparison.Ordinal);
+        Assert.Contains("SetFanLevel research", summary, StringComparison.Ordinal);
+        Assert.Contains("DeviceValidatedInputLength: " + HpDiagnosticDashboardFormatter.SetFanMaxInputLengthUnset, summary, StringComparison.Ordinal);
     }
 
     [Fact]

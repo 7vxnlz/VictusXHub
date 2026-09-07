@@ -13,6 +13,7 @@ internal sealed record HpReadOnlyTelemetryDisplay(
     internal string FanRpm { get; init; } = "Unavailable";
     internal string BatteryCareStatus { get; init; } = "Unavailable";
     internal string BatteryCareCapability { get; init; } = "Unavailable";
+    internal string BatteryCareSummary { get; init; } = "Unavailable";
 }
 
 internal sealed record HpTrayTelemetryStatus(string Cpu, string Gpu, string Battery, string Screen)
@@ -81,7 +82,8 @@ internal static class HpReadOnlyTelemetryFormatter
             CpuTemperature = "Unavailable",
             FanRpm = "Unavailable",
             BatteryCareStatus = batteryCare,
-            BatteryCareCapability = FormatBatteryCareCapability(current.BatteryCare?.Result)
+            BatteryCareCapability = FormatBatteryCareCapability(current.BatteryCare?.Result),
+            BatteryCareSummary = FormatBatteryCareSummary(current.BatteryCare?.Result)
         };
     }
 
@@ -108,7 +110,16 @@ internal static class HpReadOnlyTelemetryFormatter
 
     internal static string FormatBatteryCareCapability(HpBatteryCareProbeResult? result) => result switch
     {
-        { Availability: HpBatteryCareAvailability.Supported, Enabled: not null } => "Available",
+        { Availability: HpBatteryCareAvailability.Supported, Enabled: not null } => "Supported",
+        { Availability: HpBatteryCareAvailability.Supported } => "Supported, state unavailable",
+        { Availability: HpBatteryCareAvailability.NotExposed } => "Not supported",
+        _ => "Unavailable"
+    };
+
+    internal static string FormatBatteryCareSummary(HpBatteryCareProbeResult? result) => result switch
+    {
+        { Availability: HpBatteryCareAvailability.Supported, Enabled: true } => "Supported · Enabled",
+        { Availability: HpBatteryCareAvailability.Supported, Enabled: false } => "Supported · Disabled",
         { Availability: HpBatteryCareAvailability.Supported } => "Supported, state unavailable",
         { Availability: HpBatteryCareAvailability.NotExposed } => "Not supported",
         _ => "Unavailable"

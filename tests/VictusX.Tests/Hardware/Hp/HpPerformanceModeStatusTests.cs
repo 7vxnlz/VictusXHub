@@ -15,6 +15,7 @@ public sealed class HpPerformanceModeStatusTests
         Assert.Equal((byte)expected, HpPerformanceModeStatus.ReferenceModeByte(mode));
         Assert.False(HpPerformanceModeStatus.CanSwitch);
         Assert.Equal(-1, HpPerformanceModeStatus.CurrentBaseMode);
+        Assert.Equal("Unavailable", HpPerformanceModeStatus.CapabilityText);
         Assert.Equal(HpTrayIconKind.Default, HpTrayIconSelector.Select(HpPerformanceModeStatus.CurrentBaseMode));
     }
 

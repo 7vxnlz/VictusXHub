@@ -34,6 +34,13 @@ internal readonly record struct HpKeyboardBacklightStatus(
         _ => "Unavailable"
     };
 
+    public string SupportText => Availability switch
+    {
+        HpKeyboardBacklightAvailability.SupportedStateUnavailable => "Supported",
+        HpKeyboardBacklightAvailability.NotSupported => "Not supported",
+        _ => "Unavailable"
+    };
+
     public string DisplayText => $"Keyboard lighting: {CapabilityText}";
 
     public string EvidenceText => Availability switch

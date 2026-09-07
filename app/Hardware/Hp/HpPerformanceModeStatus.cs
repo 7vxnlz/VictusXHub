@@ -5,7 +5,8 @@ internal static class HpPerformanceModeStatus
 {
     internal static bool CanSwitch => false;
     internal static int CurrentBaseMode => -1;
-    internal static string DisplayText => "Performance mode: Unavailable";
+    internal static string CapabilityText => "Unavailable";
+    internal static string DisplayText => "Performance mode: " + CapabilityText;
     internal static string Blocker => "HP mode switching is not validated on BIOS F.31; current mode and safe recovery are unverified.";
 
     // omencore V1 aliases; these are not validated target-device commands.

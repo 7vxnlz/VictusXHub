@@ -31,10 +31,12 @@ public sealed record HpDiagnosticUserSummaryInput
     public string? RefreshRate { get; init; }
     public string? CpuTemperature { get; init; }
     public string? FanRpm { get; init; }
+    public string? PerformanceMode { get; init; }
     public string? GpuSwitchingCapability { get; init; }
     public string? KeyboardBacklightCapability { get; init; }
     public string? BatteryCareCapability { get; init; }
     public string? FanControlStatus { get; init; }
+    public string? DisplayControlStatus { get; init; }
 }
 
 public sealed record HpDiagnosticDashboardHealthSummary(

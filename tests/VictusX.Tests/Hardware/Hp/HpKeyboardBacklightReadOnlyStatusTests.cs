@@ -15,6 +15,7 @@ public sealed class HpKeyboardBacklightReadOnlyStatusTests
         Assert.Null(status.IsOn);
         Assert.Null(status.BrightnessLevel);
         Assert.Equal("Supported, state unavailable", status.CapabilityText);
+        Assert.Equal("Supported", status.SupportText);
         Assert.Equal("Keyboard lighting: Supported, state unavailable", status.DisplayText);
         Assert.Contains("BIOS F.31 state is not validated", status.EvidenceText);
     }
@@ -30,6 +31,8 @@ public sealed class HpKeyboardBacklightReadOnlyStatusTests
 
         Assert.Equal(expected, status.DisplayText);
         Assert.Equal(expected.Replace("Keyboard lighting: ", ""), status.CapabilityText);
+        Assert.Equal(status.Availability == HpKeyboardBacklightAvailability.NotSupported ? "Not supported" : "Unavailable",
+            status.SupportText);
         Assert.Null(status.IsOn);
         Assert.Null(status.BrightnessLevel);
     }

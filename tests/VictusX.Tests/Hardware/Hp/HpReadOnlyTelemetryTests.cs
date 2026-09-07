@@ -342,7 +342,13 @@ public sealed class HpReadOnlyTelemetryTests
         Assert.Equal(expectedEnabled, result.Enabled);
         HpReadOnlyTelemetryDisplay display = HpReadOnlyTelemetryFormatter.Format(snapshot, Now, true, false);
         Assert.Equal(expectedText, display.BatteryCare.Replace("Battery care: ", ""));
-        Assert.Equal(expectedEnabled.HasValue ? "Available" : "Supported, state unavailable", display.BatteryCareCapability);
+        Assert.Equal(expectedEnabled.HasValue ? "Supported" : "Supported, state unavailable", display.BatteryCareCapability);
+        Assert.Equal(expectedEnabled switch
+        {
+            true => "Supported · Enabled",
+            false => "Supported · Disabled",
+            _ => "Supported, state unavailable"
+        }, display.BatteryCareSummary);
         Assert.Contains("numeric limits unavailable", display.Summary);
     }
 
@@ -361,9 +367,12 @@ public sealed class HpReadOnlyTelemetryTests
             BatteryCare = new(Now, result)
         };
 
-        Assert.Equal(expected, HpReadOnlyTelemetryFormatter.Format(snapshot, Now, true, false).BatteryCare);
+        HpReadOnlyTelemetryDisplay display = HpReadOnlyTelemetryFormatter.Format(snapshot, Now, true, false);
+        Assert.Equal(expected, display.BatteryCare);
         Assert.Equal(availability == HpBatteryCareAvailability.NotExposed ? "Not supported" : "Unavailable",
-            HpReadOnlyTelemetryFormatter.Format(snapshot, Now, true, false).BatteryCareCapability);
+            display.BatteryCareCapability);
+        Assert.Equal(availability == HpBatteryCareAvailability.NotExposed ? "Not supported" : "Unavailable",
+            display.BatteryCareSummary);
     }
 
     private sealed class FakeSource : IHpReadOnlyTelemetrySource

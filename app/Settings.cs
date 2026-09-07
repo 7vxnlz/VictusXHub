@@ -38,9 +38,9 @@ namespace GHelper
         Panel? hpReadOnlyTelemetryAdvanced;
         RButton? hpReadOnlyTelemetryAdvancedToggle;
         string? hpLastUserDiagnosticSummarySignature;
+        HpDiagnosticUserSummaryInput hpCurrentUserDiagnosticSummary = new();
         Label? hpReadOnlyTelemetrySource;
         Label? hpReadOnlyTelemetryHealth;
-        Label? hpReadOnlyTelemetryWarning;
         HpDiagnosticReportLoadResult? hpCachedDiagnosticReport;
         HpFanMaxPulseHistoryLoadResult? hpPulseHistory;
         HpFanProofGapAnalysis? hpFanProofGaps;
@@ -583,7 +583,7 @@ namespace GHelper
             if (hpLiveTelemetrySummary is not null)
                 hpLiveTelemetrySummary.Text = display.Summary + Environment.NewLine + keyboard.EvidenceText +
                     Environment.NewLine + gpuMode.EvidenceText + Environment.NewLine + HpPerformanceModeStatus.Blocker;
-            PopulateHpUserDiagnosticSummary(new HpDiagnosticUserSummaryInput
+            hpCurrentUserDiagnosticSummary = new HpDiagnosticUserSummaryInput
             {
                 Model = GetSnapshotOrReportValue(snapshot?.Model, hpCachedDiagnosticReport, "Model"),
                 Sku = GetSnapshotOrReportValue(snapshot?.SystemSku, hpCachedDiagnosticReport, "Sku"),
@@ -597,11 +597,14 @@ namespace GHelper
                 RefreshRate = display.RefreshRate,
                 CpuTemperature = display.CpuTemperature,
                 FanRpm = display.FanRpm,
+                PerformanceMode = HpPerformanceModeStatus.CapabilityText,
                 GpuSwitchingCapability = gpuMode.SwitchingCapabilityText,
-                KeyboardBacklightCapability = keyboard.CapabilityText,
-                BatteryCareCapability = display.BatteryCareCapability,
-                FanControlStatus = "NO-GO"
-            });
+                KeyboardBacklightCapability = keyboard.SupportText,
+                BatteryCareCapability = display.BatteryCareSummary,
+                FanControlStatus = "Blocked",
+                DisplayControlStatus = hpDisplayRefreshRateState.IsAvailable ? "Supported" : "Unavailable"
+            };
+            PopulateHpUserDiagnosticSummary(hpCurrentUserDiagnosticSummary);
         }
 
         private static byte? GetHpGpuModeSwitchRaw(
@@ -778,16 +781,6 @@ namespace GHelper
                 Padding = new Padding(10, 5, 10, 5)
             };
 
-            hpReadOnlyTelemetryWarning = new Label
-            {
-                AutoSize = true,
-                BorderStyle = BorderStyle.FixedSingle,
-                Dock = DockStyle.Top,
-                ForeColor = colorTurbo,
-                Padding = new Padding(10, 5, 10, 5),
-                Text = HpDiagnosticStatusText.SafetyWarning
-            };
-
             hpLiveTelemetrySummary = new Label
             {
                 AutoSize = true,
@@ -832,6 +825,7 @@ namespace GHelper
             };
             advancedPanel.Controls.Add(details);
             advancedPanel.Controls.Add(hpLiveTelemetrySummary);
+            advancedPanel.Controls.Add(hpReadOnlyTelemetryHealth);
 
             hpReadOnlyTelemetryAdvancedToggle = CreateHpDiagnosticActionButton(
                 "Show Advanced / Developer diagnostics", ButtonHpDiagnosticAdvanced_Click);
@@ -864,8 +858,6 @@ namespace GHelper
             panel.Controls.Add(advancedPanel);
             panel.Controls.Add(hpReadOnlyTelemetryAdvancedToggle);
             panel.Controls.Add(userSummary);
-            panel.Controls.Add(hpReadOnlyTelemetryWarning);
-            panel.Controls.Add(hpReadOnlyTelemetryHealth);
             panel.Controls.Add(hpReadOnlyTelemetrySource);
             panel.Controls.Add(heading);
             scrollHost.Controls.Add(panel);
@@ -1152,8 +1144,11 @@ namespace GHelper
 
         private string BuildHpDiagnosticSummary()
         {
-            return "VictusX Read-only Diagnostic" + Environment.NewLine +
-                HpDiagnosticDashboardFormatter.BuildSummary(CreateHpDiagnosticDashboardInput());
+            return "VictusX Read-only Diagnostic" + Environment.NewLine + Environment.NewLine +
+                HpDiagnosticDashboardFormatter.BuildCompleteSummary(
+                    hpCurrentUserDiagnosticSummary,
+                    CreateHpDiagnosticDashboardInput(),
+                    hpLiveTelemetrySummary?.Text);
         }
 
         private HpDiagnosticDashboardInput CreateHpDiagnosticDashboardInput()
@@ -1268,7 +1263,8 @@ namespace GHelper
             return status switch
             {
                 HpDiagnosticDashboardStatus.Ready => colorEco,
-                HpDiagnosticDashboardStatus.Warning or HpDiagnosticDashboardStatus.Blocked => colorTurbo,
+                HpDiagnosticDashboardStatus.Warning => Color.Orange,
+                HpDiagnosticDashboardStatus.Blocked => colorTurbo,
                 _ => foreMain
             };
         }

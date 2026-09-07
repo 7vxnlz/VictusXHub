@@ -25,6 +25,9 @@ public static class HpDiagnosticDashboardFormatter
     public const string SetFanMaxUserFacingControlNotAllowed = "False - user-facing control is not allowed";
     public const string PulseHistoryNotAvailable = "No pulse history available";
     public const string PulseHistoryNormalControlDisabled = "Disabled - normal fan control remains NO-GO";
+    public const string SetFanLevelStatus = "NO-GO - non-executable research only";
+    public const string SetFanLevelDryRunStatus = "Hardware/WMI-inert; serialization evidence only";
+    public const string NoDiagnosticHardwareActions = "No HP BIOS or fan-write action is exposed in Diagnostic.";
 
     public static HpDiagnosticDashboardHealthSummary BuildHealthSummary(HpDiagnosticDashboardInput input)
     {
@@ -62,7 +65,6 @@ public static class HpDiagnosticDashboardFormatter
             ]),
             new("Device",
             [
-                Row(HpDiagnosticStatusText.ReadOnlyDiagnostic, "Cached report and startup snapshot only; no UI action invokes WMI."),
                 Row("HP/Victus detected", input.IsHpVictusDetected == true ? "Detected" : NotAvailable),
                 Row("Manufacturer", input.Manufacturer),
                 Row("Model", input.Model),
@@ -120,6 +122,7 @@ public static class HpDiagnosticDashboardFormatter
             new("SetFanMax evidence readiness",
             [
                 Row("Current status", SetFanMaxReadinessStatus),
+                Row("Safety boundary", SetFanMaxStatus, blocked: true),
                 Row("First-write gate status", FormatFirstWriteGateStatus(input.SetFanMaxFirstWriteGateStatus)),
                 Row("First-write gate satisfied", FormatFirstWriteGateSatisfied(input.SetFanMaxFirstWriteGateSatisfied)),
                 Row("First-write gate reason", FormatFirstWriteGateReason(
@@ -157,21 +160,21 @@ public static class HpDiagnosticDashboardFormatter
                 Row("Report blocked reason", input.SetFanMaxBlockedReason),
                 Row("Report next required proof", input.SetFanMaxNextRequiredProof)
             ]),
-            new("Safety / NO-GO status",
+            new("SetFanLevel research",
             [
-                Row("Fan control", FanControlStatus),
-                Row("SetFanMax", SetFanMaxStatus),
-                Row("SetFanMax write implemented", input.SetFanMaxWriteImplemented),
-                Row("SetFanMax write allowed", input.SetFanMaxWriteAllowed),
-                Row("Blocked reason", input.SetFanMaxBlockedReason),
-                Row("Next required proof", input.SetFanMaxNextRequiredProof)
+                Row("Current status", SetFanLevelStatus),
+                Row("Dry-run / preflight", SetFanLevelDryRunStatus),
+                Row("First-write value", SetFanMaxPayloadLengthNotSelected),
+                Row("DeviceValidatedInputLength", SetFanMaxInputLengthUnset),
+                Row("Recovery evidence", SetFanMaxEvidenceMissing),
+                Row("Normal fan control", FanControlStatus)
             ]),
-            new("Missing-data guidance",
+            new("Diagnostic boundaries",
             [
+                Row("Data source", "Cached report, startup snapshot, and local logs only; opening Diagnostic invokes no WMI."),
                 Row("Explicit probe data", HpDiagnosticStatusText.NormalHpModeDoesNotRunExplicitProbes),
                 Row("Developer-only tests", HpDiagnosticStatusText.ExplicitTestsAreDeveloperOnly),
-                Row("Fan control", HpDiagnosticStatusText.FanControlNotImplemented),
-                Row("SetFanMax", HpDiagnosticStatusText.SetFanMaxNoGo)
+                Row("Hardware actions", NoDiagnosticHardwareActions)
             ])
         ];
     }
@@ -186,36 +189,46 @@ public static class HpDiagnosticDashboardFormatter
                 UserRow("SKU", input.Sku),
                 UserRow("BIOS", input.BiosVersion),
                 UserRow("HP/Victus detection", input.HpVictusDetection),
-                UserRow("Fan count", input.FanCount),
-                UserRow("Thermal policy", input.ThermalPolicy)
+                UserRow("Thermal policy", input.ThermalPolicy),
+                UserRow("Fan count", input.FanCount)
             ]),
             new("Live status",
             [
-                UserRow("CPU Load", input.CpuLoad),
-                UserRow("GPU Temp", input.GpuTemperature),
-                UserRow("Battery / AC", input.BatteryPower),
-                UserRow("Refresh Rate", input.RefreshRate),
-                UserRow("CPU Temp", input.CpuTemperature),
+                UserRow("CPU load", input.CpuLoad),
+                UserRow("CPU temperature", input.CpuTemperature),
+                UserRow("GPU temperature", input.GpuTemperature),
+                UserRow("Battery / AC / charging", input.BatteryPower),
+                UserRow("Refresh rate", input.RefreshRate),
                 UserRow("Fan RPM", input.FanRpm)
             ]),
             new("Capabilities",
             [
+                UserRow("Performance Mode", input.PerformanceMode),
                 UserRow("GPU Switching", input.GpuSwitchingCapability),
                 UserRow("Keyboard Lighting", input.KeyboardBacklightCapability),
                 UserRow("Battery Care", input.BatteryCareCapability),
-                UserRow("Fan Control", input.FanControlStatus, blocked: true)
+                UserRow("Fan Control", input.FanControlStatus, blocked: true),
+                UserRow("Display Control", input.DisplayControlStatus)
             ])
         ];
     }
 
     public static string BuildSummary(HpDiagnosticDashboardInput input)
     {
-        return string.Join(
-            Environment.NewLine,
-            BuildSections(input)
-                .SelectMany(section => section.Rows)
-                .Select(row => row.Label + ": " + row.Value));
+        return FormatSections(BuildSections(input));
     }
+
+    public static string BuildCompleteSummary(
+        HpDiagnosticUserSummaryInput userSummary,
+        HpDiagnosticDashboardInput advanced,
+        string? liveEvidence) =>
+        "User summary" + Environment.NewLine +
+        FormatSections(BuildUserSummary(userSummary)) + Environment.NewLine + Environment.NewLine +
+        "Advanced live-status evidence" + Environment.NewLine +
+        (string.IsNullOrWhiteSpace(liveEvidence) ? NotAvailable : liveEvidence.Trim()) +
+        Environment.NewLine + Environment.NewLine +
+        "Advanced diagnostics" + Environment.NewLine +
+        FormatSections(BuildSections(advanced));
 
     public static string FormatWriteImplementationStatus(bool? value) => value switch
     {
@@ -349,10 +362,13 @@ public static class HpDiagnosticDashboardFormatter
             : NotAvailable;
     }
 
-    private static HpDiagnosticDashboardRow Row(string label, string? value)
+    private static HpDiagnosticDashboardRow Row(string label, string? value, bool blocked = false)
     {
         string displayValue = string.IsNullOrWhiteSpace(value) ? NotAvailable : value;
-        return new HpDiagnosticDashboardRow(label, displayValue, GetStatus(displayValue));
+        return new HpDiagnosticDashboardRow(
+            label,
+            displayValue,
+            blocked ? HpDiagnosticDashboardStatus.Blocked : GetStatus(displayValue));
     }
 
     private static HpDiagnosticDashboardRow UserRow(string label, string? value, bool blocked = false)
@@ -365,6 +381,12 @@ public static class HpDiagnosticDashboardFormatter
                 : HpDiagnosticDashboardStatus.Ready;
         return new HpDiagnosticDashboardRow(label, displayValue, status);
     }
+
+    private static string FormatSections(IReadOnlyList<HpDiagnosticDashboardSection> sections) =>
+        string.Join(
+            Environment.NewLine + Environment.NewLine,
+            sections.Select(section => section.Title + Environment.NewLine +
+                string.Join(Environment.NewLine, section.Rows.Select(row => row.Label + ": " + row.Value))));
 
     private static bool IsUnavailableUserValue(string value) =>
         value.Contains("Unavailable", StringComparison.OrdinalIgnoreCase) ||

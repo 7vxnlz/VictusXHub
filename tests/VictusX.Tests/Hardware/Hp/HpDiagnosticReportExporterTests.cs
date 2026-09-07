@@ -71,6 +71,38 @@ public sealed class HpDiagnosticReportExporterTests
     }
 
     [Fact]
+    public void BuildMarkdown_PreservesVisibleSummaryAndAdvancedEvidenceFromCompleteSummary()
+    {
+        string summary = HpDiagnosticDashboardFormatter.BuildCompleteSummary(
+            new()
+            {
+                BatteryCareCapability = "Supported · Enabled",
+                DisplayControlStatus = "Supported",
+                FanControlStatus = "Blocked"
+            },
+            new()
+            {
+                RootWmiReadiness = "Ready",
+                SetFanMaxDeviceValidatedInputLength = null,
+                FanProofGapRestoreVerificationDecision = HpFanProofGapAnalyzer.RestoreVerificationPartial
+            },
+            "GPU mode: current state unavailable; exact-device switching capability is supported.");
+
+        string content = HpDiagnosticReportExporter.BuildMarkdown(summary, DateTimeOffset.UnixEpoch);
+
+        Assert.Contains("User summary", content, StringComparison.Ordinal);
+        Assert.Contains("Battery Care: Supported · Enabled", content, StringComparison.Ordinal);
+        Assert.Contains("Display Control: Supported", content, StringComparison.Ordinal);
+        Assert.Contains("Fan Control: Blocked", content, StringComparison.Ordinal);
+        Assert.Contains("Advanced live-status evidence", content, StringComparison.Ordinal);
+        Assert.Contains("current state unavailable", content, StringComparison.Ordinal);
+        Assert.Contains("Advanced diagnostics", content, StringComparison.Ordinal);
+        Assert.Contains("root\\wmi: Ready", content, StringComparison.Ordinal);
+        Assert.Contains("Restore verification: " + HpFanProofGapAnalyzer.RestoreVerificationPartial, content, StringComparison.Ordinal);
+        Assert.Contains("SetFanLevel research", content, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void Exporter_HasNoWmiDependencyOrInvocationSurface()
     {
         Type exporterType = typeof(HpDiagnosticReportExporter);

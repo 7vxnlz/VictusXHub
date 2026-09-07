@@ -211,6 +211,12 @@ public sealed class HpDiagnosticPreviewConfigurationTests
         Assert.Contains("Visible = false", settings, StringComparison.Ordinal);
         Assert.Contains("advancedPanel.Controls.Add(details);", settings, StringComparison.Ordinal);
         Assert.Contains("advancedPanel.Controls.Add(hpLiveTelemetrySummary);", settings, StringComparison.Ordinal);
+        Assert.Contains("advancedPanel.Controls.Add(hpReadOnlyTelemetryHealth);", settings, StringComparison.Ordinal);
+        Assert.DoesNotContain("hpReadOnlyTelemetryWarning", settings, StringComparison.Ordinal);
+        Assert.Contains("HpDiagnosticDashboardFormatter.BuildCompleteSummary", settings, StringComparison.Ordinal);
+        Assert.Contains("HpDiagnosticDashboardStatus.Warning => Color.Orange", settings, StringComparison.Ordinal);
+        Assert.Contains("HpDiagnosticDashboardStatus.Blocked => colorTurbo", settings, StringComparison.Ordinal);
+        Assert.Contains("if (!AppConfig.IsHpVictusHardwareMode()) return;", settings, StringComparison.Ordinal);
     }
 
     [Fact]

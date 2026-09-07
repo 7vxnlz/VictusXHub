@@ -4,8 +4,6 @@ Use for source-only preview readiness, notices, audit warnings, signing plans, a
 
 ## Files
 
-- `AGENTS.md`
-- `AI_WORKING_STATE.md`
 - `app/VictusX.csproj`
 - `THIRD-PARTY-NOTICES.md`
 - `docs/hp-diagnostic-preview-final-blocker-tracker.md`

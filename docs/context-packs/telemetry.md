@@ -4,8 +4,6 @@ Use for HP read-only CPU/GPU/fan/battery/display status. Add a source-specific f
 
 ## Files
 
-- `AGENTS.md`
-- `AI_WORKING_STATE.md`
 - `app/Hardware/Hp/AGENTS.md`
 - `app/Hardware/Hp/HpReadOnlyTelemetry.cs`
 - `app/Hardware/Hp/HpReadOnlyTelemetryFormatter.cs`

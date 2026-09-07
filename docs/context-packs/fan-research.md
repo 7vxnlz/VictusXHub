@@ -4,8 +4,6 @@ Use for SetFanMax/SetFanLevel safety, serialization, gates, logs, and evidence d
 
 ## Files
 
-- `AGENTS.md`
-- `AI_WORKING_STATE.md`
 - `app/Hardware/Hp/AGENTS.md`
 - `app/Hardware/Hp/HpFanResearchContracts.cs`
 - `app/Hardware/Hp/HpFanMaxPulseCommand.cs`

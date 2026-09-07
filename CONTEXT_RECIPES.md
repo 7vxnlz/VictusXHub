@@ -1,22 +1,17 @@
 # Context Recipes
 
-Every task starts with `AGENTS.md` and `AI_WORKING_STATE.md`. Then choose one route.
+Use this default flow:
+
+`injected/repository instructions -> AI_WORKING_STATE.md -> exact rg search -> one domain route -> selected implementation + focused tests -> git diff -> focused verification -> broad verification once when warranted -> state delta -> commit/push only when explicitly requested`
+
+Do not reread root `AGENTS.md` when it is already present in session instructions. Always read the nearest scoped `AGENTS.md` for the selected domain. Do not enumerate or load installed skill documentation speculatively; use a skill only when the task triggers it. A context-pack definition is a routing aid, not an instruction to materialize or read every listed file. Historical documents are demand-loaded when their decision or evidence is active.
 
 | Task | Pack | Search next | Usually exclude |
 | --- | --- | --- | --- |
-| Fan safety/research | `fan-research` | exact command, gate, mapper, test name | UI, packaging, unrelated decoders |
+| Fan safety/research | `fan-research` | exact command, gate, mapper, test | UI, packaging, unrelated decoders |
 | Read-only telemetry | `telemetry` | source/provider/formatter symbol | write runners, reference repos |
 | HP shell/Diagnostic UI | `ui` | control name and event handler | fan transports, packaging |
-| Packaging/release evidence | `packaging` | blocker or artifact type | application internals |
-| Icon/branding/metadata | `identity` | visible string or resource path | hardware code |
+| Packaging/release | `packaging` | blocker or artifact type | application internals |
+| Identity/branding | `identity` | visible string or resource path | hardware code |
 
-## Workflow
-
-1. Read the selected pack definition; do not automatically read every listed file if search narrows it further.
-2. Run `rg` for the exact symbol/behavior.
-3. Inspect `git diff` when continuing uncommitted work.
-4. Read the implementation and its focused tests.
-5. Measure only when the selection is becoming large.
-6. Materialize a pack only for handoff, cross-file comparison, or token-budget enforcement.
-
-For reference comparisons, read `REFERENCE_POLICY.md`, use `docs/reference-index.md`, verify commits in `REFERENCE_SOURCES.md`, and open only the matching files. For failures, start with the failing output plus one implementation/test pair. For documentation-only work, read the target document and the current decision source; source code is optional unless the claim needs verification.
+For failures, start with failing output plus one implementation/test pair. Run focused tests before the full suite, avoid restore when project/package inputs and outputs permit `--no-build`, keep successful verification to a concise PASS summary, and retain actionable command output on failure. For reference comparisons, follow `REFERENCE_POLICY.md` and `docs/reference-index.md` before opening 1-5 exact files. For documentation-only work, source is optional unless a claim requires verification.

@@ -1,29 +1,24 @@
 # Token Strategy
 
-Optimize relevance, not raw smallness. The default startup context is:
+Optimize relevance before breadth. Repository instructions already injected into the session should not be reread. Start with the compact `AI_WORKING_STATE.md`, then use exact `rg` searches, one domain route when useful, and only the implementation/tests needed by the task. The nearest scoped `AGENTS.md` remains mandatory for that domain.
 
-1. `AGENTS.md`
-2. `AI_WORKING_STATE.md`
-3. nearest scoped `AGENTS.md`
-4. one `docs/context-packs/*.md` file
-5. exact implementation/tests found by `rg`
+Do not load `SESSION_STATE.md`, all documentation, a whole source directory, installed skill documentation speculatively, or reference repositories by default. Skills and historical evidence are demand-loaded only when the task triggers them.
 
-Do not load `SESSION_STATE.md`, all docs, a whole source directory, or reference repositories by default. Historical evidence remains searchable and should be opened only when its decision is active.
+## Targets
 
-## Budgets
-
-- Focused change: target 8k-20k tokens and no more than 12 files.
-- Cross-cutting investigation: up to 35k tokens and 25 files with a stated reason.
+- Normal focused implementation: <= 12k approximate tokens and <= 8 selected files.
+- Medium cross-cutting task: <= 20k approximate tokens and <= 12 selected files.
+- Investigation: <= 30k approximate tokens and <= 20 selected files.
+- Above 30k: justify expansion first and prefer splitting the task. These are targets, never correctness- or safety-breaking limits.
 - References: 1-5 exact files, after reading `REFERENCE_POLICY.md` and checking `docs/reference-index.md`.
 
-## Tools
+## Selection and Tools
+
+Prefer exact symbol/file selection after `rg`, and use `git diff` for ongoing work. Read a pack definition as a route; do not materialize it merely because it exists. Use `pack.ps1` only for handoff, cross-file comparison, or budget enforcement. Never pack the whole repository.
 
 ```powershell
 tools/context/measure.ps1 -Path app/Hardware/Hp,tests/VictusX.Tests/Hardware/Hp -Top 20
 tools/context/pack.ps1 -Pack telemetry -TokenBudget 20000 -OutputPath .tmp/telemetry-context.md
-tools/context/pack.ps1 -Pack fan-research -UseRepomix -TokenBudget 20000 -OutputPath .tmp/fan-context.md
 ```
 
-`measure.ps1` reports approximate tokens using characters/4; use it for relative weight, not billing. `pack.ps1` reads only the `## Files` list in a named pack, supports checked `path#Lstart-Lend` slices for monolithic files, rejects missing/out-of-repo files, and fails when selected content exceeds the budget. Repomix is opt-in, requires whole-file selectors and an installed executable, and its output is checked again and removed if over budget.
-
-Prefer `git diff` for ongoing work and add individual files after symbol search. Never solve a missing-context problem by packing the whole repository.
+`measure.ps1` uses characters/4 for relative context weight, not billing. `pack.ps1` accepts the named pack's checked whole-file and `#Lstart-Lend` selectors, rejects missing/out-of-repository files, and enforces its budget. Repomix is optional and whole-file-only.

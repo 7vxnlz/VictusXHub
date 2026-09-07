@@ -4,8 +4,6 @@ Use for the inherited HP shell, footer, read-only status, and Diagnostic side pa
 
 ## Files
 
-- `AGENTS.md`
-- `AI_WORKING_STATE.md`
 - `app/UI/AGENTS.md`
 - `app/Settings.cs#L300-L780`
 - `app/Settings.cs#L1450-L1510`

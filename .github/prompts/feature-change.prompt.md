@@ -1,22 +1,7 @@
 # Feature Change Prompt
 
-Implement only the requested feature. Avoid speculative scaffolding.
+Follow injected repository instructions, canonical state, and one useful route from `CONTEXT_RECIPES.md`.
 
-Model guidance:
+Define the requested behavior and acceptance criteria, search for existing abstractions, and select exact implementation/tests. Make the smallest patch, review the diff, and verify focused behavior before any warranted final suite. Update `AI_WORKING_STATE.md` only for durable truth.
 
-- Use GPT-5.5 Low for small localized features.
-- Use GPT-5.5 Medium for cross-module features.
-- Use GPT-5.6 High for hardware-facing or safety-sensitive features.
-
-Workflow:
-
-1. Read `AGENTS.md`, `AI_CONTEXT.md`, `SESSION_STATE.md`, `TOKEN_STRATEGY.md`, and the matching recipe in `CONTEXT_RECIPES.md`.
-2. Search for existing abstractions and similar behavior.
-3. Select exact files before reading broadly.
-4. Use Repomix only if more than four selected files must be shared as a pack.
-5. Do not include reference repositories unless explicitly required.
-6. Make a minimal patch.
-7. Update focused tests for changed behavior.
-8. Review `git diff`.
-9. Run focused verification.
-10. Update `SESSION_STATE.md` if the work meaningfully changes project state.
+For hardware-facing work, stay within exact-device evidence and explicit authorization; never infer compatibility or execute write-capable paths from this template.

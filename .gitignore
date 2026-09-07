@@ -6,6 +6,7 @@ obj/
 TestResults/
 coverage/
 artifacts/
+.tmp/
 *.user
 *.suo
 *.pdb

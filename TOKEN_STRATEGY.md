@@ -21,4 +21,4 @@ tools/context/measure.ps1 -Path app/Hardware/Hp,tests/VictusX.Tests/Hardware/Hp 
 tools/context/pack.ps1 -Pack telemetry -TokenBudget 20000 -OutputPath .tmp/telemetry-context.md
 ```
 
-`measure.ps1` uses characters/4 for relative context weight, not billing. `pack.ps1` accepts the named pack's checked whole-file and `#Lstart-Lend` selectors, rejects missing/out-of-repository files, and enforces its budget. Repomix is optional and whole-file-only.
+`measure.ps1` uses characters/4 for relative context weight, not billing. `pack.ps1` accepts the named pack's checked whole-file and `#Lstart-Lend` selectors, rejects missing/out-of-repository files, requires generated files under `.tmp/`, and enforces its budget. Repomix is optional and whole-file-only.

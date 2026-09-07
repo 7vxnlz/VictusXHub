@@ -12,6 +12,7 @@ TestResults/
 coverage/
 packages/
 logs/
+.tmp/
 reference/
 references/
 

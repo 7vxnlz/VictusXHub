@@ -1,13 +1,13 @@
 {
   "$schema": "https://repomix.com/schemas/latest/schema.json",
   "output": {
-    "filePath": "repomix-output.md",
+    "filePath": ".tmp/repomix-context.md",
     "style": "markdown",
-    "headerText": "VictusControl selected repository context. Do not include whole-repo packs unless explicitly approved.",
-    "fileSummary": true,
-    "directoryStructure": true,
-    "tokenCountTree": true,
-    "showLineNumbers": true,
+    "headerText": "VictusX explicit AI/context files only.",
+    "fileSummary": false,
+    "directoryStructure": false,
+    "tokenCountTree": false,
+    "showLineNumbers": false,
     "removeEmptyLines": false,
     "removeComments": false
   },
@@ -45,6 +45,7 @@
       "coverage/**",
       "packages/**",
       "logs/**",
+      ".tmp/**",
       "reference/**",
       "references/**",
       "**/*.user",

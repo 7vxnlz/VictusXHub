@@ -14,4 +14,8 @@ Do not reread root `AGENTS.md` when it is already present in session instruction
 | Packaging/release | `packaging` | blocker or artifact type | application internals |
 | Identity/branding | `identity` | visible string or resource path | hardware code |
 
-For failures, start with failing output plus one implementation/test pair. Run focused tests before the full suite, avoid restore when project/package inputs and outputs permit `--no-build`, keep successful verification to a concise PASS summary, and retain actionable command output on failure. For reference comparisons, follow `REFERENCE_POLICY.md` and `docs/reference-index.md` before opening 1-5 exact files. For documentation-only work, source is optional unless a claim requires verification.
+For failures, start with failing output plus one implementation/test pair. Run focused tests first and full build/test once near completion when warranted. Do not repeat restore unless dependency/project state requires it. Summarize successful commands as concise PASS results; retain enough failure output to debug. For reference comparisons, follow `REFERENCE_POLICY.md` and `docs/reference-index.md` before opening 1-5 exact files. For documentation-only work, source is optional unless a claim requires verification.
+
+## Session Lifecycle
+
+Prefer one coherent task per session: focused work, verification, durable state update only, then commit/push when explicitly requested. Start a fresh session for the next unrelated task. Handoff only when continuing the same unfinished task and important transient findings are not yet represented in repository state; a completed committed task needs no handoff.

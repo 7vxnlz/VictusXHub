@@ -12,6 +12,7 @@ param(
 $ErrorActionPreference = "Stop"
 $repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..\..")).Path
 $repoPrefix = $repoRoot.TrimEnd('\') + '\'
+$temporaryOutputPrefix = [System.IO.Path]::GetFullPath((Join-Path $repoRoot '.tmp')).TrimEnd('\') + '\'
 $packDefinition = Join-Path $repoRoot "docs\context-packs\$Pack.md"
 if (-not (Test-Path -LiteralPath $packDefinition -PathType Leaf)) {
     throw "Unknown context pack: $Pack"
@@ -77,8 +78,8 @@ if ($UseRepomix) {
         throw 'Repomix mode does not support line-range selectors; use the direct pack output for this pack.'
     }
     $destination = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $OutputPath))
-    if (-not $destination.StartsWith($repoPrefix, [StringComparison]::OrdinalIgnoreCase)) {
-        throw 'OutputPath must remain inside the repository.'
+    if (-not $destination.StartsWith($temporaryOutputPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+        throw 'OutputPath must be under the repository .tmp directory.'
     }
     if (Test-Path -LiteralPath $destination) { throw "OutputPath already exists: $destination" }
     $parent = Split-Path -Parent $destination
@@ -132,8 +133,8 @@ if ([string]::IsNullOrWhiteSpace($OutputPath)) {
     $builder.ToString()
 } else {
     $destination = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $OutputPath))
-    if (-not $destination.StartsWith($repoPrefix, [StringComparison]::OrdinalIgnoreCase)) {
-        throw 'OutputPath must remain inside the repository.'
+    if (-not $destination.StartsWith($temporaryOutputPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+        throw 'OutputPath must be under the repository .tmp directory.'
     }
     if (Test-Path -LiteralPath $destination) { throw "OutputPath already exists: $destination" }
     $parent = Split-Path -Parent $destination

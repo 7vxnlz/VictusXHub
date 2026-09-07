@@ -1,0 +1,129 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>annotations</Nullable>
+    <UseWindowsForms>True</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPublishable>True</IsPublishable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <StartupObject>GHelper.Program</StartupObject>
+    <ApplicationIcon>Assets\VictusX.ico</ApplicationIcon>
+    <Platforms>x64</Platforms>
+    <Platform>x64</Platform>
+    <AssemblyName>VictusX</AssemblyName>
+    <RootNamespace>GHelper</RootNamespace>
+    <PlatformTarget>x64</PlatformTarget>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <DebugType>embedded</DebugType>
+    <OutputPath>bin\x64\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\x64\$(Configuration)\</IntermediateOutputPath>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <Product>VictusX</Product>
+    <Description>VictusX HP diagnostic preview (read-only)</Description>
+    <Company>VictusX Contributors</Company>
+    <Authors>VictusX Contributors</Authors>
+    <Copyright>Copyright (c) 2026 VictusX Contributors</Copyright>
+    <Version>0.1.0-preview.1</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <InformationalVersion>0.1.0-preview.1</InformationalVersion>
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="logs\**" />
+    <EmbeddedResource Remove="logs\**" />
+    <None Remove="logs\**" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\VictusX.ico">
+      <LogicalName>GHelper.Assets.VictusX.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\VictusX.Silent.ico">
+      <LogicalName>GHelper.Assets.VictusX.Silent.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\VictusX.Balanced.ico">
+      <LogicalName>GHelper.Assets.VictusX.Balanced.ico</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\VictusX.Turbo.ico">
+      <LogicalName>GHelper.Assets.VictusX.Turbo.ico</LogicalName>
+    </EmbeddedResource>
+    <Content Include="favicon.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <None Include="..\LICENSE" Link="LICENSE">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+    <None Include="..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+    <None Update="Assets\Licenses\**\*">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+    <None Include="..\tools\run-victusx-hp-diagnostic.ps1" Link="tools\run-victusx-hp-diagnostic.ps1">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FftSharp" Version="2.2.0" />
+    <PackageReference Include="HidSharpCore" Version="1.3.0" />
+    <PackageReference Include="NAudio.Wasapi" Version="2.3.0" />
+    <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
+    <PackageReference Include="System.Management" Version="10.0.10" />
+    <PackageReference Include="TaskScheduler" Version="2.12.2" />
+    <PackageReference Include="WinForms.DataVisualization" Version="1.10.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Pawn\RyzenSMU.bin">
+      <LogicalName>GHelper.RyzenSMU.bin</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pawn\IntelMSR.bin">
+      <LogicalName>GHelper.IntelMSR.bin</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+	<Target Name="KillRunningVictusX" BeforeTargets="Build" Condition="'$(GITHUB_ACTIONS)'!='true'">
+		<Exec Command="powershell -NoProfile -Command &quot;try { [System.Threading.EventWaitHandle]::OpenExisting('Global\GHelperApp-Exit').Set() } catch {}; for ($i = 0; $i -lt 50; $i++) { if (-not (Get-Process -Name VictusX -ErrorAction SilentlyContinue)) { break }; Start-Sleep -Milliseconds 100 }&quot;" />
+	</Target>
+
+	<Target Name="ZipSingleExe" AfterTargets="Publish" Condition="'$(GITHUB_ACTIONS)'!='true' And '$(SkipLegacySingleExeZip)'!='true'">
+		<Exec Command="powershell -NoProfile -Command &quot;$exe = '$(PublishDir)VictusX.exe'; for ($i = 0; $i -lt 30; $i++) { try { [IO.File]::Open($exe, 'Open', 'Read', 'None').Close(); break } catch { Start-Sleep -Milliseconds 200 } }; Compress-Archive -Path $exe -DestinationPath '$(PublishDir)VictusX.zip' -Force&quot;" />
+	</Target>
+</Project>
+
+

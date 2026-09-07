@@ -1,0 +1,14 @@
+bin/
+obj/
+.vs/
+.vscode/
+.idea/
+TestResults/
+coverage/
+artifacts/
+*.user
+*.suo
+*.pdb
+*.dll
+*.exe
+*.log

@@ -1,0 +1,79 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\app\Hardware\Hp\HpDisplayRefreshRateControl.cs" Link="Hardware\Hp\HpDisplayRefreshRateControl.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpPerformanceModeStatus.cs" Link="Hardware\Hp\HpPerformanceModeStatus.cs" />
+    <Compile Include="..\..\app\UI\HpTrayIconSelector.cs" Link="UI\HpTrayIconSelector.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpGpuTemperaturePoller.cs" Link="Hardware\Hp\HpGpuTemperaturePoller.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpBatteryCareReadOnlyContracts.cs" Link="Hardware\Hp\HpBatteryCareReadOnlyContracts.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpKeyboardBacklightReadOnlyStatus.cs" Link="Hardware\Hp\HpKeyboardBacklightReadOnlyStatus.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpGpuModeReadOnlyStatus.cs" Link="Hardware\Hp\HpGpuModeReadOnlyStatus.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanLevelFirstWritePreflight.cs" Link="Hardware\Hp\HpFanLevelFirstWritePreflight.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanLevelResearchDryRunCommand.cs" Link="Hardware\Hp\HpFanLevelResearchDryRunCommand.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanLevelResearchDryRunLogWriter.cs" Link="Hardware\Hp\HpFanLevelResearchDryRunLogWriter.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpReadOnlyTelemetry.cs" Link="Hardware\Hp\HpReadOnlyTelemetry.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpReadOnlyTelemetryFormatter.cs" Link="Hardware\Hp\HpReadOnlyTelemetryFormatter.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpWindowsTelemetrySource.cs" Link="Hardware\Hp\HpWindowsTelemetrySource.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpBiosWmiCommandCatalog.cs" Link="Hardware\Hp\HpBiosWmiCommandCatalog.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpBiosWmiCommandDefinition.cs" Link="Hardware\Hp\HpBiosWmiCommandDefinition.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticReportExporter.cs" Link="Hardware\Hp\HpDiagnosticReportExporter.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticDashboardModel.cs" Link="Hardware\Hp\HpDiagnosticDashboardModel.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticDashboardFormatter.cs" Link="Hardware\Hp\HpDiagnosticDashboardFormatter.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticReportLoader.cs" Link="Hardware\Hp\HpDiagnosticReportLoader.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticReportSchemaV2Refresher.cs" Link="Hardware\Hp\HpDiagnosticReportSchemaV2Refresher.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticPaths.cs" Link="Hardware\Hp\HpDiagnosticPaths.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticStatusText.cs" Link="Hardware\Hp\HpDiagnosticStatusText.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpVictusCapabilityReportMetadata.cs" Link="Hardware\Hp\HpVictusCapabilityReportMetadata.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanGetCountDecoder.cs" Link="Hardware\Hp\HpFanGetCountDecoder.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanGetCountReportDecoder.cs" Link="Hardware\Hp\HpFanGetCountReportDecoder.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanGetLevelDecoder.cs" Link="Hardware\Hp\HpFanGetLevelDecoder.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanGetLevelReportDecoder.cs" Link="Hardware\Hp\HpFanGetLevelReportDecoder.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxDryRunReport.cs" Link="Hardware\Hp\HpFanMaxDryRunReport.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentLogRecord.cs" Link="Hardware\Hp\HpFanMaxExperimentLogRecord.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentManualObservation.cs" Link="Hardware\Hp\HpFanMaxExperimentManualObservation.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxPulseCommand.cs" Link="Hardware\Hp\HpFanMaxPulseCommand.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxHoldCommand.cs" Link="Hardware\Hp\HpFanMaxHoldCommand.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxPulseHistoryLoader.cs" Link="Hardware\Hp\HpFanMaxPulseHistoryLoader.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanProofGapAnalyzer.cs" Link="Hardware\Hp\HpFanProofGapAnalyzer.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentOutcomeClassifier.cs" Link="Hardware\Hp\HpFanMaxExperimentOutcomeClassifier.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentLogFormatter.cs" Link="Hardware\Hp\HpFanMaxExperimentLogFormatter.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentLogWriter.cs" Link="Hardware\Hp\HpFanMaxExperimentLogWriter.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentDryRunCommand.cs" Link="Hardware\Hp\HpFanMaxExperimentDryRunCommand.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentBaselineCaptureCommand.cs" Link="Hardware\Hp\HpFanMaxExperimentBaselineCaptureCommand.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentBaselineCaptureMapper.cs" Link="Hardware\Hp\HpFanMaxExperimentBaselineCaptureMapper.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentRunnerCommand.cs" Link="Hardware\Hp\HpFanMaxExperimentRunnerCommand.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentRunner.cs" Link="Hardware\Hp\HpFanMaxExperimentRunner.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxExperimentRunLogMapper.cs" Link="Hardware\Hp\HpFanMaxExperimentRunLogMapper.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanResearchContracts.cs" Link="Hardware\Hp\HpFanResearchContracts.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxDeviceValidationDecision.cs" Link="Hardware\Hp\HpFanMaxDeviceValidationDecision.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxDeviceValidationEvaluator.cs" Link="Hardware\Hp\HpFanMaxDeviceValidationEvaluator.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxGetDecoder.cs" Link="Hardware\Hp\HpFanMaxGetDecoder.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxGetReportDecoder.cs" Link="Hardware\Hp\HpFanMaxGetReportDecoder.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxPayloadDescription.cs" Link="Hardware\Hp\HpFanMaxPayloadDescription.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxWriteExperimentPlan.cs" Link="Hardware\Hp\HpFanMaxWriteExperimentPlan.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxWritePreflightEvaluator.cs" Link="Hardware\Hp\HpFanMaxWritePreflightEvaluator.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanMaxWritePreflightRequest.cs" Link="Hardware\Hp\HpFanMaxWritePreflightRequest.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanWritePreflightResult.cs" Link="Hardware\Hp\HpFanWritePreflightResult.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpFanWriteSafetyPolicy.cs" Link="Hardware\Hp\HpFanWriteSafetyPolicy.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpSystemDesignDataDecoder.cs" Link="Hardware\Hp\HpSystemDesignDataDecoder.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpSystemDesignDataReportDecoder.cs" Link="Hardware\Hp\HpSystemDesignDataReportDecoder.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpSystemDesignDataSnapshot.cs" Link="Hardware\Hp\HpSystemDesignDataSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

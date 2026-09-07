@@ -1,0 +1,72 @@
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "output": {
+    "filePath": "repomix-output.md",
+    "style": "markdown",
+    "headerText": "VictusControl selected repository context. Do not include whole-repo packs unless explicitly approved.",
+    "fileSummary": true,
+    "directoryStructure": true,
+    "tokenCountTree": true,
+    "showLineNumbers": true,
+    "removeEmptyLines": false,
+    "removeComments": false
+  },
+  "include": [
+    "AGENTS.md",
+    "AI_WORKING_STATE.md",
+    "TOKEN_STRATEGY.md",
+    "CONTEXT_RECIPES.md",
+    "REFERENCE_POLICY.md",
+    "REFERENCE_SOURCES.md",
+    "repomix.config.json",
+    ".repomixignore",
+    "app/**/AGENTS.md",
+    "tests/AGENTS.md",
+    "docs/context-packs/*.md",
+    "docs/reference-index.md",
+    "tools/context/*.ps1"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDotIgnore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      ".git/**",
+      ".github/workflows/**",
+      ".vs/**",
+      ".vscode/**",
+      ".idea/**",
+      "bin/**",
+      "obj/**",
+      "artifacts/**",
+      "dist/**",
+      "build/**",
+      "TestResults/**",
+      "coverage/**",
+      "packages/**",
+      "logs/**",
+      "reference/**",
+      "references/**",
+      "**/*.user",
+      "**/*.suo",
+      "**/*.pdb",
+      "**/*.dll",
+      "**/*.exe",
+      "**/*.png",
+      "**/*.jpg",
+      "**/*.jpeg",
+      "**/*.webp",
+      "**/*.ico",
+      "**/*.resx",
+      "**/*.Designer.cs",
+      "**/*.g.cs",
+      "**/*.generated.cs"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  },
+  "tokenCount": {
+    "encoding": "o200k_base"
+  }
+}

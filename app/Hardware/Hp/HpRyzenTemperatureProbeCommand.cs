@@ -30,7 +30,11 @@ internal static class HpRyzenTemperatureProbeCommand
         HpRyzenTemperatureProbeGateResult gate = HpRyzenTemperatureProbeGate.Evaluate(device);
         WriteLine("VictusX Ryzen temperature probe (diagnostic-only)");
         WriteLine("Target gate: " + (gate.IsAccepted ? "accepted" : "rejected") + " — " + gate.Reason);
-        WriteLine("Device: " + device.Manufacturer + " | " + device.Model + " | SKU " + device.Sku + " | BIOS " + device.Bios);
+        WriteLine("Identity source: " + device.Identity.Source + " — " + device.Identity.Detail);
+        WriteLine("Identity raw: Manufacturer=" + device.Identity.Manufacturer + " | Model=" + device.Identity.Model +
+                  " | SKU=" + device.Identity.Sku + " | BIOS=" + device.Identity.Bios);
+        WriteLine("Identity normalized: Manufacturer=" + device.Identity.NormalizedManufacturer + " | Model=" + device.Identity.NormalizedModel +
+                  " | SKU=" + device.Identity.NormalizedSku + " | BIOS=" + device.Identity.NormalizedBios);
         WriteLine("CPU: " + device.CpuName + " | Family " + FormatHex(device.CpuFamily) + " | Model " + FormatHex(device.CpuModel) + " | Stepping " + FormatHex(device.CpuStepping));
         WriteLine("Backend: " + HpRyzenTemperatureProbeResult.BackendName);
         WriteLine("LibreHardwareMonitor: not initialized; direct official AMDFamily17 semantics are used to prevent RyzenSMU initialization.");
@@ -39,7 +43,7 @@ internal static class HpRyzenTemperatureProbeCommand
         WriteLine("Sensor: " + HpRyzenTemperatureProbeResult.SourceName + " | SMN THM_TCON_CUR_TMP semantics.");
         WriteLine("Safety: RyzenSMU PM-table path initialized: False. Fan/EC/control command invoked: False.");
 
-        if (!gate.IsAccepted)
+        if (!HpRyzenTemperatureProbeGate.MayOpenPawnIo(gate))
         {
             Environment.ExitCode = 2;
             return true;
@@ -85,34 +89,30 @@ internal static class HpRyzenTemperatureProbeCommand
 
     private static HpRyzenTemperatureProbeDevice ReadDevice()
     {
-        string manufacturer = string.Empty;
-        string model = string.Empty;
-        string sku = string.Empty;
-        string bios = string.Empty;
+        HpRyzenTemperatureProbeIdentity wmiIdentity;
         try
         {
             using var computerSystem = new ManagementObjectSearcher("root\\cimv2", "SELECT Manufacturer, Model, SystemSKUNumber FROM Win32_ComputerSystem");
             using ManagementObjectCollection systems = computerSystem.Get();
             ManagementObject? system = systems.Cast<ManagementObject>().FirstOrDefault();
-            manufacturer = system?["Manufacturer"]?.ToString()?.Trim() ?? string.Empty;
-            model = system?["Model"]?.ToString()?.Trim() ?? string.Empty;
-            sku = system?["SystemSKUNumber"]?.ToString()?.Trim() ?? string.Empty;
+            string manufacturer = system?["Manufacturer"]?.ToString()?.Trim() ?? string.Empty;
+            string model = system?["Model"]?.ToString()?.Trim() ?? string.Empty;
+            string sku = system?["SystemSKUNumber"]?.ToString()?.Trim() ?? string.Empty;
 
             using var biosSearcher = new ManagementObjectSearcher("root\\cimv2", "SELECT SMBIOSBIOSVersion FROM Win32_BIOS");
             using ManagementObjectCollection biosRows = biosSearcher.Get();
-            bios = biosRows.Cast<ManagementObject>().FirstOrDefault()?["SMBIOSBIOSVersion"]?.ToString()?.Trim() ?? string.Empty;
+            string bios = biosRows.Cast<ManagementObject>().FirstOrDefault()?["SMBIOSBIOSVersion"]?.ToString()?.Trim() ?? string.Empty;
+            wmiIdentity = new(HpRyzenTemperatureProbeIdentitySource.Wmi, manufacturer, model, sku, bios, "WMI Win32_ComputerSystem/Win32_BIOS read.");
         }
-        catch (ManagementException)
+        catch (Exception ex) when (ex is ManagementException or UnauthorizedAccessException or System.Runtime.InteropServices.COMException)
         {
-            // The exact-device gate fails closed below when WMI inventory is unavailable.
-        }
-        catch (UnauthorizedAccessException)
-        {
-            // The exact-device gate fails closed below when WMI inventory is unavailable.
+            wmiIdentity = HpRyzenTemperatureProbeIdentity.Unavailable("WMI identity unavailable: " + ex.Message);
         }
 
         (string cpuName, int? family, int? cpuModel, int? stepping) = ReadCpuIdentity();
-        return new(manufacturer, model, sku, bios, cpuName, family, cpuModel, stepping);
+        HpRyzenTemperatureProbeIdentity identity = HpRyzenTemperatureProbeIdentitySelection.Select(
+            wmiIdentity, HpRyzenTemperatureProbeSmbios.Read(), HpRyzenTemperatureProbeRegistryIdentity.Read());
+        return new(identity, cpuName, family, cpuModel, stepping);
     }
 
     private static (string Name, int? Family, int? Model, int? Stepping) ReadCpuIdentity()

@@ -26,10 +26,7 @@ internal enum HpRyzenTemperatureProbeAvailability
 }
 
 internal sealed record HpRyzenTemperatureProbeDevice(
-    string Manufacturer,
-    string Model,
-    string Sku,
-    string Bios,
+    HpRyzenTemperatureProbeIdentity Identity,
     string CpuName,
     int? CpuFamily,
     int? CpuModel,
@@ -46,30 +43,38 @@ internal static class HpRyzenTemperatureProbeGate
     internal const string ExpectedBios = "F.31";
     internal const string ExpectedCpuName = "Ryzen 5 7640HS";
     internal const int ExpectedCpuFamily = 0x19;
-    internal const int ExpectedCpuModel = 0x70;
+    // AMD documents Phoenix in the Family 19h Models 70h-7Fh group; CPUID leaf 1
+    // decodes the observed Ryzen 5 7640HS as model 74h, stepping 1.
+    internal const int ExpectedCpuModel = 0x74;
+    internal const int ExpectedCpuStepping = 0x1;
 
     public static HpRyzenTemperatureProbeGateResult Evaluate(HpRyzenTemperatureProbeDevice device)
     {
         ArgumentNullException.ThrowIfNull(device);
 
-        if (!Contains(device.Manufacturer, "HP") || !Contains(device.Model, "Victus") || !Contains(device.Model, "16-s0") ||
-            !EqualsValue(device.Sku, ExpectedSku) || !Contains(device.Bios, ExpectedBios))
+        if (!HpRyzenTemperatureProbeIdentity.IsExactTarget(device.Identity))
         {
             return new(false, HpRyzenTemperatureProbeAvailability.DeviceMismatch,
-                "Exact HP Victus 16-s0035nt / SKU 7Z5Z2EA#AB8 / BIOS F.31 gate did not match.");
+                "Exact HP Victus identity gate did not match from " + device.Identity.Source + ": " + device.Identity.Detail);
         }
 
-        if (!Contains(device.CpuName, ExpectedCpuName) || device.CpuFamily != ExpectedCpuFamily || device.CpuModel != ExpectedCpuModel)
+        if (!Contains(device.CpuName, ExpectedCpuName) || device.CpuFamily != ExpectedCpuFamily ||
+            device.CpuModel != ExpectedCpuModel || device.CpuStepping != ExpectedCpuStepping)
         {
             return new(false, HpRyzenTemperatureProbeAvailability.UnsupportedCpu,
-                "Exact AMD Ryzen 5 7640HS Family 19h Model 70h CPU gate did not match.");
+                "Exact AMD Ryzen 5 7640HS Family 19h Model 74h Stepping 1 CPU gate did not match.");
         }
 
         return HpRyzenTemperatureProbeGateResult.Accept;
     }
 
+    internal static bool MayOpenPawnIo(HpRyzenTemperatureProbeGateResult gate)
+    {
+        ArgumentNullException.ThrowIfNull(gate);
+        return gate.IsAccepted;
+    }
+
     private static bool Contains(string value, string expected) => value.Contains(expected, StringComparison.OrdinalIgnoreCase);
-    private static bool EqualsValue(string value, string expected) => string.Equals(value.Trim(), expected, StringComparison.OrdinalIgnoreCase);
 }
 
 internal sealed record HpRyzenTemperatureProbeResult(

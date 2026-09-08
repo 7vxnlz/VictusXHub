@@ -20,6 +20,7 @@ public sealed class PreviewPackageVerificationScriptTests
         "NAudio-LICENSE.txt",
         "NvAPIWrapper-LGPL-3.0.txt",
         "NvAPIWrapper-README.txt",
+        "PawnIO.Modules-0.2.2-LGPL-2.1.txt",
         "System.Management-LICENSE.txt",
         "System.Management-THIRD-PARTY-NOTICES.txt",
         "TaskScheduler-LICENSE.txt",
@@ -125,6 +126,19 @@ public sealed class PreviewPackageVerificationScriptTests
 
         Assert.Equal(1, result.ExitCode);
         Assert.Contains("FAIL required-files: missing: Assets/Licenses/Microsoft.NETCore.App.Runtime.win-x64-10.0.11-THIRD-PARTY-NOTICES.TXT", result.Output, StringComparison.Ordinal);
+        Assert.EndsWith("Preview package: NO-GO", result.Output.TrimEnd(), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void MissingPawnIoModuleLicense_IsNoGo()
+    {
+        using var fixture = PreviewPackageFixture.Create();
+        File.Delete(Path.Combine(fixture.DirectoryPath, "Assets", "Licenses", "PawnIO.Modules-0.2.2-LGPL-2.1.txt"));
+
+        ScriptResult result = RunInspector(fixture.DirectoryPath);
+
+        Assert.Equal(1, result.ExitCode);
+        Assert.Contains("FAIL required-files: missing: Assets/Licenses/PawnIO.Modules-0.2.2-LGPL-2.1.txt", result.Output, StringComparison.Ordinal);
         Assert.EndsWith("Preview package: NO-GO", result.Output.TrimEnd(), StringComparison.Ordinal);
     }
 

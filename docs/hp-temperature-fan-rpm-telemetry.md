@@ -4,7 +4,7 @@
 
 ### CPU Source Follow-Up
 
-The follow-up CPU-only review found no trustworthy CPU-package source already wired into this HP runtime. CPU temperature therefore remains **Unavailable**, as required when source identity is ambiguous. No speculative sensor provider, CPU polling task or dependency is added.
+The follow-up CPU-only review found no trustworthy CPU-package source already wired into this HP runtime. CPU temperature therefore remains **Unavailable**, as required when source identity is ambiguous. The later direct-PawnIO diagnostic probe is deliberately outside the normal telemetry/UI path until it returns reviewed exact-device evidence.
 
 | Candidate | Evidence and disposition |
 | --- | --- |
@@ -12,19 +12,19 @@ The follow-up CPU-only review found no trustworthy CPU-package source already wi
 | PerformanceCounter | Inherited HardwareControl.GetCPUTemp reads Thermal Zone Information/Temperature for `\\_TZ.THRM`; the instance name and Kelvin conversion do not prove CPU-package identity. CPU utilization counters are not temperature sensors. |
 | Inherited sensor code | HardwareControl.GetCPUTemp additionally uses ASUS ACPI; GetCPUTempWMI selects the Qualcomm `ACPI\\QCOM0C5A\\1_0` instance. Neither is an established source for this AMD Victus. These helpers remain outside the HP telemetry path. |
 | HP BIOS selector | omencore HpWmiBios.GetTemperature (same revision listed below) reads 0x23 with `[01,00,00,00]`, accepts byte zero in 1..109, and labels it CPU. The [existing thermal investigation](hp-temperature-readonly-investigation.md) records contradictory ambient/board labels in other references. Numeric plausibility does not resolve that conflict for F.31. No new BIOS query is implemented or invoked. |
-| LibreHardwareMonitor | No package reference or source usage was found in the VictusX application search. Reference worker/library stacks are not an already available HP CPU provider; no monitor/driver is installed or opened. No external running sensor service is assumed. |
+| LibreHardwareMonitor / PawnIO lineage | Normal VictusX telemetry does not initialize LibreHardwareMonitor. The developer-only `--hp-ryzen-temperature-probe` command uses the official PawnIO.Modules 0.2.2 `AMDFamily17.bin` lineage directly so that `RyzenSMU` PM-table initialization is impossible. It opens only the already-installed PawnIO device, loads that exact signed module, calls only `ioctl_read_smn` for `THM_TCON_CUR_TMP` (`0x00059800`), and applies the current LHM `Core (Tctl/Tdie)` decode. It is not a user-facing provider and has not yet run on the exact device. |
 | NVIDIA NVAPI | Existing dependency supplies GPU-target temperature only; it is not a CPU source. Existing optional GPU reads are unchanged. |
 
 The reference WmiBiosMonitor also explicitly tracks frozen AMD BIOS readings. Re-reading a value cannot prove that the firmware refreshed it; neither a successful query nor an in-range number establishes CPU-package accuracy. This review does not claim every possible Windows/third-party CPU source is unavailable, only that the inspected existing sources do not meet the identity requirements.
 
 No valid real CPU sample exists to exercise a numeric CPU display path. Regression tests instead enforce unavailable output for fresh/stale/future OS snapshots and plausible or invalid untyped cached temperatures. Existing hidden-window stop/reset, stale GPU tests and source-boundary tests continue to apply; no additional polling is introduced. A future implementation needs exact-target sensor identity and freshness evidence or a separately reviewed driver-free sensor feed before wiring a numeric CPU field.
 
-This is a partial read-only milestone: optional NVIDIA GPU temperature is implemented. CPU temperature and Fan 1 / Fan 2 RPM remain unavailable on this V1 target because the inspected sources do not establish safe, reliable readings. No HP BIOS method, new dependency, driver installation, fan command, UI control or control-enabling change is added. DeviceValidatedInputLength remains null; normal fan control remains NO-GO.
+This is a partial read-only milestone: optional NVIDIA GPU temperature is implemented. CPU temperature and Fan 1 / Fan 2 RPM remain unavailable on this V1 target because no exact-device runtime evidence is recorded. The direct PawnIO probe adds no driver installation, HP BIOS method, fan command, EC access, UI control, background worker, or control-enabling change. DeviceValidatedInputLength remains null; normal fan control remains NO-GO.
 
 | Value | Source class / decision |
 | --- | --- |
 | CPU load and battery/AC | Existing Windows-native GetSystemTimes/GetSystemPowerStatus; unchanged |
-| CPU temperature | Unavailable. Inherited HardwareControl.GetCPUTemp uses ASUS ACPI or a named thermal-zone counter; its WMI alternative targets a Qualcomm ACPI instance. Neither proves CPU-package identity on this AMD Victus. Generic thermal zones are not relabeled CPU temperature. |
+| CPU temperature | Unavailable in normal UI. Inherited HardwareControl.GetCPUTemp uses ASUS ACPI or a named thermal-zone counter; its WMI alternative targets a Qualcomm ACPI instance. Neither proves CPU-package identity on this AMD Victus. The separate direct-PawnIO command accepts only the exact `Core (Tctl/Tdie)` SMN semantics and remains diagnostic-only until real target samples are reviewed. |
 | GPU temperature | Existing NvAPIWrapper.Net 0.8.1.101, through installed NVIDIA display driver. Separate HpNvidiaTemperatureSource performs only physical-device enumeration and GetThermalSettings. Exactly one device and one ThermalSettingsTarget.GPU sensor are required; ambiguous, non-NVIDIA, absent or failed sources remain unavailable. No NvidiaGpuControl instance is created. |
 | Fan RPM | Unavailable. No proven V1 tachometer source was found. FanGetLevel remains raw-only; no multiplication, endian guess or conversion to RPM is adopted. |
 | FanGetRpm 0x38 | Not implemented or invoked. Reference generation gating restricts this to V2; this target is V1. Plausible values would not prove correct interpretation. |
@@ -55,4 +55,4 @@ The main GPU label changes from Unavailable only when a valid fresh sample exist
 
 Build passed with four existing NU1900 warnings; tests passed 341/341 using test-double reads only. Tests cover valid/invalid temperatures, independent freshness, bounded concurrency, hidden reset, exception recovery, raw-only fan behavior and UI/source safety boundaries. No app launch, native sensor read, HP diagnostic probe or experiment was performed for this task; exact-device runtime temperature availability remains unconfirmed.
 
-Next: observe the normal HP shell on the target to confirm the optional NVIDIA reading and its power impact. CPU-package and actual V1 fan-tachometer source identity remain separate discovery gaps, not permission to add a driver or probe unsupported commands.
+Next: run `VictusX.exe --hp-victus --hp-ryzen-temperature-probe` on the exact target with already-installed PawnIO, retain its ten timestamped samples and module identity, and review them before exposing CPU temperature. CPU-package and actual V1 fan-tachometer source identity remain separate validation gaps, not permission to add a driver, probe EC registers, or invoke unsupported commands.

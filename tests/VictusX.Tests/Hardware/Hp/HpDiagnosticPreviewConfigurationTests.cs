@@ -128,7 +128,11 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     public void FanLevelDryRun_ExitsBeforeAllHardwareStartupAndHasNoUiOrTransportDependency()
     {
         string program = ReadRepositoryFile("app", "Program.cs").Replace("\r\n", "\n");
-        Assert.Contains("public static void Main(string[] args)\n        {\n            if (TryRunHpFanLevelResearchDryRun(args))\n            {\n                return;\n            }", program, StringComparison.Ordinal);
+        int probeRoute = program.IndexOf("HpRyzenTemperatureProbeCommand.TryRun(args)", StringComparison.Ordinal);
+        int fanRoute = program.IndexOf("TryRunHpFanLevelResearchDryRun(args)", StringComparison.Ordinal);
+        int applicationStartup = program.IndexOf("MainCore(args)", StringComparison.Ordinal);
+        Assert.True(probeRoute >= 0 && fanRoute > probeRoute && applicationStartup > fanRoute,
+            "Both bounded diagnostic command routes must exit before normal application startup.");
         int start = program.IndexOf("private static bool TryRunHpFanLevelResearchDryRun", StringComparison.Ordinal);
         int end = program.IndexOf("private static bool TryRunHpFanMaxHold", start, StringComparison.Ordinal);
         string route = program[start..end];

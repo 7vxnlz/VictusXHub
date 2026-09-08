@@ -24,7 +24,7 @@ The reviewed upstream source reference recorded by this repository is commit `5c
 
 ## Runtime Dependency Notice Review
 
-The following dependencies exactly match `app/VictusX.csproj` and the local restored application graph. Their license evidence is recorded in the [Runtime Dependency License Review](docs/runtime-dependency-license-review.md), and the current ignored candidate externally contains the complete reviewed notice bundle.
+The following dependencies exactly match `app/VictusX.csproj` and the local restored application graph. Their license evidence is recorded in the [Runtime Dependency License Review](docs/runtime-dependency-license-review.md). The frozen preview predates the PawnIO diagnostic module; any later candidate must externally contain this complete reviewed notice bundle.
 
 | Package | Version | Relationship | Requirement | Assembled material |
 | --- | --- | --- | --- | --- |
@@ -36,12 +36,15 @@ The following dependencies exactly match `app/VictusX.csproj` and the local rest
 | TaskScheduler | 2.12.2 | Direct | MIT attribution and license text | `TaskScheduler-LICENSE.txt` |
 | WinForms.DataVisualization | 1.10.2 | Direct | MIT attribution and license text | `WinForms.DataVisualization-LICENSE.txt` |
 | NAudio.Core | 2.3.0 | Transitive | MIT attribution and license text | Covered by `NAudio-LICENSE.txt` |
+| PawnIO.Modules `AMDFamily17.bin` | 0.2.2 | Embedded diagnostic-only module | LGPL-2.1-or-later license; exact release/archive/module provenance | `PawnIO.Modules-0.2.2-LGPL-2.1.txt`, `LICENSE-SOURCES.md` |
 
 `System.Management` 10.0.10 is the current NuGet package version and is distinct from the superseded .NET runtime-pack 10.0.10 baseline. The self-contained runtime-pack evidence is exclusively 10.0.11.
 
 No runtime package is treated as attribution-only: the applicable license terms are assembled for each one. HidSharpCore additionally requires its NOTICE. NvAPIWrapper additionally requires prominent identification and LGPL combined-work relinking/replacement compliance. The HP preview profile excludes `NvAPIWrapper.dll` from the single-file bundle so it is distributed and replaceable beside `VictusX.exe`; the current candidate and inspector verify that layout.
 
 `app/Assets/Licenses/LICENSE-SOURCES.md` records the authoritative source revision and SHA-256 for each assembled file. The project publishes this directory externally rather than hiding it inside the single-file executable.
+
+The post-freeze `--hp-ryzen-temperature-probe` embeds only the official PawnIO.Modules 0.2.2 `AMDFamily17.bin` module for an exact-gated, diagnostic-only SMN temperature read. It does not distribute a PawnIO driver or installer and does not initialize `RyzenSMU`. The frozen preview ZIP predates this development milestone and remains unchanged; any later candidate must repeat package inspection with this additional notice material.
 
 The former Microsoft.Management.Infrastructure package family is not part of the current project or restored dependency graph after its duplicate readiness probe was removed. Final artifact inspection must confirm that no stale MMI files are distributed. Before distribution, compare this list and the assembled files with the final ZIP or installer contents. The self-contained `win-x64` preview baseline uses Microsoft.NETCore.App.Runtime.win-x64 and Microsoft.WindowsDesktop.App.Runtime.win-x64 10.0.11; verbatim exact-pack license/notice files and runtime-pack provenance are packaged under `Assets/Licenses` and fail closed in the preview inspector. See [Dependency Notice Inventory](docs/dependency-notice-inventory.md) and [Package License Review Workflow](docs/package-license-review-workflow.md).
 

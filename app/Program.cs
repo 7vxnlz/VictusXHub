@@ -60,6 +60,11 @@ namespace GHelper
         [STAThread]
         public static void Main(string[] args)
         {
+            if (HpRyzenTemperatureProbeCommand.TryRun(args))
+            {
+                return;
+            }
+
             if (TryRunHpFanLevelResearchDryRun(args))
             {
                 return;

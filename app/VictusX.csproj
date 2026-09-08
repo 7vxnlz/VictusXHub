@@ -106,6 +106,9 @@
     <EmbeddedResource Include="Pawn\IntelMSR.bin">
       <LogicalName>GHelper.IntelMSR.bin</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Hardware\Hp\Resources\PawnIO\AMDFamily17.bin">
+      <LogicalName>GHelper.Hardware.Hp.Resources.PawnIO.AMDFamily17.bin</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 	<Target Name="KillRunningVictusX" BeforeTargets="Build" Condition="'$(GITHUB_ACTIONS)'!='true'">

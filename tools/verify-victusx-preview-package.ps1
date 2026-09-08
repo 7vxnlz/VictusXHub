@@ -65,6 +65,7 @@ $licenseFiles = @(
     "NAudio-LICENSE.txt",
     "NvAPIWrapper-LGPL-3.0.txt",
     "NvAPIWrapper-README.txt",
+    "PawnIO.Modules-0.2.2-LGPL-2.1.txt",
     "System.Management-LICENSE.txt",
     "System.Management-THIRD-PARTY-NOTICES.txt",
     "TaskScheduler-LICENSE.txt",
@@ -205,6 +206,7 @@ if ($actualPaths.ContainsKey("THIRD-PARTY-NOTICES.md")) {
         '| HidSharpCore | 1.3.0 | Direct |',
         '| NAudio.Wasapi | 2.3.0 | Direct |',
         '| NvAPIWrapper.Net | 0.8.1.101 | Direct |',
+        '| PawnIO.Modules `AMDFamily17.bin` | 0.2.2 | Embedded diagnostic-only module |',
         '| System.Management | 10.0.10 | Direct |',
         '| TaskScheduler | 2.12.2 | Direct |',
         '| WinForms.DataVisualization | 1.10.2 | Direct |',
@@ -222,7 +224,7 @@ if ($actualPaths.ContainsKey("THIRD-PARTY-NOTICES.md")) {
     $missingNoticeEvidence = @($requiredNoticeEvidence | Where-Object { -not $thirdPartyNotices.Contains($_) })
     $staleNoticeEvidence = @($forbiddenNoticeEvidence | Where-Object { $thirdPartyNotices.Contains($_) })
     if ($missingNoticeEvidence.Count -eq 0 -and $staleNoticeEvidence.Count -eq 0) {
-        Write-Pass "notice-inventory" "project, G-Helper, eight package-library, .NET 10.0.11, NvAPIWrapper, and icon records match the approved baseline."
+        Write-Pass "notice-inventory" "project, G-Helper, eight package-library, PawnIO module, .NET 10.0.11, NvAPIWrapper, and icon records match the approved baseline."
     } else {
         $reasons = @()
         if ($missingNoticeEvidence.Count -gt 0) { $reasons += "missing reviewed evidence: $($missingNoticeEvidence -join '; ')" }

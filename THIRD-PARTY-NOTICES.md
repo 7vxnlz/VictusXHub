@@ -4,7 +4,7 @@
 
 Status: **Source-level dependency evidence and package-library license bundle assembled; final release review pending**.
 
-This notice is prepared for a future VictusX HP Diagnostic preview. It does not authorize publishing. License identities for the current package dependency graph have been reviewed, and the applicable package-library texts are assembled under `Assets/Licenses` for external publication. NvAPIWrapper is source-configured as a replaceable external library; verification of that layout against the release candidate remains pending. The self-contained .NET runtime notice set, icon attribution, and final artifact-content match also remain pending.
+This notice is prepared for a future VictusX HP Diagnostic preview. It does not authorize publishing. License identities for the current package dependency graph have been reviewed, and the applicable package-library texts are assembled under `Assets/Licenses` for external publication. NvAPIWrapper is source-configured as a replaceable external library; verification of that layout against the release candidate remains pending. The self-contained .NET 10.0.11 `win-x64` runtime-pack notice baseline is assembled and inspector-verified; icon attribution and final artifact-content match remain pending.
 
 ## VictusX Project Notice
 
@@ -39,7 +39,7 @@ No runtime package is treated as attribution-only: the applicable license terms 
 
 `app/Assets/Licenses/LICENSE-SOURCES.md` records the authoritative source revision and SHA-256 for each assembled file. The project publishes this directory externally rather than hiding it inside the single-file executable.
 
-The former Microsoft.Management.Infrastructure package family is not part of the current project or restored dependency graph after its duplicate readiness probe was removed. Final artifact inspection must confirm that no stale MMI files are distributed. Before distribution, compare this list and the assembled files with the final ZIP or installer contents. A self-contained package also requires the exact .NET runtime license/notice set selected by the release candidate. See [Dependency Notice Inventory](docs/dependency-notice-inventory.md) and [Package License Review Workflow](docs/package-license-review-workflow.md).
+The former Microsoft.Management.Infrastructure package family is not part of the current project or restored dependency graph after its duplicate readiness probe was removed. Final artifact inspection must confirm that no stale MMI files are distributed. Before distribution, compare this list and the assembled files with the final ZIP or installer contents. The self-contained `win-x64` preview baseline uses Microsoft.NETCore.App.Runtime.win-x64 and Microsoft.WindowsDesktop.App.Runtime.win-x64 10.0.11; verbatim exact-pack license/notice files and runtime-pack provenance are packaged under `Assets/Licenses` and fail closed in the preview inspector. See [Dependency Notice Inventory](docs/dependency-notice-inventory.md) and [Package License Review Workflow](docs/package-license-review-workflow.md).
 
 The [Runtime Dependency License Review Evidence Checklist](docs/runtime-dependency-license-review-evidence-checklist.md) now tracks the remaining release-candidate and artifact checks; the source-level findings are in the completed [Runtime Dependency License Review](docs/runtime-dependency-license-review.md).
 
@@ -79,4 +79,4 @@ HP, OMEN, and Victus names are used only to identify compatibility targets and r
 
 Status: **Blocked for release use**.
 
-The package-library license and notice files are assembled, but this document is not completed release evidence. The NvAPIWrapper source architecture now uses a replaceable external DLL, with release-candidate verification still required. A preview package remains blocked until the self-contained runtime notice set and final artifact contents are matched, icon attribution is completed, and signing/checksum and clean-machine evidence exist. Normal/user-facing fan control also remains NO-GO.
+The package-library and exact 10.0.11 runtime-pack license/notice files are assembled, but this document is not completed release evidence. The NvAPIWrapper source architecture now uses a replaceable external DLL, with release-candidate verification still required. A preview package remains blocked until final artifact contents are matched, icon attribution is completed, and signing/checksum and clean-machine evidence exist. Normal/user-facing fan control also remains NO-GO.

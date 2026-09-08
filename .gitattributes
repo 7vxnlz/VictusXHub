@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Exact restored Microsoft runtime-pack materials retain their source bytes.
+app/Assets/Licenses/Microsoft.NETCore.App.Runtime.win-x64-10.0.11-LICENSE.TXT -text whitespace=-trailing-space
+app/Assets/Licenses/Microsoft.NETCore.App.Runtime.win-x64-10.0.11-THIRD-PARTY-NOTICES.TXT -text whitespace=-trailing-space
+app/Assets/Licenses/Microsoft.WindowsDesktop.App.Runtime.win-x64-10.0.11-LICENSE.TXT -text whitespace=-trailing-space

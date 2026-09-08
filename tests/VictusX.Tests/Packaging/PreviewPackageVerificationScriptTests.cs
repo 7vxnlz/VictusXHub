@@ -13,6 +13,10 @@ public sealed class PreviewPackageVerificationScriptTests
         "HidSharpCore-LICENSE.txt",
         "HidSharpCore-NOTICE.txt",
         "LICENSE-SOURCES.md",
+        "Microsoft.NET-10.0.11-win-x64-RUNTIME-EVIDENCE.md",
+        "Microsoft.NETCore.App.Runtime.win-x64-10.0.11-LICENSE.TXT",
+        "Microsoft.NETCore.App.Runtime.win-x64-10.0.11-THIRD-PARTY-NOTICES.TXT",
+        "Microsoft.WindowsDesktop.App.Runtime.win-x64-10.0.11-LICENSE.TXT",
         "NAudio-LICENSE.txt",
         "NvAPIWrapper-LGPL-3.0.txt",
         "NvAPIWrapper-README.txt",
@@ -96,6 +100,46 @@ public sealed class PreviewPackageVerificationScriptTests
     }
 
     [Fact]
+    public void MissingRuntimeNotice_IsNoGo()
+    {
+        using var fixture = PreviewPackageFixture.Create();
+        File.Delete(Path.Combine(fixture.DirectoryPath, "Assets", "Licenses", "Microsoft.NETCore.App.Runtime.win-x64-10.0.11-THIRD-PARTY-NOTICES.TXT"));
+
+        ScriptResult result = RunInspector(fixture.DirectoryPath);
+
+        Assert.Equal(1, result.ExitCode);
+        Assert.Contains("FAIL required-files: missing: Assets/Licenses/Microsoft.NETCore.App.Runtime.win-x64-10.0.11-THIRD-PARTY-NOTICES.TXT", result.Output, StringComparison.Ordinal);
+        Assert.EndsWith("Preview package: NO-GO", result.Output.TrimEnd(), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void ModifiedRuntimeNotice_IsNoGo()
+    {
+        using var fixture = PreviewPackageFixture.Create();
+        File.AppendAllText(Path.Combine(fixture.DirectoryPath, "Assets", "Licenses", "Microsoft.NETCore.App.Runtime.win-x64-10.0.11-LICENSE.TXT"), "modified");
+
+        ScriptResult result = RunInspector(fixture.DirectoryPath);
+
+        Assert.Equal(1, result.ExitCode);
+        Assert.Contains("FAIL notice-matching: content mismatch: Assets/Licenses/Microsoft.NETCore.App.Runtime.win-x64-10.0.11-LICENSE.TXT", result.Output, StringComparison.Ordinal);
+        Assert.EndsWith("Preview package: NO-GO", result.Output.TrimEnd(), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void WrongRuntimeIdentity_IsNoGo()
+    {
+        using var fixture = PreviewPackageFixture.Create();
+        string evidencePath = Path.Combine(fixture.DirectoryPath, "Assets", "Licenses", "Microsoft.NET-10.0.11-win-x64-RUNTIME-EVIDENCE.md");
+        File.WriteAllText(evidencePath, File.ReadAllText(evidencePath).Replace("10.0.11", "10.0.10", StringComparison.Ordinal));
+
+        ScriptResult result = RunInspector(fixture.DirectoryPath);
+
+        Assert.Equal(1, result.ExitCode);
+        Assert.Contains("FAIL runtime-notices: expected 10.0.11 win-x64 runtime evidence is incomplete or mismatched.", result.Output, StringComparison.Ordinal);
+        Assert.EndsWith("Preview package: NO-GO", result.Output.TrimEnd(), StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void ValidLayout_ProducesDeterministicChecksumsAndAutomatedGo()
     {
         using var fixture = PreviewPackageFixture.Create();
@@ -107,7 +151,7 @@ public sealed class PreviewPackageVerificationScriptTests
         Assert.Equal(first.Output, second.Output);
         Assert.Matches(new Regex(@"PASS checksum-evidence: \d+ files; deterministic manifest SHA256 [A-F0-9]{64}\."), first.Output);
         Assert.Contains("PASS notice-matching", first.Output, StringComparison.Ordinal);
-        Assert.Contains("WARN runtime-notices", first.Output, StringComparison.Ordinal);
+        Assert.Contains("PASS runtime-notices", first.Output, StringComparison.Ordinal);
         Assert.Contains("WARN manual-release-evidence", first.Output, StringComparison.Ordinal);
         Assert.EndsWith("Preview package: GO", first.Output.TrimEnd(), StringComparison.Ordinal);
     }

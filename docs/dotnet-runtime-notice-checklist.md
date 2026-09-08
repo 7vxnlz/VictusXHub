@@ -7,7 +7,7 @@ This checklist defines the artifact-specific evidence required before a self-con
 ## Current Status
 
 - Source-side preparation: **Done**. The HP preview profile is documented as self-contained, and project/package notices are wired as external publish content.
-- Artifact-specific verification: **Pending**. On 2026-09-08, an ignored local `win-x64` candidate built with SDK 10.0.400 passed automated package inspection; its RID-specific restore resolved Microsoft.NETCore.App.Runtime.win-x64 and Microsoft.WindowsDesktop.App.Runtime.win-x64 to 10.0.11. This establishes a patched local build baseline only; the exact runtime license/notice mapping and final distributable evidence remain open.
+- Runtime notice mapping: **Done for the verified baseline**. An ignored local `win-x64` candidate built with SDK 10.0.400 resolved Microsoft.NETCore.App.Runtime.win-x64 and Microsoft.WindowsDesktop.App.Runtime.win-x64 to 10.0.11. It passed the inspector's required-file, byte-match, identity, and deterministic-manifest checks for the three verbatim exact-pack files and the provenance record. Final distributable evidence remains a separate pending item.
 - Preview package publish: **Blocked / NO-GO** until this checklist is completed against the actual package candidate.
 
 ## Checklist
@@ -15,10 +15,10 @@ This checklist defines the artifact-specific evidence required before a self-con
 | Item | Current status | Required evidence |
 | --- | --- | --- |
 | Publish mode | Ready to inspect | Confirm the actual release candidate is self-contained, RID-specific, and built from the intended HP preview profile. |
-| RID and version match | Pending artifact | Record `TargetFramework`, `RuntimeIdentifier`, .NET SDK version, runtime pack versions, app version, build commit SHA, and artifact name. |
+| RID and version match | Done for verified baseline | `net10.0-windows`, `win-x64`, SDK 10.0.400, and both selected runtime packs at 10.0.11 are recorded in the packaged runtime evidence. |
 | Runtime components shipped | Pending artifact | Inventory every .NET runtime, Windows Desktop runtime, native host, native runtime, ICU/globalization, compression, diagnostics, and support file included in the package. |
-| Runtime license text | Pending artifact | Match the shipped .NET runtime components to the applicable Microsoft .NET license text from the exact runtime pack/source evidence. |
-| Runtime third-party notices | Pending artifact | Include or reference the third-party notices supplied by the matching .NET runtime/runtime-pack materials. |
+| Runtime license text | Done for verified baseline | Verbatim exact-pack Core and Windows Desktop license files are externally packaged and byte-matched. |
+| Runtime third-party notices | Done for verified baseline | The verbatim Core runtime-pack `THIRD-PARTY-NOTICES.TXT` is externally packaged and byte-matched. The exact Windows Desktop pack has no separately packaged notice file, so no substitute is inferred. |
 | Native runtime files | Pending artifact | Identify native `.dll`, host, extraction, or support binaries that come from the .NET runtime packs and confirm they are covered by the matched notices. |
 | Single-file extraction behavior | Pending artifact | Record whether runtime files are embedded, externally shipped, or extracted at runtime, and ensure notices remain externally available to users. |
 | Notice placement | Source-ready, pending artifact | Confirm `LICENSE`, `THIRD-PARTY-NOTICES.md`, and `Assets/Licenses/**` are present outside the single-file executable in the final package. |
@@ -41,4 +41,4 @@ This checklist can be marked complete only after a release candidate exists and 
 - final artifact name, version, commit SHA, and SHA-256 hash;
 - reviewer and date.
 
-Until then, the .NET runtime notice item remains artifact-specific pending work, and preview package publishing remains **NO-GO**.
+Runtime notice mapping is complete for the verified 10.0.11 `win-x64` baseline. The final package hash/reference, signing/checksum, icon attribution, and clean-machine validation remain independent **NO-GO** blockers.

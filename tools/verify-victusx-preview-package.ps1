@@ -58,6 +58,10 @@ $licenseFiles = @(
     "HidSharpCore-LICENSE.txt",
     "HidSharpCore-NOTICE.txt",
     "LICENSE-SOURCES.md",
+    "Microsoft.NET-10.0.11-win-x64-RUNTIME-EVIDENCE.md",
+    "Microsoft.NETCore.App.Runtime.win-x64-10.0.11-LICENSE.TXT",
+    "Microsoft.NETCore.App.Runtime.win-x64-10.0.11-THIRD-PARTY-NOTICES.TXT",
+    "Microsoft.WindowsDesktop.App.Runtime.win-x64-10.0.11-LICENSE.TXT",
     "NAudio-LICENSE.txt",
     "NvAPIWrapper-LGPL-3.0.txt",
     "NvAPIWrapper-README.txt",
@@ -192,6 +196,24 @@ if ($noticeMismatches.Count -eq 0 -and $missing.Count -eq 0) {
     Write-Fail "notice-matching" ("content mismatch: " + ($noticeMismatches -join ", "))
 }
 
+$runtimeEvidenceRelativePath = "Assets/Licenses/Microsoft.NET-10.0.11-win-x64-RUNTIME-EVIDENCE.md"
+$requiredRuntimeEvidence = @(
+    'SDK `10.0.400`',
+    '| Microsoft.NETCore.App.Runtime.win-x64 | 10.0.11 | `microsoft.netcore.app.runtime.win-x64.nuspec`; `dotnet/dotnet` commit `e2f47b0110ed922f21a1522da67279133ce28f32` |',
+    '| Microsoft.WindowsDesktop.App.Runtime.win-x64 | 10.0.11 | `microsoft.windowsdesktop.app.runtime.win-x64.nuspec`; `dotnet/dotnet` commit `e2f47b0110ed922f21a1522da67279133ce28f32` |'
+)
+if ($actualPaths.ContainsKey($runtimeEvidenceRelativePath)) {
+    $runtimeEvidence = Get-Content -Raw -LiteralPath $actualPaths[$runtimeEvidenceRelativePath]
+    $missingRuntimeEvidence = @($requiredRuntimeEvidence | Where-Object { -not $runtimeEvidence.Contains($_) })
+    if ($missingRuntimeEvidence.Count -eq 0) {
+        Write-Pass "runtime-notices" "10.0.11 win-x64 .NET Core and Windows Desktop runtime-pack evidence matches the approved external notice files."
+    } else {
+        Write-Fail "runtime-notices" "expected 10.0.11 win-x64 runtime evidence is incomplete or mismatched."
+    }
+} else {
+    Write-Fail "runtime-notices" "missing $runtimeEvidenceRelativePath."
+}
+
 $unexpectedExecutables = @($entries.RelativePath | Where-Object {
     ([IO.Path]::GetExtension($_) -in @(".exe", ".dll")) -and $_ -notin @("VictusX.exe", "NvAPIWrapper.dll")
 })
@@ -249,7 +271,6 @@ try {
 }
 Write-Pass "checksum-evidence" "$($entries.Count) files; deterministic manifest SHA256 $manifestHash."
 
-Write-Warn "runtime-notices" "the self-contained .NET/Windows Desktop runtime is embedded; exact runtime-pack version and Microsoft notice mapping still require build-record review."
 Write-Warn "manual-release-evidence" "signing decision, artifact-level ZIP checksum, icon provenance/attribution, attribution review, and clean-machine validation remain required."
 
 if ($script:FailureCount -eq 0) {

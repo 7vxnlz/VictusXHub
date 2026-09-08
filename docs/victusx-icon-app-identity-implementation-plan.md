@@ -1,6 +1,8 @@
 # VictusX Icon And App Identity Implementation Plan
 
-## Current App Identity State
+> Superseded on 2026-09-08. The approved single-icon identity is implemented; see the [VictusX Icon Wiring Checkpoint](victusx-icon-wiring-checkpoint.md). The remaining sections preserve the pre-integration plan as historical context.
+
+## Historical App Identity State
 
 - `app/VictusX.csproj` builds `VictusX.exe` with `AssemblyName=VictusX`.
 - Project metadata already uses `Product=VictusX`, a read-only diagnostic description, `VictusX Contributors`, and `0.1.0-preview.1` / `0.1.0.0` version fields.
@@ -10,7 +12,7 @@
 
 There is no `app/Properties/AssemblyInfo.cs`; executable metadata is currently project-file driven.
 
-## Current Icon And Resource State
+## Historical Icon And Resource State
 
 - `ApplicationIcon` conditionally selects `app/Assets/VictusX.ico` when the reviewed asset is present and otherwise retains `app/favicon.ico` as the inherited fallback.
 - In HP mode, the initial tray icon is the executable associated icon; outside HP mode, it remains `Properties.Resources.standard`.
@@ -107,6 +109,6 @@ Rollback:
 - re-run build/tests and HP Diagnostic launch after rollback
 - keep release blocked until visual identity verification passes
 
-## Recommended Next Safe Task
+## Historical Recommended Next Safe Task
 
 Create or approve an original VictusX diagnostic icon asset with documented license/provenance and size coverage. Do not integrate it until the asset satisfies the acceptance checklist.

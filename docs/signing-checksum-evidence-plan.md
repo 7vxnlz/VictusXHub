@@ -132,7 +132,7 @@ For every released artifact, record:
 - Final package contents are unavailable.
 - Clean-machine validation is not complete.
 - Runtime dependency license/notice review and `NU1900` disposition remain open.
-- Icon attribution remains pending a future approved VictusX icon asset.
+- Icon provenance and source wiring are recorded; retain their checkpoint linkage in final release evidence.
 - Normal/user-facing fan control remains NO-GO.
 
 ## Recommended Next Safe Task

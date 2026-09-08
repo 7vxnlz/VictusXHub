@@ -516,26 +516,33 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     }
 
     [Fact]
-    public void HpTrayIdentity_UsesFixedApplicationIconAndModeAwareEmbeddedIcons()
+    public void HpTrayIdentity_UsesOneFixedVictusXIconAndPreservesNonHpRouting()
     {
         string project = ReadRepositoryFile("app", "VictusX.csproj");
         string program = ReadRepositoryFile("app", "Program.cs");
         string settings = ReadRepositoryFile("app", "Settings.cs");
+        string selector = ReadRepositoryFile("app", "UI", "HpTrayIconSelector.cs");
 
         Assert.Contains("<ApplicationIcon>Assets\\VictusX.ico</ApplicationIcon>", project, StringComparison.Ordinal);
         Assert.DoesNotContain("<ApplicationIcon>favicon.ico</ApplicationIcon>", project, StringComparison.Ordinal);
-        Assert.Contains("GHelper.Assets.VictusX.Silent.ico", project, StringComparison.Ordinal);
-        Assert.Contains("GHelper.Assets.VictusX.Balanced.ico", project, StringComparison.Ordinal);
-        Assert.Contains("GHelper.Assets.VictusX.Turbo.ico", project, StringComparison.Ordinal);
+        Assert.Contains("<LogicalName>GHelper.Assets.VictusX.ico</LogicalName>", project, StringComparison.Ordinal);
         Assert.Contains("Icon = GetTrayIcon(),", program, StringComparison.Ordinal);
         Assert.Contains("internal static Icon GetTrayIcon()", program, StringComparison.Ordinal);
-        Assert.Contains("return GetHpTrayIcon(HpPerformanceModeStatus.CurrentBaseMode);", program, StringComparison.Ordinal);
-        Assert.Contains("GetManifestResourceStream(resourceName)", program, StringComparison.Ordinal);
+        Assert.Contains("return GetHpTrayIcon();", program, StringComparison.Ordinal);
+        Assert.Contains("internal static Icon GetHpTrayIcon()", program, StringComparison.Ordinal);
+        Assert.Contains("HpTrayIconSelector.ResourceName", program, StringComparison.Ordinal);
+        Assert.Contains("GetManifestResourceStream(HpTrayIconSelector.ResourceName)", program, StringComparison.Ordinal);
         Assert.Contains("Icon.ExtractAssociatedIcon(Application.ExecutablePath)", program, StringComparison.Ordinal);
         Assert.Contains("if (!AppConfig.IsHpVictusHardwareMode()) return Properties.Resources.standard;", program, StringComparison.Ordinal);
         Assert.Contains("if (AppConfig.IsHpVictusHardwareMode())", settings, StringComparison.Ordinal);
-        Assert.Contains("Program.GetHpTrayIcon(basePerformanceMode)", settings, StringComparison.Ordinal);
+        Assert.Contains("Program.GetHpTrayIcon()", settings, StringComparison.Ordinal);
         Assert.Contains("Icon newIcon = GPUMode switch", settings, StringComparison.Ordinal);
+
+        string combined = project + program + settings + selector;
+        Assert.DoesNotContain("VictusX.Silent.ico", combined, StringComparison.Ordinal);
+        Assert.DoesNotContain("VictusX.Balanced.ico", combined, StringComparison.Ordinal);
+        Assert.DoesNotContain("VictusX.Turbo.ico", combined, StringComparison.Ordinal);
+        Assert.DoesNotContain("HpTrayIconKind", combined, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -543,7 +550,6 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     {
         string settings = ReadRepositoryFile("app", "Settings.cs");
         string status = ReadRepositoryFile("app", "Hardware", "Hp", "HpPerformanceModeStatus.cs");
-        Assert.Contains("int basePerformanceMode = HpPerformanceModeStatus.CurrentBaseMode;", settings);
         Assert.Contains("button.Activated = false;", settings);
         Assert.Contains("button.Enabled = false;", settings);
         Assert.Contains("button.AccessibleDescription = HpPerformanceModeStatus.Blocker;", settings);

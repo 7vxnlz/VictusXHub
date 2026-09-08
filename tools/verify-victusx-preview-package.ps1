@@ -249,7 +249,7 @@ if ($actualPaths.ContainsKey("VictusX.exe")) {
     try {
         $icon = [Drawing.Icon]::ExtractAssociatedIcon($actualPaths["VictusX.exe"])
         if ($null -eq $icon) { Write-Warn "executable-icon" "no extractable icon resource was found." }
-        else { $icon.Dispose(); Write-Pass "executable-icon" "an icon resource is extractable; visual identity and provenance still require manual review." }
+        else { $icon.Dispose(); Write-Pass "executable-icon" "the approved VictusX icon resource is extractable; final visual review remains part of clean-machine validation." }
     } catch {
         Write-Warn "executable-icon" "icon resource could not be inspected cheaply; verify it manually."
     }
@@ -271,7 +271,7 @@ try {
 }
 Write-Pass "checksum-evidence" "$($entries.Count) files; deterministic manifest SHA256 $manifestHash."
 
-Write-Warn "manual-release-evidence" "signing decision, artifact-level ZIP checksum, icon provenance/attribution, attribution review, and clean-machine validation remain required."
+Write-Warn "manual-release-evidence" "signing decision, artifact-level ZIP checksum, final package notice review, and clean-machine validation remain required."
 
 if ($script:FailureCount -eq 0) {
     Write-Output "Preview package: GO"

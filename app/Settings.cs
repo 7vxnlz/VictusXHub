@@ -3180,7 +3180,7 @@ namespace GHelper
 
 
         private (int, bool, bool)? lastIcon;
-        private HpTrayIconKind? lastHpTrayIcon;
+        private bool hpTrayIconApplied;
         private bool isDark = CheckSystemDarkModeStatus();
 
         public void VisualiseIcon(bool themeChange = false)
@@ -3188,13 +3188,11 @@ namespace GHelper
             if (Program.trayIcon is null) return;
             if (AppConfig.IsHpVictusHardwareMode())
             {
-                int basePerformanceMode = HpPerformanceModeStatus.CurrentBaseMode;
-                HpTrayIconKind iconKind = HpTrayIconSelector.Select(basePerformanceMode);
-                if (lastHpTrayIcon == iconKind) return;
-                lastHpTrayIcon = iconKind;
+                if (hpTrayIconApplied) return;
+                hpTrayIconApplied = true;
 
                 Icon? oldHpIcon = Program.trayIcon.Icon;
-                Program.trayIcon.Icon = Program.GetHpTrayIcon(basePerformanceMode);
+                Program.trayIcon.Icon = Program.GetHpTrayIcon();
                 oldHpIcon?.Dispose();
                 return;
             }

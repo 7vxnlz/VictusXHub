@@ -43,15 +43,6 @@
     <EmbeddedResource Include="Assets\VictusX.ico">
       <LogicalName>GHelper.Assets.VictusX.ico</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Assets\VictusX.Silent.ico">
-      <LogicalName>GHelper.Assets.VictusX.Silent.ico</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Assets\VictusX.Balanced.ico">
-      <LogicalName>GHelper.Assets.VictusX.Balanced.ico</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Assets\VictusX.Turbo.ico">
-      <LogicalName>GHelper.Assets.VictusX.Turbo.ico</LogicalName>
-    </EmbeddedResource>
     <Content Include="favicon.ico">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>

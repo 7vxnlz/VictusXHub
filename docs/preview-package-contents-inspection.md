@@ -10,7 +10,7 @@ This checklist defines what must be inspected in a future VictusX HP Diagnostic 
 - Preview package publish remains **NO-GO**.
 - The HP source profile is `Release` / `net10.0-windows` / `win-x64`, self-contained, single-file, explicitly untrimmed, and configured without debug symbols.
 - `VictusX.exe` embeds the application and self-contained runtime. `NvAPIWrapper.dll` remains external and replaceable. `VictusX.dll.config`, `LICENSE`, `THIRD-PARTY-NOTICES.md`, `Assets/Licenses/**`, and `tools/run-victusx-hp-diagnostic.ps1` are external publish files.
-- `tools/verify-victusx-preview-package.ps1` performs the deterministic file/layout checks below against an explicit directory. Final signing, runtime-notice attribution, icon provenance, and clean-machine evidence remain manual blockers.
+- `tools/verify-victusx-preview-package.ps1` performs the deterministic file/layout checks below against an explicit directory. Final signing/checksum, package notice review, and clean-machine evidence remain manual blockers.
 
 ## Automated Inspection
 
@@ -34,8 +34,8 @@ Any additional file is fail-closed until the publish contract and inspector are 
 
 | Item | Status | Future inspection requirement |
 | --- | --- | --- |
-| VictusX executable identity | Automated, final candidate pending | Confirm `VictusX.exe`, Windows executable header, readable VictusX product metadata, and extractable icon resource. Visual identity and provenance remain manual. |
-| Final `VictusX.ico` presence | Blocked by missing artifact | Confirm `app/Assets/VictusX.ico` was supplied from an original or properly licensed asset and is reflected in Explorer, taskbar, tray, and window identity. |
+| VictusX executable identity | Automated, final candidate pending | Confirm `VictusX.exe`, Windows executable header, readable VictusX product metadata, and extractable icon resource. Final visual confirmation remains part of clean-machine validation. |
+| Final `VictusX.ico` source and wiring | Source complete; final candidate pending | The approved PNG source, generated ICO hashes and frames, factual provenance, `ApplicationIcon`, and single HP tray resource are verified in source. Confirm the exact candidate visually during clean-machine validation. |
 | Expected runtime files only | Automated, runtime notices pending | Require the single executable, `VictusX.dll.config`, and only the external `NvAPIWrapper.dll`; reject every unexpected file/binary. Embedded runtime-pack version/notice mapping remains manual. |
 | No test artifacts | Automated | Reject test directories/assemblies, testhost, xUnit, test-platform, coverage, and test-result artifacts. |
 | No source-only/reference repo files | Automated | Reject source/build files, `.git`, `.github`, reference repositories, context packs, and unexpected tooling. |
@@ -58,4 +58,4 @@ Any additional file is fail-closed until the publish contract and inspector are 
 
 ## Current Decision
 
-The publish profile and automated directory inspector are source-ready. Preview package publishing remains **NO-GO** until the exact final candidate passes this tool and the runtime-notice mapping, notice/attribution review, icon provenance, signing decision/final artifact checksum, and clean-machine validation are complete.
+The publish profile and automated directory inspector are source-ready. Preview package publishing remains **NO-GO** until the exact final candidate passes this tool and final package notice review, signing decision/final artifact checksum, and clean-machine validation are complete.

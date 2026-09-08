@@ -34,7 +34,7 @@ Treat [HP Diagnostic Preview Final Blocker Tracker](hp-diagnostic-preview-final-
 
 - Preserve the resolved inherited-shell UI state during future release-prep changes.
 - Complete package-license and notice review from authoritative package metadata.
-- Replace inherited G-Helper visual identity with approved VictusX icon/app assets.
+- Confirm the approved VictusX icon visually on the exact clean-machine candidate.
 - Define and verify signing and checksum output for the final package.
 - Run the clean-machine validation plan against a final candidate package.
 - Dispose recurring `NU1900` package vulnerability audit-source warnings with documented evidence.
@@ -52,9 +52,9 @@ The future ZIP/installer must include applicable license text, upstream G-Helper
 
 ## Icon/App Identity Blocker
 
-Use [VictusX Icon and App Identity Plan](victusx-icon-app-identity-plan.md) and [VictusX Icon Asset Requirements](victusx-icon-asset-requirements.md). The inherited icon remains a release blocker until an original or properly licensed VictusX icon is added and verified for executable properties, Explorer, shortcuts, tray, and window display.
+The owner-approved `VictusX.Source.png` and generated `VictusX.ico` now supply executable and HP tray identity. Source provenance, hashes, frames, and wiring are complete in the [VictusX Icon Wiring Checkpoint](victusx-icon-wiring-checkpoint.md); Explorer, shortcut, taskbar, tray, and window appearance still require final clean-machine confirmation.
 
-The [VictusX Icon and App Identity Implementation Plan](victusx-icon-app-identity-implementation-plan.md) defines the future asset integration, HP-mode tray handling, verification, and rollback sequence. It does not change assets or executable metadata.
+The former identity implementation plan is retained as a superseded historical record.
 
 Default ASUS/G-Helper behavior and shared resources must not be broken while preparing HP diagnostic preview identity.
 
@@ -104,4 +104,4 @@ These are intentional safety conditions, not release tasks to unblock.
 
 ## Recommended Next Safe Task
 
-Proceed to icon/app identity asset implementation only after an original or properly licensed VictusX icon asset exists. If no approved asset is available yet, continue license/notice review evidence without publishing artifacts.
+Preserve the approved icon hashes and verify the exact candidate visually during clean-machine validation. Do not publish artifacts until the remaining release gates are complete.

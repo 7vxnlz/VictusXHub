@@ -33,7 +33,7 @@ This checkpoint does not authorize publishing, artifact creation, signing, check
 
 ## Remaining Release Blockers
 
-- Icon/app identity remains blocked pending an original or properly licensed VictusX icon asset and integration verification.
+- Icon provenance and source integration are complete; exact-candidate visual confirmation remains part of clean-machine validation.
 - Package license/notices remain blocked pending authoritative review and package-content matching.
 - Runtime dependency license review remains blocked pending per-package evidence.
 - `THIRD-PARTY-NOTICES.md` remains draft/source-level only.
@@ -60,7 +60,7 @@ This checkpoint does not authorize publishing, artifact creation, signing, check
 ## What Can Continue Safely
 
 - Source-only release-prep documentation.
-- Icon asset review and future implementation planning without replacing assets until approved.
+- Preservation and final candidate verification of the approved VictusX icon identity.
 - Runtime dependency license evidence collection.
 - `THIRD-PARTY-NOTICES.md` review against authoritative metadata.
 - `NU1900` disposition in a network-connected release-prep environment.

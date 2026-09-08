@@ -96,13 +96,13 @@ Package vulnerability audit data is also a separate signal. If restore/build/tes
 - required license text and attribution text are added or explicitly marked not required based on reviewed evidence;
 - final artifact contents are inspected and matched to the reviewed inventory;
 - inherited G-Helper attribution and applicable project license text are preserved;
-- icon attribution is added or explicitly marked not required after the future icon asset is approved;
+- the approved icon's factual provenance and attribution decision remain recorded;
 - reviewer and review date are recorded;
 - remaining questions are closed or the release remains blocked.
 
 ## Remaining Blocked Items
 
-Runtime dependency license identity review is complete for the current graph, and the MMI runtime disposition is resolved at source/restore-graph level. Release remains blocked because required license/notice files are not assembled and final package contents are unavailable. Icon attribution depends on a future approved VictusX icon asset, signing/checksum evidence is incomplete, and clean-machine validation has not been run against a package candidate.
+Runtime dependency license identity review and icon provenance/source wiring are complete for the current graph, and the MMI runtime disposition is resolved at source/restore-graph level. Release remains blocked pending final package notice/content review, signing/checksum evidence, and clean-machine validation against the exact distributable.
 
 Recurring `NU1900` audit-source warnings also remain open until package vulnerability audit retrieval is verified or separately dispositioned.
 

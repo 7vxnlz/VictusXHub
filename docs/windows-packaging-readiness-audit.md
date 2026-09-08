@@ -9,10 +9,8 @@
 
 ## Branding and Metadata Risks
 
-- `favicon.ico` is still the inherited blue G icon, so Explorer, shortcuts, and executable properties do not present distinct VictusX branding.
-- [VictusX Icon and App Identity Plan](victusx-icon-app-identity-plan.md) maps the separate executable, tray, window, and shared-resource paths; no asset replacement has occurred.
-- [VictusX Icon Asset Requirements](victusx-icon-asset-requirements.md) defines the ownership, format, accessibility, and acceptance checklist required before any icon asset is created or replaced.
-- [VictusX Icon and App Identity Implementation Plan](victusx-icon-app-identity-implementation-plan.md) defines the concrete integration, verification, and rollback steps; no icon/resource/metadata changes have been made by that plan.
+- The owner-approved `VictusX.Source.png` and generated multi-resolution `VictusX.ico` now provide distinct executable and HP tray identity; provenance, hashes, and wiring are recorded in the [icon checkpoint](victusx-icon-wiring-checkpoint.md).
+- The former icon plan and implementation plan are retained as superseded historical records.
 - The project now supplies explicit VictusX product, description, company/authors, copyright, assembly, file, and informational version metadata. A future packaged smoke test must still confirm the final executable properties match those values.
 - G-Helper and ASUS strings/resources remain in the binary. HP shell isolation hides inherited control/update surfaces, but packaging must not imply that those features support HP hardware.
 - GPLv3 is present, but a preview package still needs clear source, attribution, modified-project, and third-party notice handling.
@@ -61,7 +59,7 @@ The IDE launch profile is not embedded into a published executable. Any preview 
 - Use [HP Inherited Shell UI Final Checkpoint](hp-inherited-shell-ui-final-checkpoint.md) as the manual visual confirmation that HP mode preserves the compact inherited shell, readable footer, aligned disabled captions, and Diagnostic side panel.
 - Review [HP Diagnostic Preview Readiness Checkpoint](hp-diagnostic-preview-readiness-checkpoint.md) for the current read-only dashboard, proof-gap analyzer, close-to-tray behavior, and remaining blocker status.
 - Review [HP Diagnostic Preview Source Readiness Audit](hp-diagnostic-preview-source-readiness-audit.md) before selecting any package candidate.
-- Confirm the explicit product/version/publisher metadata in a packaged executable and add a distinct VictusX icon.
+- Confirm the explicit product/version/publisher metadata and approved VictusX icon in the exact packaged executable.
 - Choose and document framework-dependent versus self-contained runtime packaging.
 - Add a dedicated HP diagnostic publish profile and versioned artifact name.
 - Provide a shortcut or launcher that always supplies only `--hp-victus`.
@@ -80,13 +78,11 @@ The IDE launch profile is not embedded into a published executable. Any preview 
 
 ## Change Now
 
-Keep the explicit VictusX metadata aligned with the future artifact version. Proceed to icon/app identity asset implementation only after an original or properly licensed VictusX icon asset exists; otherwise continue license/notice review evidence before any release work.
+Keep the explicit VictusX metadata and approved icon hashes aligned with the future artifact version. Final visual confirmation remains part of clean-machine validation.
 
 See [Third-Party Notices Audit](third-party-notices-audit.md) for the source-attribution and package-notice distribution gate.
 See [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md) before drafting or reviewing package notices for a preview candidate.
-See [VictusX Icon and App Identity Plan](victusx-icon-app-identity-plan.md) for the future HP-preview-only visual identity work.
-See [VictusX Icon Asset Requirements](victusx-icon-asset-requirements.md) for the icon acceptance gate before replacing inherited visual assets.
-See [VictusX Icon and App Identity Implementation Plan](victusx-icon-app-identity-implementation-plan.md) before changing executable, tray, or window icon integration.
+See the [VictusX Icon Wiring Checkpoint](victusx-icon-wiring-checkpoint.md) for the implemented HP-preview identity, provenance, and validation record.
 See [Signing and Checksum Workflow](signing-checksum-workflow.md) for future release integrity evidence.
 See [Signing And Checksum Evidence Plan](signing-checksum-evidence-plan.md) for the exact artifact-level evidence required before release.
 See [Clean-Machine Validation Plan](clean-machine-validation-plan.md) for the future portable-preview acceptance procedure.
@@ -105,6 +101,6 @@ Defer automatic updates, startup registration, a production installer/store pack
 
 ## Recommended Next Safe Task
 
-The next product task is a read-only source-validation design for CPU/GPU temperature and fan RPM, scoped by the [usefulness gap audit](hp-victus-ui-usefulness-gap-audit.md), with no HP BIOS-method probe, EC, driver, or experiment invocation. Packaging remains source-only: icon integration still needs an original/licensed asset, notices require evidence, and all remaining release gates stay open. Do not publish binaries or enable normal fan control.
+The next product task is a read-only source-validation design for CPU/GPU temperature and fan RPM, scoped by the [usefulness gap audit](hp-victus-ui-usefulness-gap-audit.md), with no HP BIOS-method probe, EC, driver, or experiment invocation. Packaging remains source-only: final package review, signing/checksum, and clean-machine gates stay open. Do not publish binaries or enable normal fan control.
 
 See [HP Diagnostic Publish Profile Design](hp-diagnostic-publish-profile-design.md) for the proposed artifact name, dedicated launcher contract, deployment choice, and fail-closed pre-release checklist.

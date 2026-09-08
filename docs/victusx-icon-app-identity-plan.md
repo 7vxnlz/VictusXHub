@@ -1,13 +1,15 @@
 # VictusX Icon and App Identity Plan
 
-## Current Status
+> Superseded on 2026-09-08. The approved single-icon identity is implemented; see the [VictusX Icon Wiring Checkpoint](victusx-icon-wiring-checkpoint.md). The remaining sections preserve the pre-integration plan as historical context.
+
+## Historical Pre-Integration Status
 
 - `app/VictusX.csproj` embeds `app/favicon.ico` as the executable icon. Packaging audit work identifies it as the inherited blue G icon.
 - The project and manifest identity are already `VictusX` / `VictusX.app`; product, read-only description, contributor attribution, and preview version metadata are explicit.
 - In `--hp-victus` mode, the tray tooltip is `VictusX` and the visible diagnostic title is `VictusX Read-only Diagnostic`.
-- The tray icon still uses `Properties.Resources.standard`, an inherited shared icon resource. No clearly named, reviewed VictusX icon asset was found.
+- At the time of this historical plan, the tray icon used `Properties.Resources.standard` and no reviewed VictusX icon asset had yet been integrated.
 
-## Current Identity References
+## Historical Identity References
 
 | Surface | Current reference | Future HP diagnostic treatment |
 | --- | --- | --- |
@@ -27,7 +29,7 @@ See [VictusX Icon Asset Requirements](victusx-icon-asset-requirements.md) for th
 - Neutral diagnostic identity: it must not imply fan, performance, or hardware-control support.
 - Match the existing read-only wording in metadata and UI; do not present the preview as HP-endorsed.
 
-## Future Integration Plan
+## Historical Integration Plan
 
 See [VictusX Icon and App Identity Implementation Plan](victusx-icon-app-identity-implementation-plan.md) for the implementation sequence, source integration points, verification steps, and rollback plan.
 
@@ -44,10 +46,10 @@ See [VictusX Icon and App Identity Implementation Plan](victusx-icon-app-identit
 - Default ASUS/G-Helper window, tray, update, and control behavior outside `--hp-victus`.
 - Any logo or brand asset without a documented right to use it.
 
-## Preview Release Status
+## Historical Preview Release Status
 
 The inherited executable and tray identity remain a release blocker. Replacement must satisfy the asset requirements checklist before integration. Replacement is not sufficient by itself: dependency notice review, signing/checksums, and clean-machine packaged validation must also pass. No image, icon, or binary asset changed as part of this plan.
 
-## Recommended Next Safe Task
+## Historical Recommended Next Safe Task
 
 Review and approve an original, license-documented multi-resolution VictusX diagnostic icon, then perform a separate asset-only integration task using the implementation plan.

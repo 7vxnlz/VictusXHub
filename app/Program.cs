@@ -939,17 +939,14 @@ namespace GHelper
         {
             if (!AppConfig.IsHpVictusHardwareMode()) return Properties.Resources.standard;
 
-            return GetHpTrayIcon(HpPerformanceModeStatus.CurrentBaseMode);
+            return GetHpTrayIcon();
         }
 
-        internal static Icon GetHpTrayIcon(int basePerformanceMode)
+        internal static Icon GetHpTrayIcon()
         {
-            string resourceName = HpTrayIconSelector.GetResourceName(
-                HpTrayIconSelector.Select(basePerformanceMode));
-
             try
             {
-                using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+                using Stream? stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(HpTrayIconSelector.ResourceName);
                 if (stream is not null)
                 {
                     using var icon = new Icon(stream);

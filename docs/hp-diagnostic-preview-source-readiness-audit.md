@@ -13,7 +13,7 @@
 ## Remaining Release Blockers
 
 - Package-license and notice review is incomplete.
-- The inherited icon/app visual identity has not been replaced.
+- The approved VictusX executable and HP tray identity is integrated; final candidate visual confirmation remains pending.
 - No signing or checksum evidence exists.
 - Clean-machine validation has not been run against a final package candidate.
 - No final package contents list or release evidence record exists.
@@ -55,7 +55,7 @@ This audit does not modify license terms or make legal conclusions.
 
 ## Icon and App Identity Status
 
-The inherited icon remains unchanged. Icon replacement is blocked until the asset requirements and acceptance checklist are satisfied with original or properly licensed VictusX assets.
+The owner-approved single VictusX source master and generated ICO satisfy the source provenance, format, and wiring requirements. Final candidate visual confirmation remains part of clean-machine validation.
 
 ## Signing and Checksum Status
 

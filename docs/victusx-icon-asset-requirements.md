@@ -2,8 +2,8 @@
 
 ## Ownership and Licensing
 
-- The future VictusX icon must be original work or explicitly licensed for redistribution with the HP diagnostic preview.
-- The source, author, license terms, and attribution requirements must be recorded before the asset is added.
+- The VictusX icon must be new work or explicitly licensed for redistribution with the HP diagnostic preview.
+- The source, creation method, owner approval, applicable terms, and attribution requirements must be recorded before release.
 - If generated with a tool or commissioned, keep the prompt/brief, license, and acceptance approval with the release records.
 - Do not modify repository license terms as part of icon replacement.
 
@@ -45,21 +45,18 @@
 - No `--hp-wmi-readonly-test`, fan write, performance write, EC, or BIOS write behavior is added.
 - Release blocker checklist updated after verification.
 
-## Files and Resources Likely Affected Later
+## Implemented Files and Resources
 
-- `app/favicon.ico` for executable identity.
-- `app/VictusX.csproj` `ApplicationIcon` metadata.
-- `app/Properties/Resources.resx` and generated designer if an HP-mode tray resource is added.
-- `app/Resources/*.ico` only for a reviewed HP-mode-specific resource; shared inherited resources should remain unchanged unless a separate default-mode branding task approves it.
-- `app/Program.cs` for an `--hp-victus`-only tray icon selection.
-- Future shortcut/launcher/package metadata for the preview artifact.
+- `app/Assets/VictusX.Source.png` is the approved source master.
+- `app/Assets/VictusX.ico` supplies executable and HP tray identity through `app/VictusX.csproj` and `app/Program.cs`.
+- Shared inherited resources remain unchanged for non-HP behavior.
 
-See [VictusX Icon and App Identity Implementation Plan](victusx-icon-app-identity-implementation-plan.md) for the concrete source integration and verification sequence after an approved icon asset exists.
+See the [VictusX Icon Wiring Checkpoint](victusx-icon-wiring-checkpoint.md) for provenance, hashes, sizes, and final wiring.
 
 ## Release Blocker Status
 
-Icon/app identity remains a preview release blocker. No icon, image, or binary asset has been created, generated, replaced, or modified by this requirements document.
+The source, factual provenance, multi-frame conversion, and source wiring requirements are complete. Final visual confirmation of the exact distributable remains part of clean-machine validation rather than an icon-provenance blocker.
 
 ## Recommended Next Safe Task
 
-Create or approve an original VictusX diagnostic icon asset with documented license/provenance and size coverage. Do not integrate it until the asset satisfies this checklist.
+Preserve the approved source and ICO hashes and verify the exact distributable during clean-machine validation.

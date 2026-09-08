@@ -41,4 +41,4 @@ This checklist can be marked complete only after a release candidate exists and 
 - final artifact name, version, commit SHA, and SHA-256 hash;
 - reviewer and date.
 
-Runtime notice mapping is complete for the verified 10.0.11 `win-x64` baseline. The final package hash/reference, signing/checksum, icon attribution, and clean-machine validation remain independent **NO-GO** blockers.
+Runtime notice mapping is complete for the verified 10.0.11 `win-x64` baseline. Icon provenance and source wiring are also complete; the final package hash/reference, signing/checksum, package notice review, and clean-machine validation remain independent **NO-GO** blockers.

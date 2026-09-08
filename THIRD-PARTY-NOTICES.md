@@ -4,7 +4,7 @@
 
 Status: **Source-level dependency evidence and package-library license bundle assembled; final release review pending**.
 
-This notice is prepared for a future VictusX HP Diagnostic preview. It does not authorize publishing. License identities for the current package dependency graph have been reviewed, and the applicable package-library texts are assembled under `Assets/Licenses` for external publication. NvAPIWrapper is source-configured as a replaceable external library; verification of that layout against the release candidate remains pending. The self-contained .NET 10.0.11 `win-x64` runtime-pack notice baseline is assembled and inspector-verified; icon attribution and final artifact-content match remain pending.
+This notice is prepared for a future VictusX HP Diagnostic preview. It does not authorize publishing. License identities for the current package dependency graph have been reviewed, and the applicable package-library texts are assembled under `Assets/Licenses` for external publication. NvAPIWrapper is source-configured as a replaceable external library; verification of that layout against the release candidate remains pending. The self-contained .NET 10.0.11 `win-x64` runtime-pack notice baseline is assembled and inspector-verified; icon provenance is recorded and final artifact-content review remains pending.
 
 ## VictusX Project Notice
 
@@ -65,11 +65,11 @@ The following packages are recorded only in the test project or its resolved tes
 | xunit.extensibility.core | 2.9.3 | Resolved test transitive; **Pending review if distributed** |
 | xunit.extensibility.execution | 2.9.3 | Resolved test transitive; **Pending review if distributed** |
 
-## Icon Attribution (Pending)
+## VictusX Icon Provenance
 
-Status: **Final assets present; release provenance confirmation pending**.
+Status: **Owner-approved source and technical integration recorded**.
 
-The project-supplied final `VictusX.ico`, `VictusX.Silent.ico`, `VictusX.Balanced.ico`, and `VictusX.Turbo.ico` assets passed Windows ICO container and frame validation and are wired for fixed application identity plus HP mode-aware tray identity. No external artwork source or third-party attribution requirement was supplied. Final release review must retain the recorded asset hashes and confirm the project owner's ownership/license statement and any required attribution against the package candidate. See [VictusX Icon Wiring Checkpoint](docs/victusx-icon-wiring-checkpoint.md).
+The project owner directed creation of `app/Assets/VictusX.Source.png` specifically for VictusXHub in the owner's ChatGPT image-generation design session and approved it as the single application identity. The owner states that the design was newly created rather than sourced from an existing third-party icon and that no vendor logo, icon, or marketing asset was intentionally used as source material. No separate third-party artwork attribution requirement is identified by this factual record. The generated `VictusX.ico` and source master hashes, icon frames, superseded variants, and executable/HP-tray wiring are recorded in the [VictusX Icon Wiring Checkpoint](docs/victusx-icon-wiring-checkpoint.md).
 
 ## Trademark Notice
 
@@ -79,4 +79,4 @@ HP, OMEN, and Victus names are used only to identify compatibility targets and r
 
 Status: **Blocked for release use**.
 
-The package-library and exact 10.0.11 runtime-pack license/notice files are assembled, but this document is not completed release evidence. The NvAPIWrapper source architecture now uses a replaceable external DLL, with release-candidate verification still required. A preview package remains blocked until final artifact contents are matched, icon attribution is completed, and signing/checksum and clean-machine evidence exist. Normal/user-facing fan control also remains NO-GO.
+The package-library and exact 10.0.11 runtime-pack license/notice files are assembled, but this document is not completed release evidence. The NvAPIWrapper source architecture now uses a replaceable external DLL, with release-candidate verification still required. A preview package remains blocked until final artifact contents are matched and signing/checksum and clean-machine evidence exist. Normal/user-facing fan control also remains NO-GO.

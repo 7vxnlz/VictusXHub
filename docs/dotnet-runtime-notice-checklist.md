@@ -7,7 +7,7 @@ This checklist defines the artifact-specific evidence required before a self-con
 ## Current Status
 
 - Source-side preparation: **Done**. The HP preview profile is documented as self-contained, and project/package notices are wired as external publish content.
-- Artifact-specific verification: **Pending**. No release candidate has been published or inspected, so the exact runtime components and notices shipped by the artifact are not yet known.
+- Artifact-specific verification: **Pending**. On 2026-09-08, an ignored local `win-x64` candidate built with SDK 10.0.400 passed automated package inspection; its RID-specific restore resolved Microsoft.NETCore.App.Runtime.win-x64 and Microsoft.WindowsDesktop.App.Runtime.win-x64 to 10.0.11. This establishes a patched local build baseline only; the exact runtime license/notice mapping and final distributable evidence remain open.
 - Preview package publish: **Blocked / NO-GO** until this checklist is completed against the actual package candidate.
 
 ## Checklist

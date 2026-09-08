@@ -2,11 +2,11 @@
 
 ## Current Disposition
 
-Status: **Cleared for the current source verification on 2026-09-06; repeat for the final release candidate.**
+Status: **Cleared for the current source verification on 2026-09-08; repeat for the final release candidate.**
 
 The warning was reproduced with a forced no-cache diagnostic restore inside the restricted coding sandbox. DNS resolved `api.nuget.org`, but TCP 443 and `Invoke-WebRequest` failed with Windows socket error `10013` (access denied by execution-environment policy). No proxy variables or WinHTTP proxy were configured. The only enabled NuGet source in the user configuration was the canonical `https://api.nuget.org/v3/index.json`; the repository has no `NuGet.Config`, audit suppression, or audit-disable setting.
 
-The same host outside that socket restriction returned HTTP 200 for the NuGet service index and `v3/vulnerabilities/index.json`. A forced no-cache restore with .NET SDK 10.0.302 fetched the vulnerability index plus its base/update pages successfully and completed with zero warnings. Subsequent required restore/build/test commands also completed without `NU1900`. The failure was therefore environmental network denial, not a package-specific finding, TLS failure, bad source, or repository configuration defect.
+The same host outside that socket restriction returned HTTP 200 for the NuGet service index and `v3/vulnerabilities/index.json`. A network-capable restore with .NET SDK 10.0.400 fetched current vulnerability metadata successfully and completed with zero warnings. Direct/transitive audits for both projects reported no vulnerable packages. The HP preview's RID-specific restore resolved Microsoft.NETCore.App.Runtime.win-x64 and Microsoft.WindowsDesktop.App.Runtime.win-x64 to the patched 10.0.11 servicing release. The failure was therefore environmental network denial, not a package-specific finding, TLS failure, bad source, or repository configuration defect.
 
 ## Vulnerability Evidence
 

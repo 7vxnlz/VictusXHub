@@ -9,13 +9,13 @@ Updated: 2026-09-08
 - Verified read-only status includes CPU load, battery/AC/charging, device detection, NVIDIA temperature when NVAPI is available, named HP battery-care support and enabled/disabled state when the recognized inventory value is explicit, exact-SKU keyboard-backlight capability evidence, and exact-device GPU-switch capability from cached SystemDesignData. Main-shell and tray refresh-rate actions use one Windows-native validated path and appear only for one unambiguous internal panel with matching mode geometry; there is no vendor write path.
 - Unavailable: CPU package temperature, V1 fan RPM, keyboard state/levels, numeric charge limits, and current GPU mode. `FanGetLevel` is raw-only and is never RPM or percent; `FanMaxGet` is inconclusive. HP performance mode is unavailable and controls remain disabled.
 - Normal/user-facing fan control is NO-GO. `DeviceValidatedInputLength` remains null. Developer SetFanMax pulse/hold remains CLI-only, explicitly gated, four-byte, no-retry, and restore-protected; hold seconds are only the bounded pre-restore wait. SetFanLevel remains non-executable research: dry-run/preflight is hardware/WMI-inert, first-write readiness is NO-GO, and no value is selected.
-- Release status: source-only preparation and the fail-closed preview-directory inspection workflow are GO; an ignored local candidate passed its automated layout/notice/hash checks. Preview publishing remains NO-GO pending exact embedded-runtime notice matching, final notice/attribution review, signing decision and distributable checksum, and clean-machine validation. See `docs/preview-release-current-blockers.md` and the `packaging` context pack.
+- Release status: source-only preparation and the fail-closed preview-directory inspection workflow are GO. The previous .NET 10.0.10 runtime-pack baseline was superseded after servicing advisories; the active `win-x64` restore baseline is .NET Core and Windows Desktop runtime packs 10.0.11 via SDK 10.0.400. An ignored local candidate passed automated layout/notice/hash checks. Preview publishing remains NO-GO pending exact embedded-runtime notice matching for 10.0.11, final notice/attribution review, signing decision and distributable checksum, and clean-machine validation. See `docs/preview-release-current-blockers.md` and the `packaging` context pack.
 - Non-HP behavior is unchanged.
 
 ## Verification Baseline
 
 - Branch: `main` tracking `origin/main`.
-- Last verified: `dotnet build VictusX.sln --no-restore` passed with zero warnings; `dotnet test VictusX.sln --no-build` passed 433/433. No hardware, vendor-write, or real display-mode command was run.
+- Last verified: with SDK 10.0.400 and the 10.0.11 `win-x64` .NET Core/Windows Desktop runtime-pack baseline, `dotnet build VictusX.sln --no-restore` passed with zero warnings; `dotnet test VictusX.sln --no-build` passed 433/433. No hardware, vendor-write, or real display-mode command was run.
 - NU1900 is not suppressed. The last network-capable audit found no vulnerable packages; repeat against the exact release candidate.
 
 ## Context Routing

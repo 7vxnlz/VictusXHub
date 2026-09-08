@@ -1,10 +1,10 @@
 # Runtime Dependency License Review
 
-Reviewed: 2026-09-06
+Reviewed: 2026-09-06. Candidate notice-set match completed: 2026-09-08.
 
 ## Scope And Result
 
-This source-level review covers every package in the current `app/VictusX.csproj` restore graph. Package identities, versions, license sources, and package-library license/notice files are evidenced. The review does not approve publication: runtime-pack and final-artifact matching remain open.
+This review covers every package in the current `app/VictusX.csproj` restore graph. Package identities, versions, license sources, package-library license/notices, exact .NET 10.0.11 runtime-pack evidence, and current-candidate matching are complete. It does not approve publication; signing/final-checksum evidence and clean-machine validation remain open.
 
 Evidence was taken from `app/VictusX.csproj`, `app/obj/project.assets.json`, package `.nuspec` and license/readme files restored from `https://api.nuget.org/v3/index.json`, and the identified upstream repositories. The local restore hashes matched the `project.assets.json` content hashes.
 
@@ -25,11 +25,11 @@ Evidence was taken from `app/VictusX.csproj`, `app/obj/project.assets.json`, pac
 
 The only application use of `Microsoft.Management.Infrastructure` was the supplementary `HpCimReadinessProbe`: it created a `CimSession` and read class, instance, and method metadata. It did not invoke a CIM method and was not part of the HP command transport. The existing `System.Management` path already reads `root\wmi`, `hpqBIntM`, `hpqBDataIn`, and method metadata for the capability report and Diagnostic panel.
 
-The direct MMI reference was therefore removed together with that duplicate probe. A clean restore during `dotnet build` confirms that `Microsoft.Management.Infrastructure`, `Microsoft.Management.Infrastructure.Runtime.Win`, and `Microsoft.Management.Infrastructure.Runtime.Unix` are absent from `app/obj/project.assets.json`. The current graph contains seven direct packages and one transitive package (`NAudio.Core`). Final package inspection must still confirm that no stale MMI binary or native asset is distributed.
+The direct MMI reference was therefore removed together with that duplicate probe. The restored graph confirms that `Microsoft.Management.Infrastructure`, `Microsoft.Management.Infrastructure.Runtime.Win`, and `Microsoft.Management.Infrastructure.Runtime.Unix` are absent. The current graph contains seven direct packages and one transitive package (`NAudio.Core`), and the inspected candidate contains no stale MMI binary or native asset.
 
 ## Framework And Test Separation
 
-`Microsoft.NETCore.App` and `Microsoft.WindowsDesktop.App.WindowsForms` are framework references, not application `PackageReference` dependencies. A framework-dependent preview relies on the installed .NET runtime. A self-contained preview would distribute runtime components and therefore requires the applicable .NET license/notices to be identified during final package inspection.
+`Microsoft.NETCore.App` and `Microsoft.WindowsDesktop.App.WindowsForms` are framework references, not application `PackageReference` dependencies. The self-contained preview distributes those runtime components; their exact 10.0.11 `win-x64` license/notice evidence is externally packaged and inspector-verified.
 
 The test project directly references `Microsoft.NET.Test.Sdk` 18.0.1, `xunit` 2.9.3, and `xunit.runner.visualstudio` 3.1.5. Its resolved tooling graph also contains Microsoft.CodeCoverage, Microsoft.TestPlatform components, Newtonsoft.Json, and xUnit support packages. These are test-only and are excluded from runtime notices unless a future distributed artifact actually contains them.
 
@@ -50,16 +50,16 @@ Options reviewed:
 
 Current disposition: **Resolved at source architecture level by external deployment**. The HP preview profile keeps the application and self-contained runtime single-file, but marks the resolved `NvAPIWrapper.dll` publish item `ExcludeFromSingleFile=true`. A fail-closed publish target errors if that resolved library is absent. This leaves the same assembly and runtime call path intact while making the LGPL library independently replaceable beside `VictusX.exe`.
 
-Release-candidate inspection must still prove that exactly one `NvAPIWrapper.dll` 0.8.1.101 is present beside the executable, is not embedded in the bundle, can be replaced independently, and is accompanied by the assembled attribution and LGPL/GPL texts. That is artifact verification, not an open source-architecture decision.
+Current-candidate inspection proves that exactly one `NvAPIWrapper.dll` 0.8.1.101 is present beside the executable, is not embedded in the bundle, can be replaced independently, and is accompanied by the assembled attribution and LGPL/GPL texts. Repeat that check against the exact distributable.
 
 ## Reconciliation Decision
 
 - Runtime dependency license identity review: **Complete for the current restore graph**.
 - MMI runtime release disposition: **Resolved at source/restore-graph level** by removing the unused duplicate CIM transport and its package graph.
 - Required package-library notice/license-text assembly: **Complete** under `app/Assets/Licenses`; source revisions and hashes are recorded in `LICENSE-SOURCES.md`.
-- NvAPIWrapper.Net distribution method: **Resolved at source architecture level**. The managed library is excluded from the single-file bundle and must be distributed as a replaceable sidecar; release-candidate inspection must verify the resulting artifact.
-- Self-contained .NET runtime notices: **Pending release-candidate evidence** because the final runtime pack has not been materialized or inspected.
-- Final artifact match: **Pending** because no preview artifact exists.
-- `THIRD-PARTY-NOTICES.md`: source-assembled, but not release-ready until the pending packaging and artifact checks are resolved.
+- NvAPIWrapper.Net distribution method: **Verified for the current candidate**. The managed library is excluded from the single-file bundle and distributed as a replaceable sidecar with its notices.
+- Self-contained .NET runtime notices: **Complete for the verified 10.0.11 `win-x64` baseline**.
+- Notice-set candidate match: **Complete for the current ignored candidate**; repeat against the exact distributable.
+- `THIRD-PARTY-NOTICES.md`: **Reviewed for the current preview baseline**; publishing remains separately blocked.
 
 This record is an engineering evidence review, not legal advice. Final artifact inspection remains required before any distribution claim.

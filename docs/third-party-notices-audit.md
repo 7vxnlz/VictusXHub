@@ -17,11 +17,11 @@ This is a repository-evidence checkpoint for a future HP diagnostic preview. It 
 | --- | --- | --- |
 | `LICENSE` | Present; GPLv3 text | Include the applicable license text and verify its presentation in the package. |
 | README credits | Present for G-Helper and research references | Add a concise package attribution that names G-Helper, the source location/commit, and that VictusX is modified. |
-| `THIRD-PARTY-NOTICES.md` | Draft records reviewed license identities; release packaging remains pending | Assemble required license/notices and compare against final package contents before distribution. |
+| `THIRD-PARTY-NOTICES.md` | Reviewed for the current preview baseline | Preserve it and repeat inspector matching against the exact distributable. |
 | Package lock | Not found | Keep a clean-restore comparison step before packaging. |
 | Resolved dependency inventory | Locally restored assets were inspected | See [Dependency Notice Inventory](dependency-notice-inventory.md); repeat from a clean restore before packaging. |
-| Package license evidence | Recorded for the current graph | See [Runtime Dependency License Review](runtime-dependency-license-review.md); required release files and artifact matching remain open. |
-| Runtime dependency review evidence | Source-level review complete | MMI runtime blocker resolved by removing the duplicate probe/package graph; final artifact must confirm absence. |
+| Package license evidence | Recorded and candidate-matched for the current graph | See [Runtime Dependency License Review](runtime-dependency-license-review.md). |
+| Runtime dependency review evidence | Complete for current baseline | Exact .NET 10.0.11 notices and absence of MMI artifacts are inspector-verified. |
 
 ## NuGet Considerations
 
@@ -38,14 +38,14 @@ Before a ZIP or installer is created, the release review should include:
 - confirmation that no upstream notices were removed and that the package contents match the reviewed notice inventory;
 - review of the final artifact by a maintainer qualified to make the distribution decision.
 
-Use [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md) and the source-level [Third-Party Notices Draft](../THIRD-PARTY-NOTICES.md) as the checklist and starting record for turning the current audit and inventory into a reviewed package notice set.
+Use [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md) and the reviewed [Third-Party Notices](../THIRD-PARTY-NOTICES.md) to preserve the current notice set and repeat exact-distributable matching.
 
 Use [Runtime Dependency License Review Evidence Checklist](runtime-dependency-license-review-evidence-checklist.md) for the exact evidence required before the runtime dependency section can be treated as reviewed.
 
 ## Still Blocked or Unknown
 
-The current dependency graph and license identities are reviewed. Required license/notice-file assembly, package-runtime contents, and final source-distribution presentation remain unresolved. The inherited icon, signing/checksum plan, and clean-machine packaged smoke test are also incomplete. Release remains blocked; this audit does not authorize a publish.
+The current dependency graph, license identities, notice files, package-runtime mapping, NvAPIWrapper treatment, and icon provenance are reviewed and matched to the current candidate. Signing/final-checksum evidence and clean-machine validation remain incomplete, so this audit does not authorize publishing.
 
 ## Recommended Next Safe Task
 
-Assemble the required license/notice files and compare them against a final package file list, explicitly confirming that no stale MMI runtime asset is included. Keep the notices marked draft until that work is complete.
+Repeat the inspector against the exact distributable, then complete signing/final-checksum evidence and clean-machine validation.

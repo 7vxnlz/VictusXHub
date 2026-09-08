@@ -34,13 +34,11 @@ This checkpoint does not authorize publishing, artifact creation, signing, check
 ## Remaining Release Blockers
 
 - Icon provenance and source integration are complete; exact-candidate visual confirmation remains part of clean-machine validation.
-- Package license/notices remain blocked pending authoritative review and package-content matching.
-- Runtime dependency license review remains blocked pending per-package evidence.
-- `THIRD-PARTY-NOTICES.md` remains draft/source-level only.
-- `NU1900` audit-source warning disposition remains open.
+- Package license/notices, runtime dependency evidence, `THIRD-PARTY-NOTICES.md`, and current-candidate matching are complete for the current preview baseline.
+- The current network-capable vulnerability audit is clean and `NU1900` is not suppressed.
 - Signing/checksum evidence remains open.
 - Clean-machine validation remains open.
-- Final package contents inspection remains open because no artifact exists.
+- Exact-distributable package inspection remains pending for final evidence linkage.
 - Normal/user-facing fan control must remain blocked for the preview.
 
 ## Governing Documents
@@ -49,7 +47,7 @@ This checkpoint does not authorize publishing, artifact creation, signing, check
 - Release blockers: [HP Diagnostic Preview Release Blockers](hp-diagnostic-preview-release-blockers.md).
 - Packaging readiness: [Windows Packaging Readiness Audit](windows-packaging-readiness-audit.md).
 - Icon/app identity: [VictusX Icon and App Identity Implementation Plan](victusx-icon-app-identity-implementation-plan.md).
-- Notices: [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md) and [Third-Party Notices Draft](../THIRD-PARTY-NOTICES.md).
+- Notices: [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md) and reviewed [Third-Party Notices](../THIRD-PARTY-NOTICES.md).
 - Runtime dependency review: [Runtime Dependency License Review Evidence Checklist](runtime-dependency-license-review-evidence-checklist.md).
 - `NU1900`: [NU1900 Audit-Source Warning Disposition Plan](nu1900-audit-source-warning-disposition-plan.md).
 - Signing/checksum: [Signing And Checksum Evidence Plan](signing-checksum-evidence-plan.md).

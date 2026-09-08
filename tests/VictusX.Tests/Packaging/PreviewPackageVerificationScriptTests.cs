@@ -100,6 +100,22 @@ public sealed class PreviewPackageVerificationScriptTests
     }
 
     [Fact]
+    public void MissingReviewedDependencyEntry_IsNoGo()
+    {
+        using var fixture = PreviewPackageFixture.Create();
+        string noticesPath = Path.Combine(fixture.DirectoryPath, "THIRD-PARTY-NOTICES.md");
+        File.WriteAllText(
+            noticesPath,
+            File.ReadAllText(noticesPath).Replace("| FftSharp | 2.2.0 | Direct |", "| FftSharp | omitted |", StringComparison.Ordinal));
+
+        ScriptResult result = RunInspector(fixture.DirectoryPath);
+
+        Assert.Equal(1, result.ExitCode);
+        Assert.Contains("FAIL notice-inventory: missing reviewed evidence: | FftSharp | 2.2.0 | Direct |", result.Output, StringComparison.Ordinal);
+        Assert.EndsWith("Preview package: NO-GO", result.Output.TrimEnd(), StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void MissingRuntimeNotice_IsNoGo()
     {
         using var fixture = PreviewPackageFixture.Create();
@@ -151,6 +167,7 @@ public sealed class PreviewPackageVerificationScriptTests
         Assert.Equal(first.Output, second.Output);
         Assert.Matches(new Regex(@"PASS checksum-evidence: \d+ files; deterministic manifest SHA256 [A-F0-9]{64}\."), first.Output);
         Assert.Contains("PASS notice-matching", first.Output, StringComparison.Ordinal);
+        Assert.Contains("PASS notice-inventory", first.Output, StringComparison.Ordinal);
         Assert.Contains("PASS runtime-notices", first.Output, StringComparison.Ordinal);
         Assert.Contains("WARN manual-release-evidence", first.Output, StringComparison.Ordinal);
         Assert.EndsWith("Preview package: GO", first.Output.TrimEnd(), StringComparison.Ordinal);

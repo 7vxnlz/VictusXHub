@@ -12,7 +12,7 @@
 
 ## Remaining Release Blockers
 
-- Package-license and notice review is incomplete.
+- Package-license and notice review is complete for the current preview baseline; repeat against the exact distributable.
 - The approved VictusX executable and HP tray identity is integrated; final candidate visual confirmation remains pending.
 - No signing or checksum evidence exists.
 - Clean-machine validation has not been run against a final package candidate.
@@ -49,7 +49,7 @@ Project metadata is aligned to VictusX preview identity and versioning. `RootNam
 
 ## Notices and License Status
 
-The repository has a third-party notices audit, dependency notice inventory, and package license review workflow. The release blocker remains open until package licenses/notices are reviewed against authoritative metadata and matched to final package contents.
+The reviewed project/package/runtime notice set matches authoritative evidence and the current ignored candidate. The exact distributable must repeat the inspector match; signing/final-checksum and clean-machine gates remain open.
 
 This audit does not modify license terms or make legal conclusions.
 
@@ -71,4 +71,4 @@ No VictusX HP diagnostic preview release is ready yet. The repository is source-
 
 ## Recommended Next Safe Task
 
-Create a source-only `THIRD-PARTY-NOTICES.md` draft from the dependency inventory and package license review workflow, leaving legal conclusions marked pending review.
+Repeat the package inspector against the exact distributable, then complete signing/final-checksum evidence and clean-machine validation.

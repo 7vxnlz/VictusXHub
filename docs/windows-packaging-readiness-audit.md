@@ -13,16 +13,14 @@
 - The former icon plan and implementation plan are retained as superseded historical records.
 - The project now supplies explicit VictusX product, description, company/authors, copyright, assembly, file, and informational version metadata. A future packaged smoke test must still confirm the final executable properties match those values.
 - G-Helper and ASUS strings/resources remain in the binary. HP shell isolation hides inherited control/update surfaces, but packaging must not imply that those features support HP hardware.
-- GPLv3 is present, but a preview package still needs clear source, attribution, modified-project, and third-party notice handling.
-- `docs/third-party-notices-audit.md` now records the repository evidence: GPLv3 text and README-level G-Helper credit exist, while a versioned third-party notice inventory and resolved package-license review remain outstanding.
-- `docs/dependency-notice-inventory.md` records the current local restore graph: 11 application packages and 13 test-only packages. It intentionally leaves license and notice status unreviewed pending authoritative metadata.
-- [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md) and the draft [Third-Party Notices](../THIRD-PARTY-NOTICES.md) define the source-only path to a reviewed package notice set; the draft is not release evidence and no artifact has been created.
-- [Runtime Dependency License Review Evidence Checklist](runtime-dependency-license-review-evidence-checklist.md) defines the per-package evidence still required before runtime dependency notices can be marked reviewed.
+- GPLv3, modified-from-G-Helper attribution, seven direct plus one transitive application-package notices, exact .NET 10.0.11 runtime notices, NvAPIWrapper treatment, and icon provenance are reviewed and current-candidate matched.
+- `docs/dependency-notice-inventory.md` records the exact current restore graph; test-only packages are absent from the inspected candidate.
+- The completion plan, reviewed `THIRD-PARTY-NOTICES.md`, and runtime evidence checklist preserve the verified notice baseline for exact-distributable matching.
 - [NU1900 Audit-Source Warning Disposition Plan](nu1900-audit-source-warning-disposition-plan.md) defines how the recurring package vulnerability audit-source warnings must be investigated before preview packaging.
 
 ## Package and Installer Status
 
-- The only publish profile creates a framework-dependent, single-file `win-x64` build; the .NET 10 Windows Desktop Runtime is therefore required.
+- The HP preview profile creates a self-contained, single-file `win-x64` build with exact .NET 10.0.11 runtime notice evidence packaged externally.
 - Publish currently creates an unversioned `VictusX.zip`.
 - No installer/MSIX/WiX/Inno Setup project, release workflow, code signing, checksum generation, update channel, uninstall behavior, or packaged shortcut definition exists.
 - [Signing and Checksum Workflow](signing-checksum-workflow.md) defines the future evidence needed before distribution; no signing or checksum has been performed.
@@ -66,12 +64,11 @@ The IDE launch profile is not embedded into a published executable. Any preview 
 - Confirm inherited control/update surfaces remain unreachable in the packaged HP entry path.
 - Verify clean-machine startup, report/export paths, missing-runtime behavior, upgrade/uninstall behavior, and clean shutdown.
 - Run build/tests and a packaged smoke test with every explicit invocation field `Attempted=false`.
-- Add license/third-party notices, checksums, malware scan results, and a signing plan before public distribution.
+- Preserve the reviewed license/third-party notices; add final checksum, signing decision/evidence, and any required distribution scans before public distribution.
 - Complete the signing/checksum workflow against the same final artifact used for clean-machine validation.
 - Record artifact name, version, source commit, signing status, certificate details when applicable, SHA-256 hash, reviewer, date, and final artifact validation in the signing/checksum evidence plan.
 - Review the third-party notices audit, preserve applicable upstream notices, and verify direct and transitive package attribution from authoritative metadata.
-- Review and complete the dependency notice inventory against a clean restore and the final package contents.
-- Complete the runtime dependency license review evidence checklist for every direct and resolved transitive runtime candidate.
+- Repeat the reviewed dependency notice inventory and runtime evidence checks against the exact distributable.
 - Dispose the recurring `NU1900` audit-source warnings with clean restore/build/test and vulnerability-list evidence, or retain the release block with a documented maintainer decision.
 - Confirm no developer-only flags, symbols, logs, machine paths, or captured device data are shipped.
 - Execute the [Clean-Machine Validation Plan](clean-machine-validation-plan.md) against the final candidate package and retain the evidence record described by [Clean-Machine Validation Evidence Plan](clean-machine-validation-evidence-plan.md).
@@ -81,7 +78,7 @@ The IDE launch profile is not embedded into a published executable. Any preview 
 Keep the explicit VictusX metadata and approved icon hashes aligned with the future artifact version. Final visual confirmation remains part of clean-machine validation.
 
 See [Third-Party Notices Audit](third-party-notices-audit.md) for the source-attribution and package-notice distribution gate.
-See [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md) before drafting or reviewing package notices for a preview candidate.
+See [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md) for the completed notice checklist and exact-distributable repeat requirements.
 See the [VictusX Icon Wiring Checkpoint](victusx-icon-wiring-checkpoint.md) for the implemented HP-preview identity, provenance, and validation record.
 See [Signing and Checksum Workflow](signing-checksum-workflow.md) for future release integrity evidence.
 See [Signing And Checksum Evidence Plan](signing-checksum-evidence-plan.md) for the exact artifact-level evidence required before release.

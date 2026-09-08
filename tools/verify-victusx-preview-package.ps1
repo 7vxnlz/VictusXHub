@@ -196,6 +196,41 @@ if ($noticeMismatches.Count -eq 0 -and $missing.Count -eq 0) {
     Write-Fail "notice-matching" ("content mismatch: " + ($noticeMismatches -join ", "))
 }
 
+if ($actualPaths.ContainsKey("THIRD-PARTY-NOTICES.md")) {
+    $thirdPartyNotices = Get-Content -Raw -LiteralPath $actualPaths["THIRD-PARTY-NOTICES.md"]
+    $requiredNoticeEvidence = @(
+        'Status: **Reviewed for the current preview baseline; exact-distributable matching pending**.',
+        'VictusX is a modified project based on G-Helper.',
+        '| FftSharp | 2.2.0 | Direct |',
+        '| HidSharpCore | 1.3.0 | Direct |',
+        '| NAudio.Wasapi | 2.3.0 | Direct |',
+        '| NvAPIWrapper.Net | 0.8.1.101 | Direct |',
+        '| System.Management | 10.0.10 | Direct |',
+        '| TaskScheduler | 2.12.2 | Direct |',
+        '| WinForms.DataVisualization | 1.10.2 | Direct |',
+        '| NAudio.Core | 2.3.0 | Transitive |',
+        'Microsoft.NETCore.App.Runtime.win-x64 and Microsoft.WindowsDesktop.App.Runtime.win-x64 10.0.11',
+        'No separate third-party artwork attribution requirement is identified by this factual record.'
+    )
+    $forbiddenNoticeEvidence = @(
+        '| Microsoft.Management.Infrastructure |',
+        'VictusX.Silent.ico',
+        'VictusX.Balanced.ico',
+        'VictusX.Turbo.ico',
+        'Microsoft.NETCore.App.Runtime.win-x64 and Microsoft.WindowsDesktop.App.Runtime.win-x64 10.0.10'
+    )
+    $missingNoticeEvidence = @($requiredNoticeEvidence | Where-Object { -not $thirdPartyNotices.Contains($_) })
+    $staleNoticeEvidence = @($forbiddenNoticeEvidence | Where-Object { $thirdPartyNotices.Contains($_) })
+    if ($missingNoticeEvidence.Count -eq 0 -and $staleNoticeEvidence.Count -eq 0) {
+        Write-Pass "notice-inventory" "project, G-Helper, eight package-library, .NET 10.0.11, NvAPIWrapper, and icon records match the approved baseline."
+    } else {
+        $reasons = @()
+        if ($missingNoticeEvidence.Count -gt 0) { $reasons += "missing reviewed evidence: $($missingNoticeEvidence -join '; ')" }
+        if ($staleNoticeEvidence.Count -gt 0) { $reasons += "stale evidence: $($staleNoticeEvidence -join '; ')" }
+        Write-Fail "notice-inventory" ($reasons -join "; ")
+    }
+}
+
 $runtimeEvidenceRelativePath = "Assets/Licenses/Microsoft.NET-10.0.11-win-x64-RUNTIME-EVIDENCE.md"
 $requiredRuntimeEvidence = @(
     'SDK `10.0.400`',
@@ -271,7 +306,7 @@ try {
 }
 Write-Pass "checksum-evidence" "$($entries.Count) files; deterministic manifest SHA256 $manifestHash."
 
-Write-Warn "manual-release-evidence" "signing decision, artifact-level ZIP checksum, final package notice review, and clean-machine validation remain required."
+Write-Warn "manual-release-evidence" "signing decision, artifact-level ZIP checksum, and clean-machine validation remain required."
 
 if ($script:FailureCount -eq 0) {
     Write-Output "Preview package: GO"

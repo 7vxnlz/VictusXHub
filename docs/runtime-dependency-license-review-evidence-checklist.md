@@ -4,7 +4,7 @@
 
 This checklist defines the evidence required before runtime dependency license and notice review can be marked complete for a future VictusX HP Diagnostic preview. It is source-level planning only. It is not legal advice, does not modify license terms, and does not authorize publishing.
 
-Current status: source-level license identity evidence is complete for the current restore graph. See [Runtime Dependency License Review](runtime-dependency-license-review.md). Release clearance, notice assembly, and final artifact matching remain incomplete.
+Current status: license identity evidence, notice assembly, and current-candidate matching are complete for the current restore graph. See [Runtime Dependency License Review](runtime-dependency-license-review.md). Exact-distributable signing/checksum and clean-machine evidence remain incomplete.
 
 ## Current Candidate List Source
 
@@ -12,29 +12,29 @@ The current runtime dependency candidate list comes from:
 
 - `app/VictusX.csproj` direct application `PackageReference` entries;
 - locally restored dependency information summarized in [Dependency Notice Inventory](dependency-notice-inventory.md);
-- the source-level draft [Third-Party Notices](../THIRD-PARTY-NOTICES.md).
+- the reviewed [Third-Party Notices](../THIRD-PARTY-NOTICES.md).
 
-No final preview ZIP or installer has been selected, so release-candidate package matching cannot be completed. The automated directory inspector can already prove that packaged library notices byte-match their reviewed repository sources and that no unexpected external runtime binary is present.
+The current ignored candidate proves that packaged notices byte-match their reviewed repository sources, the fixed notice inventory is complete, NvAPIWrapper is the only external dependency library, and no unexpected runtime binary is present. Repeat against the exact distributable.
 
 ## Direct Runtime Package Candidates
 
 | Package | Version | Current status |
 | --- | --- | --- |
-| FftSharp | 2.2.0 | License evidence reviewed; release notice pending |
-| HidSharpCore | 1.3.0 | Apache-2.0/NOTICE reviewed; release files pending |
-| NAudio.Wasapi | 2.3.0 | License evidence reviewed; release notice pending |
-| NvAPIWrapper.Net | 0.8.1.101 | LGPL-3.0 evidence reviewed; packaging compliance pending |
-| System.Management | 10.0.10 | License evidence reviewed; release notice pending |
-| TaskScheduler | 2.12.2 | License evidence reviewed; release notice pending |
-| WinForms.DataVisualization | 1.10.2 | License evidence reviewed; release notice pending |
+| FftSharp | 2.2.0 | License and packaged notice verified |
+| HidSharpCore | 1.3.0 | Apache-2.0/NOTICE and packaged files verified |
+| NAudio.Wasapi | 2.3.0 | License and packaged notice verified |
+| NvAPIWrapper.Net | 0.8.1.101 | LGPL-3.0/GPL-3.0 notices and replaceable sidecar verified |
+| System.Management | 10.0.10 | License/package notices verified; this package version is distinct from the .NET 10.0.11 runtime-pack baseline |
+| TaskScheduler | 2.12.2 | License and packaged notice verified |
+| WinForms.DataVisualization | 1.10.2 | License and packaged notice verified |
 
 ## Resolved Transitive Runtime Package Candidates
 
 | Package | Version | Current status |
 | --- | --- | --- |
-| NAudio.Core | 2.3.0 | License evidence reviewed; release notice pending |
+| NAudio.Core | 2.3.0 | Shared NAudio license and packaged notice verified |
 
-The former MMI package family is excluded from the current project and restored graph. Final artifact inspection must confirm that no stale MMI binary or native runtime asset is present.
+The former MMI package family is excluded from the current project, restored graph, and inspected candidate.
 
 ## Required Evidence Per Dependency
 
@@ -55,7 +55,7 @@ Use `pending review` until this evidence is recorded from authoritative sources.
 
 ## Source-Level Draft Versus Release Evidence
 
-`THIRD-PARTY-NOTICES.md` is currently a source-level draft. It lists discovered runtime candidates and marks license conclusions pending. It becomes release evidence only after every runtime candidate is reviewed, required notices are filled in, and the result is compared with the final package contents.
+`THIRD-PARTY-NOTICES.md` is reviewed for the current preview baseline. Every runtime candidate is reviewed, required notices are present, and the current ignored candidate matches; the exact distributable must repeat the same inspection.
 
 The draft must not be treated as complete merely because a package appears in project files or local restore metadata.
 
@@ -67,9 +67,9 @@ Before release, inspect the final ZIP or installer contents and confirm:
 - packages listed only in source metadata but absent from the artifact are marked absent with evidence;
 - test-only packages are excluded from application notices unless they are actually distributed;
 - no developer-only logs, local machine paths, captured device evidence, or experimental command outputs are bundled;
-- `LICENSE`, reviewed third-party notices, G-Helper attribution, user safety notes, and icon attribution are included when required.
+- `LICENSE`, reviewed third-party notices, G-Helper attribution, user safety notes, and the approved icon provenance/attribution decision are included when required.
 
-Run `tools/verify-victusx-preview-package.ps1 -PublishDirectory <candidate-directory>` first. Its `notice-matching` and `runtime-layout` checks cover deterministic directory evidence. Its `runtime-notices` warning is intentionally not resolved because the self-contained .NET and Windows Desktop runtime remains embedded; exact runtime-pack version/license/notice matching still requires the build record and manual review.
+Run `tools/verify-victusx-preview-package.ps1 -PublishDirectory <candidate-directory>` first. Its `notice-matching`, `notice-inventory`, `runtime-notices`, and `runtime-layout` checks cover deterministic directory evidence for the approved baseline.
 
 ## Package Manager Metadata Limitations
 
@@ -88,9 +88,9 @@ Package vulnerability audit data is also a separate signal. If restore/build/tes
 - A dependency with unresolved metadata conflict blocks release.
 - A package removed from the final artifact should be marked excluded only after package inspection confirms it is absent.
 
-## Moving THIRD-PARTY-NOTICES.md From Draft To Reviewed
+## THIRD-PARTY-NOTICES.md Review Completion Criteria
 
-`THIRD-PARTY-NOTICES.md` may move from draft to reviewed only when:
+`THIRD-PARTY-NOTICES.md` is treated as reviewed for a baseline only when:
 
 - every runtime candidate has authoritative license and notice evidence recorded;
 - required license text and attribution text are added or explicitly marked not required based on reviewed evidence;
@@ -104,10 +104,10 @@ Package vulnerability audit data is also a separate signal. If restore/build/tes
 
 Runtime dependency license identity review and icon provenance/source wiring are complete for the current graph, and the MMI runtime disposition is resolved at source/restore-graph level. Release remains blocked pending final package notice/content review, signing/checksum evidence, and clean-machine validation against the exact distributable.
 
-Recurring `NU1900` audit-source warnings also remain open until package vulnerability audit retrieval is verified or separately dispositioned.
+The current network-capable vulnerability audit is clean and `NU1900` is not suppressed; repeat for the exact distributable if dependency inputs change.
 
 Normal/user-facing fan control also remains NO-GO and must not be presented as part of preview readiness.
 
 ## Recommended Next Safe Task
 
-Assemble the required license/notice files and compare them with a future final artifact, including an explicit check that MMI runtime files are absent. Keep preview publishing blocked until those checks pass.
+Repeat the inspector against the exact distributable, then complete signing/final-checksum evidence and clean-machine validation. Keep preview publishing blocked until those checks pass.

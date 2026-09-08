@@ -1,13 +1,15 @@
 # Package License And Third-Party Notices Completion Plan
 
+Status: completed for the current preview baseline on 2026-09-08. Preserve this file as the verification checklist and repeat candidate matching against the exact distributable.
+
 ## Current License/Notice State
 
 - Top-level `LICENSE` is present and contains the GNU General Public License version 3 text.
 - `README.md` credits G-Helper as the original application base and lists HP/Omen reference repositories.
-- A top-level `THIRD-PARTY-NOTICES.md` source-level draft is present; it records discovered package identities but deliberately leaves license conclusions pending.
+- Top-level `THIRD-PARTY-NOTICES.md` is reviewed for the current preview baseline and matches the current candidate.
 - [Third-Party Notices Audit](third-party-notices-audit.md), [Dependency Notice Inventory](dependency-notice-inventory.md), and [Package License Review Workflow](package-license-review-workflow.md) define the current evidence and review process.
 - [Runtime Dependency License Review Evidence Checklist](runtime-dependency-license-review-evidence-checklist.md) defines the exact per-runtime-package evidence required before the draft notices can become reviewed release evidence.
-- The package license/notice blocker remains open until authoritative package metadata and final package contents are reviewed together.
+- Authoritative package evidence and the current candidate notice set have been reviewed together; signing/final-checksum and clean-machine gates remain separate.
 
 This plan is not legal advice and does not modify license terms.
 
@@ -92,15 +94,10 @@ An acceptable preview package may ship only after:
 - no developer-only flags, logs, symbols, machine paths, or captured device data are included;
 - clean-machine validation and checksum/signing evidence are complete.
 
-## Remaining Blocking Items
+## Remaining Release Blocking Items
 
-- `THIRD-PARTY-NOTICES.md` is draft-only and has not been reviewed against authoritative runtime package metadata or final artifact contents.
-- Direct and transitive runtime dependency licenses remain unreviewed from authoritative metadata.
-- The runtime dependency evidence checklist is present, but its required evidence has not been filled and reviewed.
-- Final package contents do not exist yet, so package notice matching cannot be completed.
-- Icon/app identity attribution cannot be finalized until the future icon asset is approved.
 - Signing/checksum and clean-machine validation remain open.
-- NU1900 audit-source warnings need release-candidate disposition.
+- The exact distributable must repeat the inspector's notice/inventory byte-match before those final gates are completed.
 
 ## Verification Checklist
 
@@ -117,4 +114,4 @@ An acceptable preview package may ship only after:
 
 ## Recommended Next Safe Task
 
-Review the source-level `THIRD-PARTY-NOTICES.md` draft using [Runtime Dependency License Review Evidence Checklist](runtime-dependency-license-review-evidence-checklist.md), authoritative runtime package metadata, and a final package file list. Do not publish artifacts or fill legal conclusions from local project metadata alone.
+Repeat the fail-closed notice and package inspection against the exact distributable, then complete signing/final-checksum evidence and clean-machine validation. Do not publish from this plan alone.

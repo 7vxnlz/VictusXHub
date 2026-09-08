@@ -1,20 +1,22 @@
 # Third-Party Notices
 
-## Draft Status
+## Review Status
 
-Status: **Source-level dependency evidence and package-library license bundle assembled; final release review pending**.
+Status: **Reviewed for the current preview baseline; exact-distributable matching pending**.
 
-This notice is prepared for a future VictusX HP Diagnostic preview. It does not authorize publishing. License identities for the current package dependency graph have been reviewed, and the applicable package-library texts are assembled under `Assets/Licenses` for external publication. NvAPIWrapper is source-configured as a replaceable external library; verification of that layout against the release candidate remains pending. The self-contained .NET 10.0.11 `win-x64` runtime-pack notice baseline is assembled and inspector-verified; icon provenance is recorded and final artifact-content review remains pending.
+Reviewed: 2026-09-08.
+
+This notice is prepared for a future VictusX HP Diagnostic preview. It does not authorize publishing. The current restored dependency graph and ignored local candidate were compared with this notice and the external `Assets/Licenses` bundle. The self-contained .NET 10.0.11 `win-x64` runtime-pack notices, package-library notices, replaceable NvAPIWrapper sidecar treatment, G-Helper attribution, project license, and icon provenance are internally consistent and inspector-verified. The exact distributable must repeat the same inspection before release.
 
 ## VictusX Project Notice
 
-Status: **Present; pending final package review**.
+Status: **Reviewed for the current preview baseline**.
 
-VictusX is a modified project based on G-Helper. The repository includes the GNU General Public License version 3 text in `LICENSE`. A future package must include the applicable project license text, the source location and revision used for the package, and this notice after review against the final package contents.
+VictusX is a modified project based on G-Helper. The package includes the GNU General Public License version 3 text in `LICENSE`. Project source is at `https://github.com/7vxnlz/VictusXHub`; the exact packaged revision must remain linked through executable version metadata and the final signing/checksum evidence.
 
 ## G-Helper Attribution
 
-Status: **Present in draft; pending final package review**.
+Status: **Reviewed for the current preview baseline**.
 
 VictusX uses [G-Helper](https://github.com/seerge/g-helper) by seerge as its original application base. The project retains inherited application structure, including the `GHelper` root namespace and resource naming. VictusX is a modified project and is not affiliated with, authorized by, or endorsed by G-Helper.
 
@@ -22,20 +24,22 @@ The reviewed upstream source reference recorded by this repository is commit `5c
 
 ## Runtime Dependency Notice Review
 
-The following dependencies are recorded by `app/VictusX.csproj` and the local resolved dependency inventory. License evidence is recorded in the [Runtime Dependency License Review](docs/runtime-dependency-license-review.md). Inclusion in a future artifact is not yet known.
+The following dependencies exactly match `app/VictusX.csproj` and the local restored application graph. Their license evidence is recorded in the [Runtime Dependency License Review](docs/runtime-dependency-license-review.md), and the current ignored candidate externally contains the complete reviewed notice bundle.
 
 | Package | Version | Relationship | Requirement | Assembled material |
 | --- | --- | --- | --- | --- |
 | FftSharp | 2.2.0 | Direct | MIT attribution and license text | `FftSharp-LICENSE.txt` |
 | HidSharpCore | 1.3.0 | Direct | Apache-2.0 license and upstream NOTICE | `HidSharpCore-LICENSE.txt`, `HidSharpCore-NOTICE.txt` |
 | NAudio.Wasapi | 2.3.0 | Direct | MIT attribution and license text | `NAudio-LICENSE.txt` |
-| NvAPIWrapper.Net | 0.8.1.101 | Direct | Prominent attribution, LGPLv3 and incorporated GPLv3 texts; distributed as an independently replaceable external library | `NvAPIWrapper-README.txt`, `NvAPIWrapper-LGPL-3.0.txt`, `GPL-3.0.txt`; release-candidate layout verification pending |
+| NvAPIWrapper.Net | 0.8.1.101 | Direct | Prominent attribution, LGPLv3 and incorporated GPLv3 texts; distributed as an independently replaceable external library | `NvAPIWrapper-README.txt`, `NvAPIWrapper-LGPL-3.0.txt`, `GPL-3.0.txt`; external sidecar verified |
 | System.Management | 10.0.10 | Direct | MIT license and package third-party notices | `System.Management-LICENSE.txt`, `System.Management-THIRD-PARTY-NOTICES.txt` |
 | TaskScheduler | 2.12.2 | Direct | MIT attribution and license text | `TaskScheduler-LICENSE.txt` |
 | WinForms.DataVisualization | 1.10.2 | Direct | MIT attribution and license text | `WinForms.DataVisualization-LICENSE.txt` |
 | NAudio.Core | 2.3.0 | Transitive | MIT attribution and license text | Covered by `NAudio-LICENSE.txt` |
 
-No runtime package is treated as attribution-only: the applicable license terms are assembled for each one. HidSharpCore additionally requires its NOTICE. NvAPIWrapper additionally requires prominent identification and LGPL combined-work relinking/replacement compliance. The HP preview profile now excludes `NvAPIWrapper.dll` from the single-file bundle so it can be distributed and replaced independently beside `VictusX.exe`; final artifact inspection must verify that source-side intent before release.
+`System.Management` 10.0.10 is the current NuGet package version and is distinct from the superseded .NET runtime-pack 10.0.10 baseline. The self-contained runtime-pack evidence is exclusively 10.0.11.
+
+No runtime package is treated as attribution-only: the applicable license terms are assembled for each one. HidSharpCore additionally requires its NOTICE. NvAPIWrapper additionally requires prominent identification and LGPL combined-work relinking/replacement compliance. The HP preview profile excludes `NvAPIWrapper.dll` from the single-file bundle so it is distributed and replaceable beside `VictusX.exe`; the current candidate and inspector verify that layout.
 
 `app/Assets/Licenses/LICENSE-SOURCES.md` records the authoritative source revision and SHA-256 for each assembled file. The project publishes this directory externally rather than hiding it inside the single-file executable.
 
@@ -77,6 +81,6 @@ HP, OMEN, and Victus names are used only to identify compatibility targets and r
 
 ## Preview Release Blocker
 
-Status: **Blocked for release use**.
+Status: **Notice review complete; preview release still blocked**.
 
-The package-library and exact 10.0.11 runtime-pack license/notice files are assembled, but this document is not completed release evidence. The NvAPIWrapper source architecture now uses a replaceable external DLL, with release-candidate verification still required. A preview package remains blocked until final artifact contents are matched and signing/checksum and clean-machine evidence exist. Normal/user-facing fan control also remains NO-GO.
+The package-library and exact 10.0.11 runtime-pack license/notice files, project license, G-Helper attribution, NvAPIWrapper treatment, and icon provenance are complete and matched by the current candidate inspection. A preview release remains blocked until the exact distributable has signing decision/evidence, its final checksum, and clean-machine validation. Normal/user-facing fan control also remains NO-GO.

@@ -33,7 +33,7 @@ See [HP Diagnostic Source-Only Readiness Final Checkpoint](hp-diagnostic-source-
 Treat [HP Diagnostic Preview Final Blocker Tracker](hp-diagnostic-preview-final-blocker-tracker.md) as the concise source-of-truth table for current release blockers.
 
 - Preserve the resolved inherited-shell UI state during future release-prep changes.
-- Complete package-license and notice review from authoritative package metadata.
+- Preserve the completed package-license/notice review and repeat it against the exact distributable.
 - Confirm the approved VictusX icon visually on the exact clean-machine candidate.
 - Define and verify signing and checksum output for the final package.
 - Run the clean-machine validation plan against a final candidate package.
@@ -44,9 +44,9 @@ Treat [HP Diagnostic Preview Final Blocker Tracker](hp-diagnostic-preview-final-
 
 ## Package-License/Notice Review Blocker
 
-Use [Third-Party Notices Audit](third-party-notices-audit.md), [Dependency Notice Inventory](dependency-notice-inventory.md), and [Package License Review Workflow](package-license-review-workflow.md) as the current source material. The blocker remains open until direct and transitive package notices are reviewed against authoritative package metadata and matched to final package contents.
+The direct and transitive package notices, project GPL, G-Helper attribution, exact .NET 10.0.11 runtime evidence, NvAPIWrapper treatment, and icon provenance are reviewed and matched to the current candidate. Preserve this evidence and repeat the inspector against the exact distributable.
 
-The [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md), [Runtime Dependency License Review Evidence Checklist](runtime-dependency-license-review-evidence-checklist.md), and draft [Third-Party Notices](../THIRD-PARTY-NOTICES.md) define the package-facing checklist and source-level record for attribution, dependency notices, HP/OMEN wording constraints, package contents, and verification. The draft is not yet reviewed release evidence.
+The [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md), [Runtime Dependency License Review Evidence Checklist](runtime-dependency-license-review-evidence-checklist.md), and reviewed [Third-Party Notices](../THIRD-PARTY-NOTICES.md) define and record the completed current-baseline notice review.
 
 The future ZIP/installer must include applicable license text, upstream G-Helper modified-project attribution, and reviewed third-party notices.
 

@@ -132,6 +132,11 @@ internal static class HpRyzenTemperatureProbeSemantics
     }
 }
 
+internal interface IHpRyzenTemperatureProbeSession : IDisposable
+{
+    HpRyzenTemperatureProbeResult Read(DateTimeOffset sampledAt);
+}
+
 internal sealed class HpRyzenTemperatureProbeBackend
 {
     private const string ModuleResourceName = "GHelper.Hardware.Hp.Resources.PawnIO.AMDFamily17.bin";
@@ -183,12 +188,16 @@ internal sealed class HpRyzenTemperatureProbeBackend
         {
             int error = Marshal.GetLastWin32Error();
             handle.Dispose();
-            return HpRyzenTemperatureProbeSessionOpenResult.Failed(error switch
+            HpRyzenTemperatureProbeAvailability availability = error switch
             {
                 2 or 3 => HpRyzenTemperatureProbeAvailability.PawnIoNotInstalled,
                 5 => HpRyzenTemperatureProbeAvailability.PawnIoAccessDenied,
                 _ => HpRyzenTemperatureProbeAvailability.PawnIoOpenFailed
-            }, "PawnIO device open failed (Win32 " + error + ").");
+            };
+            string detail = error == 5
+                ? "PawnIO device open failed (Win32 5: elevated Administrator access required by the PawnIO device ACL)."
+                : "PawnIO device open failed (Win32 " + error + ").";
+            return HpRyzenTemperatureProbeSessionOpenResult.Failed(availability, detail);
         }
 
         if (!DeviceIoControl(handle, LoadModuleIoctl, module, (uint)module.Length, null, 0, out _, IntPtr.Zero))
@@ -211,7 +220,7 @@ internal sealed class HpRyzenTemperatureProbeBackend
         [In] byte[] inputBuffer, uint inputBufferSize, [Out] byte[]? outputBuffer, uint outputBufferSize,
         out uint bytesReturned, IntPtr overlapped);
 
-    internal sealed class HpRyzenTemperatureProbeSession : IDisposable
+    internal sealed class HpRyzenTemperatureProbeSession : IHpRyzenTemperatureProbeSession
     {
         private readonly SafeFileHandle handle;
         private bool disposed;
@@ -306,12 +315,12 @@ internal sealed class HpRyzenTemperatureProbeBackend
 
 internal sealed record HpRyzenTemperatureProbeSessionOpenResult(
     HpRyzenTemperatureProbeAvailability Availability,
-    HpRyzenTemperatureProbeBackend.HpRyzenTemperatureProbeSession? Session,
+    IHpRyzenTemperatureProbeSession? Session,
     string Detail)
 {
     public bool IsOpened => Availability == HpRyzenTemperatureProbeAvailability.Available && Session is not null;
 
-    public static HpRyzenTemperatureProbeSessionOpenResult Opened(HpRyzenTemperatureProbeBackend.HpRyzenTemperatureProbeSession session) =>
+    public static HpRyzenTemperatureProbeSessionOpenResult Opened(IHpRyzenTemperatureProbeSession session) =>
         new(HpRyzenTemperatureProbeAvailability.Available, session, "PawnIO opened; signed AMDFamily17 read-only module loaded.");
 
     public static HpRyzenTemperatureProbeSessionOpenResult Failed(HpRyzenTemperatureProbeAvailability availability, string detail) =>

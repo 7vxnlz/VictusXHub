@@ -20,8 +20,8 @@ internal sealed record HpReadOnlyTelemetrySnapshot(
     bool? Charging,
     int? DisplayRefreshRateHz = null)
 {
-    // CPU temperature and tachometer discovery remain unsupported on the V1 target.
-    public double? CpuTemperatureCelsius => null;
+    public HpRyzenTemperatureProbeResult? CpuTemperature { get; init; }
+    public double? CpuTemperatureCelsius => CpuTemperature is { IsAvailable: true } sample ? sample.Celsius : null;
     public HpGpuTemperatureSample? GpuTemperature { get; init; }
     public double? GpuTemperatureCelsius => GpuTemperature?.Celsius;
     public int? FanRpm => null;
@@ -34,7 +34,8 @@ internal sealed class HpReadOnlyTelemetryProvider(
     IHpReadOnlyTelemetrySource source,
     HpGpuTemperaturePoller? gpu = null,
     Func<int?>? displayRefreshRateReader = null,
-    HpBatteryCarePoller? batteryCare = null)
+    HpBatteryCarePoller? batteryCare = null,
+    HpRyzenTemperatureTelemetryProvider? cpuTemperature = null) : IDisposable
 {
     private HpCpuTimes? previousCpu;
     private DateTimeOffset? previousCpuTime;
@@ -46,6 +47,7 @@ internal sealed class HpReadOnlyTelemetryProvider(
         previousCpuTime = null;
         gpu?.Reset();
         batteryCare?.Reset();
+        cpuTemperature?.Reset();
     }
 
     public HpReadOnlyTelemetrySnapshot Capture(DateTimeOffset now)
@@ -75,10 +77,13 @@ internal sealed class HpReadOnlyTelemetryProvider(
 
         return new(now, load, percent, present, ac, charging, displayRefreshRate)
         {
+            CpuTemperature = cpuTemperature?.Poll(now),
             GpuTemperature = gpu?.Poll(now),
             BatteryCare = batteryCare?.Poll(now)
         };
     }
+
+    public void Dispose() => cpuTemperature?.Dispose();
 
     private int? CalculateLoad(HpCpuTimes? current, DateTimeOffset now)
     {

@@ -87,7 +87,7 @@ internal static class HpRyzenTemperatureProbeCommand
         return true;
     }
 
-    private static HpRyzenTemperatureProbeDevice ReadDevice()
+    internal static HpRyzenTemperatureProbeDevice ReadDevice()
     {
         HpRyzenTemperatureProbeIdentity wmiIdentity;
         try

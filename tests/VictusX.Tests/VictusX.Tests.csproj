@@ -21,6 +21,7 @@
     <Compile Include="..\..\app\Hardware\Hp\HpReadOnlyTelemetry.cs" Link="Hardware\Hp\HpReadOnlyTelemetry.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpRyzenTemperatureProbeIdentity.cs" Link="Hardware\Hp\HpRyzenTemperatureProbeIdentity.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpRyzenTemperatureProbe.cs" Link="Hardware\Hp\HpRyzenTemperatureProbe.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpRyzenTemperatureTelemetryProvider.cs" Link="Hardware\Hp\HpRyzenTemperatureTelemetryProvider.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpReadOnlyTelemetryFormatter.cs" Link="Hardware\Hp\HpReadOnlyTelemetryFormatter.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpWindowsTelemetrySource.cs" Link="Hardware\Hp\HpWindowsTelemetrySource.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpBiosWmiCommandCatalog.cs" Link="Hardware\Hp\HpBiosWmiCommandCatalog.cs" />

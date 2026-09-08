@@ -301,13 +301,49 @@ public sealed class HpReadOnlyTelemetryTests
 
     [Theory]
     [InlineData(-1)] [InlineData(0)] [InlineData(6)]
-    public void CpuPackageTemperatureRemainsUnavailableRegardlessOfOsSampleFreshness(int ageSeconds)
+    public void CpuPackageTemperatureWithoutValidatedSampleRemainsUnavailableRegardlessOfOsSampleFreshness(int ageSeconds)
     {
         var snapshot = new HpReadOnlyTelemetrySnapshot(Now, 70, 80, true, true, false);
         var display = HpReadOnlyTelemetryFormatter.Format(snapshot, Now.AddSeconds(ageSeconds), true, false);
         Assert.Null(snapshot.CpuTemperatureCelsius);
         Assert.StartsWith("Temp: Unavailable", display.Cpu);
-        Assert.Contains("no verified driver-free package sensor", display.Summary);
+        Assert.Contains("validated PawnIO telemetry not available", display.Summary);
+    }
+
+    [Fact]
+    public void FreshValidatedCpuTemperatureFormatsToOneDecimalAndStaleSampleFailsClosed()
+    {
+        var snapshot = new HpReadOnlyTelemetrySnapshot(Now, 70, 80, true, true, false)
+        {
+            CpuTemperature = HpRyzenTemperatureProbeSemantics.FromExactSensor(
+                HpRyzenTemperatureProbeResult.SourceName, 36.125, Now)
+        };
+
+        HpReadOnlyTelemetryDisplay fresh = HpReadOnlyTelemetryFormatter.Format(snapshot, Now, true, false);
+        HpReadOnlyTelemetryDisplay stale = HpReadOnlyTelemetryFormatter.Format(snapshot, Now.AddSeconds(6), true, false);
+
+        Assert.Equal("36.1 C", fresh.CpuTemperature);
+        Assert.StartsWith("Temp: 36.1 C", fresh.Cpu);
+        Assert.Contains("Core (Tctl/Tdie)", fresh.Summary);
+        Assert.Equal("Unavailable", stale.CpuTemperature);
+        Assert.StartsWith("Temp: Unavailable", stale.Cpu);
+    }
+
+    [Fact]
+    public void AccessDeniedCpuTemperatureFormatsAsNeutralUnavailableWithDiagnosticReason()
+    {
+        var snapshot = new HpReadOnlyTelemetrySnapshot(Now, 70, 80, true, true, false)
+        {
+            CpuTemperature = HpRyzenTemperatureProbeResult.Unavailable(
+                HpRyzenTemperatureProbeAvailability.PawnIoAccessDenied, "Administrator access required")
+        };
+
+        HpReadOnlyTelemetryDisplay display = HpReadOnlyTelemetryFormatter.Format(snapshot, Now, true, false);
+
+        Assert.Equal("Unavailable", display.CpuTemperature);
+        Assert.StartsWith("Temp: Unavailable", display.Cpu);
+        Assert.Contains("PawnIoAccessDenied", display.Summary, StringComparison.Ordinal);
+        Assert.Contains("Administrator access required", display.Summary, StringComparison.Ordinal);
     }
 
     [Theory]

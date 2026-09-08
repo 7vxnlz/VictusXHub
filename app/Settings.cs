@@ -512,7 +512,10 @@ namespace GHelper
             hpLiveTelemetryProvider = new HpReadOnlyTelemetryProvider(new HpWindowsTelemetrySource(),
                 new HpGpuTemperaturePoller(HpNvidiaTemperatureSource.Read),
                 ReadHpDisplayRefreshRate,
-                new HpBatteryCarePoller(new HpBatteryCareReadOnlySource().Read));
+                new HpBatteryCarePoller(new HpBatteryCareReadOnlySource().Read),
+                new HpRyzenTemperatureTelemetryProvider(HpRyzenTemperatureProbeCommand.ReadDevice,
+                    () => new HpRyzenTemperatureProbeBackend().Open()));
+            Disposed += (_, _) => hpLiveTelemetryProvider?.Dispose();
             components ??= new System.ComponentModel.Container();
             hpLiveTelemetryTimer = new System.Windows.Forms.Timer(components) { Interval = 1000 };
             hpLiveTelemetryTimer.Tick += (_, _) => RefreshHpLiveTelemetry();

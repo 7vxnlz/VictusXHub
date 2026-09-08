@@ -20,7 +20,7 @@ public sealed class HpDiagnosticDashboardFormatterTests
             GpuTemperature = "52 C",
             BatteryPower = "78% | AC | Charging",
             RefreshRate = "144Hz",
-            CpuTemperature = "Unavailable",
+            CpuTemperature = "36.1 C",
             FanRpm = "Unavailable",
             PerformanceMode = "Unavailable",
             GpuSwitchingCapability = "Supported",
@@ -42,7 +42,7 @@ public sealed class HpDiagnosticDashboardFormatterTests
         Assert.Equal(["Performance Mode", "GPU Switching", "Keyboard Lighting", "Battery Care", "Fan Control", "Display Control"], capabilities.Rows.Select(row => row.Label));
         Assert.Contains(live.Rows, row => row.Label == "CPU load" && row.Value == "24%" && row.Status == HpDiagnosticDashboardStatus.Ready);
         Assert.Contains(live.Rows, row => row.Label == "Refresh rate" && row.Value == "144Hz" && row.Status == HpDiagnosticDashboardStatus.Ready);
-        Assert.Contains(live.Rows, row => row.Label == "CPU temperature" && row.Value == "Unavailable" && row.Status == HpDiagnosticDashboardStatus.Normal);
+        Assert.Contains(live.Rows, row => row.Label == "CPU temperature" && row.Value == "36.1 C" && row.Status == HpDiagnosticDashboardStatus.Ready);
         Assert.Contains(live.Rows, row => row.Label == "Fan RPM" && row.Value == "Unavailable" && row.Status == HpDiagnosticDashboardStatus.Normal);
         Assert.Contains(capabilities.Rows, row => row.Label == "Performance Mode" && row.Value == "Unavailable" && row.Status == HpDiagnosticDashboardStatus.Normal);
         Assert.Contains(capabilities.Rows, row => row.Label == "GPU Switching" && row.Value == "Supported" && row.Status == HpDiagnosticDashboardStatus.Ready);
@@ -166,6 +166,7 @@ public sealed class HpDiagnosticDashboardFormatterTests
             new()
             {
                 Model = "HP Victus 16-s0035nt",
+                CpuTemperature = "36.1 C",
                 BatteryCareCapability = "Supported · Enabled",
                 DisplayControlStatus = "Supported"
             },
@@ -180,6 +181,7 @@ public sealed class HpDiagnosticDashboardFormatterTests
         Assert.Contains("User summary", summary, StringComparison.Ordinal);
         Assert.Contains("Device" + Environment.NewLine + "Model: HP Victus 16-s0035nt", summary, StringComparison.Ordinal);
         Assert.Contains("Battery Care: Supported · Enabled", summary, StringComparison.Ordinal);
+        Assert.Contains("CPU temperature: 36.1 C", summary, StringComparison.Ordinal);
         Assert.Contains("Display Control: Supported", summary, StringComparison.Ordinal);
         Assert.Contains("Advanced live-status evidence", summary, StringComparison.Ordinal);
         Assert.Contains("no verified driver-free package sensor", summary, StringComparison.Ordinal);
@@ -188,6 +190,17 @@ public sealed class HpDiagnosticDashboardFormatterTests
         Assert.Contains("FanGetLevel interpretation: " + HpFanProofGapAnalyzer.FanGetLevelRawOnly, summary, StringComparison.Ordinal);
         Assert.Contains("SetFanLevel research", summary, StringComparison.Ordinal);
         Assert.Contains("DeviceValidatedInputLength: " + HpDiagnosticDashboardFormatter.SetFanMaxInputLengthUnset, summary, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void CompleteSummary_DoesNotPresentUnavailableCpuTemperatureAsCurrent()
+    {
+        string summary = HpDiagnosticDashboardFormatter.BuildCompleteSummary(
+            new() { CpuTemperature = "Unavailable" }, new(),
+            "CPU temperature: Unavailable (PawnIoAccessDenied); Administrator access required.");
+
+        Assert.Contains("CPU temperature: Unavailable", summary, StringComparison.Ordinal);
+        Assert.DoesNotContain("CPU temperature: 36.1 C", summary, StringComparison.Ordinal);
     }
 
     [Fact]

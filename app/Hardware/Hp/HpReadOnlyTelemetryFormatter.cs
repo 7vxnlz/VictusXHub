@@ -53,12 +53,24 @@ internal static class HpReadOnlyTelemetryFormatter
         string gpuTemperature = gpuFresh
             ? current.GpuTemperature!.Value.Celsius.ToString("0", System.Globalization.CultureInfo.InvariantCulture) + " C"
             : "Unavailable";
+        HpRyzenTemperatureProbeResult? cpuTemperatureSample = current.CpuTemperature;
+        bool cpuTemperatureFresh = cpuTemperatureSample is { IsAvailable: true, Celsius: { } cpuCelsius, SampledAt: { } cpuSampledAt } &&
+            now >= cpuSampledAt && now - cpuSampledAt <= HpReadOnlyTelemetryProvider.MaximumSampleAge &&
+            double.IsFinite(cpuCelsius) && cpuCelsius > 0 && cpuCelsius <= 115;
+        string cpuTemperature = cpuTemperatureFresh
+            ? cpuTemperatureSample!.Celsius!.Value.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture) + " C"
+            : "Unavailable";
+        string cpuTemperatureEvidence = cpuTemperatureFresh
+            ? $"CPU temperature: {cpuTemperature} ({HpRyzenTemperatureProbeResult.SourceName}; {HpRyzenTemperatureProbeResult.BackendName}; exact-device gate accepted; sampled {cpuTemperatureSample!.SampledAt!.Value.ToUniversalTime():u})."
+            : cpuTemperatureSample is { IsAvailable: true, SampledAt: { } lastSampledAt }
+                ? $"CPU temperature: Unavailable (stale); last validated sample was {lastSampledAt.ToUniversalTime():u}."
+                : $"CPU temperature: Unavailable ({snapshot.CpuTemperature?.Availability.ToString() ?? "not sampled"}); {snapshot.CpuTemperature?.Detail ?? "validated PawnIO telemetry not available."}";
         string summary = $"Read-only OS telemetry: {state}; last poll: {poll}\n" +
             $"CPU load: {load} (GetSystemTimes); battery: {battery}, {ac}, {charging} (GetSystemPowerStatus).\n" +
             $"Battery charge limit: {batteryCare} (read-only HP BIOS setting inventory; numeric limits unavailable).\n" +
             $"Display refresh rate: {refreshRate} (Windows current settings for the internal panel when identifiable).\n" +
             $"GPU temperature: {gpuTemperature} (NVIDIA NVAPI GPU-target sensor; optional installed display driver).\n" +
-            "CPU temperature: Unavailable; no verified driver-free package sensor.\n" +
+            cpuTemperatureEvidence + "\n" +
             "Fan 1 / Fan 2 RPM: Unavailable; no verified V1 tachometer source; 0x38 is not enabled.\n" +
             $"{device} ({identitySource}); cached fan levels remain raw-only. Normal fan control: NO-GO.";
 
@@ -70,7 +82,7 @@ internal static class HpReadOnlyTelemetryFormatter
             FormatTrayBattery(current),
             current.DisplayRefreshRateHz is { } trayHz ? $"Screen: {trayHz} Hz" : "Screen: Unavailable");
         return new(
-            $"Temp: Unavailable | {load}", $"Temp: {gpuTemperature}",
+            $"Temp: {cpuTemperature} | {load}", $"Temp: {gpuTemperature}",
             $"Fan RPM: Unavailable | {device}" + (cachedIdentity ? " (cached)" : ""),
             batteryStatus, $"Battery care: {batteryCare}", $"Screen: {refreshRate}", summary, trayStatus)
         {
@@ -79,7 +91,7 @@ internal static class HpReadOnlyTelemetryFormatter
             GpuTemperature = gpuTemperature,
             BatteryPower = batteryStatus,
             RefreshRate = refreshRate,
-            CpuTemperature = "Unavailable",
+            CpuTemperature = cpuTemperature,
             FanRpm = "Unavailable",
             BatteryCareStatus = batteryCare,
             BatteryCareCapability = FormatBatteryCareCapability(current.BatteryCare?.Result),

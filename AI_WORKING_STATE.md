@@ -9,13 +9,13 @@ Updated: 2026-09-08
 - Verified read-only status includes CPU load, battery/AC/charging, device detection, NVIDIA temperature when NVAPI is available, named HP battery-care support and enabled/disabled state when the recognized inventory value is explicit, exact-SKU keyboard-backlight capability evidence, and exact-device GPU-switch capability from cached SystemDesignData. Main-shell and tray refresh-rate actions use one Windows-native validated path and appear only for one unambiguous internal panel with matching mode geometry; there is no vendor write path.
 - Unavailable: CPU package temperature, V1 fan RPM, keyboard state/levels, numeric charge limits, and current GPU mode. `FanGetLevel` is raw-only and is never RPM or percent; `FanMaxGet` is inconclusive. HP performance mode is unavailable and controls remain disabled.
 - Normal/user-facing fan control is NO-GO. `DeviceValidatedInputLength` remains null. Developer SetFanMax pulse/hold remains CLI-only, explicitly gated, four-byte, no-retry, and restore-protected; hold seconds are only the bounded pre-restore wait. SetFanLevel remains non-executable research: dry-run/preflight is hardware/WMI-inert, first-write readiness is NO-GO, and no value is selected.
-- Release status: source-only preparation is GO; preview publishing is NO-GO pending final notice/package compliance, signing/checksums, clean-machine validation, and final artifact inspection. The prior `Runtime.Win` restore-graph blocker is resolved at source level but still requires release-artifact confirmation. See `docs/preview-release-current-blockers.md` and the `packaging` context pack.
+- Release status: source-only preparation and the fail-closed preview-directory inspection workflow are GO; an ignored local candidate passed its automated layout/notice/hash checks. Preview publishing remains NO-GO pending exact embedded-runtime notice matching, final notice/attribution review, signing decision and distributable checksum, and clean-machine validation. See `docs/preview-release-current-blockers.md` and the `packaging` context pack.
 - Non-HP behavior is unchanged.
 
 ## Verification Baseline
 
 - Branch: `main` tracking `origin/main`.
-- Last verified: `dotnet build VictusX.sln --no-restore` passed with zero warnings; `dotnet test VictusX.sln --no-build` passed 427/427. No hardware, vendor-write, or real display-mode command was run.
+- Last verified: `dotnet build VictusX.sln --no-restore` passed with zero warnings; `dotnet test VictusX.sln --no-build` passed 433/433. No hardware, vendor-write, or real display-mode command was run.
 - NU1900 is not suppressed. The last network-capable audit found no vulnerable packages; repeat against the exact release candidate.
 
 ## Context Routing

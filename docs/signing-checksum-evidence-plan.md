@@ -2,7 +2,7 @@
 
 ## Current Blocker State
 
-Signing and checksum evidence remains open for the future VictusX HP Diagnostic preview. No preview package exists, no release artifact has been selected, nothing has been signed, and no final checksums have been generated.
+Signing and checksum evidence remains open for the future VictusX HP Diagnostic preview. No final release artifact has been selected, nothing has been signed, and no final distributable checksum has been generated.
 
 This plan does not authorize publishing, signing, checksum generation, or release readiness.
 
@@ -70,6 +70,8 @@ Required warning:
 - Record the exact checksum command/tool, operating system, tool version if available, artifact size, and generated digest.
 - Verify the checksum independently before release.
 - Do not update checksum text without rebuilding the evidence record.
+
+Before creating a ZIP or installer, run `tools/verify-victusx-preview-package.ps1` against its source directory. The emitted per-file SHA-256 lines and deterministic manifest SHA-256 are package-content evidence only. They do not replace the required SHA-256 of the final ZIP/installer, which must be generated after any signing or other byte-changing step.
 
 Example future checksum commands:
 

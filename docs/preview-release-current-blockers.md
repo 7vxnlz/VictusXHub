@@ -1,6 +1,6 @@
 # Preview Release Current Blockers
 
-Updated: 2026-09-07
+Updated: 2026-09-08
 
 This is the concise current blocker snapshot for the VictusX HP Diagnostic preview. It does not authorize publishing, signing, checksum generation, dependency changes, package creation, or runtime behavior changes.
 
@@ -20,7 +20,7 @@ This is the concise current blocker snapshot for the VictusX HP Diagnostic previ
 | `THIRD-PARTY-NOTICES.md` release readiness | Blocked | Promote from source-assembled status only after runtime-pack notice matching, external NvAPIWrapper layout verification, icon attribution, and final artifact matching are complete. | [Third-Party Notices](../THIRD-PARTY-NOTICES.md), [Runtime dependency review](runtime-dependency-license-review.md) |
 | Signing/checksum evidence | Blocked | Record artifact name, version, commit, signing status, signer/certificate if applicable, SHA-256 hash, reviewer/date, and validation linkage. | [Signing/checksum evidence plan](signing-checksum-evidence-plan.md) |
 | Clean-machine validation | Blocked | Validate the exact package candidate on a clean Windows machine/VM, including launch, read-only UI/no-control behavior, Quit/process termination, paths, crash handling, and reviewer/date evidence. | [Clean-machine evidence plan](clean-machine-validation-evidence-plan.md) |
-| Final package contents inspection | Blocked | Inspect the final artifact for executable identity, final icon, expected runtime files, notices/license files, launcher arguments, no test/source/reference artifacts, no developer-only logs/device captures, and signing/checksum evidence. | [Package contents inspection](preview-package-contents-inspection.md), [Packaging readiness audit](windows-packaging-readiness-audit.md) |
+| Final package contents inspection | Workflow ready; final candidate pending | Run `tools/verify-victusx-preview-package.ps1` against the exact candidate to verify deterministic layout, identity metadata, external NvAPIWrapper, notice-file matches, forbidden artifacts, and per-file/manifest hashes. Manual runtime-notice, signing, attribution, and clean-machine evidence remains separate. | [Package contents inspection](preview-package-contents-inspection.md), [Packaging readiness audit](windows-packaging-readiness-audit.md) |
 
 ## Completed Source-Side Items
 
@@ -34,6 +34,7 @@ This is the concise current blocker snapshot for the VictusX HP Diagnostic previ
 | MMI runtime release disposition | Done | Duplicate MMI/CIM readiness probe and package reference were removed; restored assets contain no MMI package. Final artifact inspection must confirm absence. |
 | `NU1900` disposition | Done for current source | Network-capable restore retrieved NuGet vulnerability data; project graphs reported no vulnerable packages; restore/build/test completed without `NU1900`. Repeat on the exact release candidate. See [NU1900 checkpoint](nu1900-warning-checkpoint.md). |
 | HP publish profile source | Done | Profile is `Release`, `net10.0-windows`, `win-x64`, self-contained, single-file, untrimmed, native self-extracting, symbol-free, and externally packages license/notices plus the safe HP launcher. |
+| Package inspection workflow | Done for source tooling | The fail-closed inspector accepts one explicit directory, rejects unexpected/forbidden files, verifies source-matching notices and launcher, confirms the external NvAPIWrapper layout, and emits deterministic SHA-256 evidence. A local ignored candidate passed the automated checks; this is not final release evidence. |
 | Localized inherited branding review | Done | Localized `Strings*.resx` display values use VictusX. Compatibility resource keys and internal identifiers remain unchanged. See [Visible branding audit](victusx-visible-branding-audit.md). |
 
 ## Notes

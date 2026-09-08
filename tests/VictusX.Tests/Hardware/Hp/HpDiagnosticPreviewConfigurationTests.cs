@@ -99,6 +99,8 @@ public sealed class HpDiagnosticPreviewConfigurationTests
         Assert.Contains("KeepNvApiWrapperReplaceable", profile, StringComparison.Ordinal);
         Assert.Contains("NvAPIWrapper.dll", profile, StringComparison.Ordinal);
         Assert.Contains("<ExcludeFromSingleFile>true</ExcludeFromSingleFile>", profile, StringComparison.Ordinal);
+        Assert.Contains("<ResolvedFileToPublish Update=\"@(ResolvedFileToPublish)\"", profile, StringComparison.Ordinal);
+        Assert.DoesNotContain("_NvApiWrapperPublishFile", profile, StringComparison.Ordinal);
         Assert.Contains("replaceable external library", profile, StringComparison.Ordinal);
         Assert.Contains("<PackageReference Include=\"NvAPIWrapper.Net\" Version=\"0.8.1.101\"", project, StringComparison.Ordinal);
         Assert.Contains("GPUApi.GetThermalSettings", temperatureSource, StringComparison.Ordinal);

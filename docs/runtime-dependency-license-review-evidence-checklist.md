@@ -14,7 +14,7 @@ The current runtime dependency candidate list comes from:
 - locally restored dependency information summarized in [Dependency Notice Inventory](dependency-notice-inventory.md);
 - the source-level draft [Third-Party Notices](../THIRD-PARTY-NOTICES.md).
 
-No final preview ZIP or installer exists yet, so package-content matching cannot be completed.
+No final preview ZIP or installer has been selected, so release-candidate package matching cannot be completed. The automated directory inspector can already prove that packaged library notices byte-match their reviewed repository sources and that no unexpected external runtime binary is present.
 
 ## Direct Runtime Package Candidates
 
@@ -68,6 +68,8 @@ Before release, inspect the final ZIP or installer contents and confirm:
 - test-only packages are excluded from application notices unless they are actually distributed;
 - no developer-only logs, local machine paths, captured device evidence, or experimental command outputs are bundled;
 - `LICENSE`, reviewed third-party notices, G-Helper attribution, user safety notes, and icon attribution are included when required.
+
+Run `tools/verify-victusx-preview-package.ps1 -PublishDirectory <candidate-directory>` first. Its `notice-matching` and `runtime-layout` checks cover deterministic directory evidence. Its `runtime-notices` warning is intentionally not resolved because the self-contained .NET and Windows Desktop runtime remains embedded; exact runtime-pack version/license/notice matching still requires the build record and manual review.
 
 ## Package Manager Metadata Limitations
 

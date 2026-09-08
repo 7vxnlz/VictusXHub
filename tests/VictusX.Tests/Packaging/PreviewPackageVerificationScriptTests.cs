@@ -169,7 +169,10 @@ public sealed class PreviewPackageVerificationScriptTests
         Assert.Contains("PASS notice-matching", first.Output, StringComparison.Ordinal);
         Assert.Contains("PASS notice-inventory", first.Output, StringComparison.Ordinal);
         Assert.Contains("PASS runtime-notices", first.Output, StringComparison.Ordinal);
-        Assert.Contains("WARN manual-release-evidence", first.Output, StringComparison.Ordinal);
+        Assert.Contains(
+            "WARN manual-release-evidence: artifact-level ZIP checksum and clean-machine validation must be supplied separately.",
+            first.Output,
+            StringComparison.Ordinal);
         Assert.EndsWith("Preview package: GO", first.Output.TrimEnd(), StringComparison.Ordinal);
     }
 

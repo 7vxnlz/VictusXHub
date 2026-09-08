@@ -306,7 +306,7 @@ try {
 }
 Write-Pass "checksum-evidence" "$($entries.Count) files; deterministic manifest SHA256 $manifestHash."
 
-Write-Warn "manual-release-evidence" "signing decision, artifact-level ZIP checksum, and clean-machine validation remain required."
+Write-Warn "manual-release-evidence" "artifact-level ZIP checksum and clean-machine validation must be supplied separately."
 
 if ($script:FailureCount -eq 0) {
     Write-Output "Preview package: GO"

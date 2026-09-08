@@ -4,18 +4,37 @@
 
 Signing status for the initial VictusX HP Diagnostic preview is **unsigned — explicitly approved by maintainer**. No approved code-signing certificate is configured, and no signing was performed. The maintainer does not require repository/history restructuring for a signing provider. A future free, compatible signing path may be considered separately, but it is not a blocker for this initial preview.
 
-The final distributable checksum remains open. Generate it only after the exact distributable is frozen; nothing in this decision substitutes for artifact-specific checksum or clean-machine evidence.
+The final distributable checksum is recorded below for the exact frozen ZIP. Clean-machine evidence remains open.
 
 This plan does not authorize publishing, signing, checksum generation, or release readiness.
 
 See [HP Diagnostic Preview Final Blocker Tracker](hp-diagnostic-preview-final-blocker-tracker.md) for the consolidated release-blocker status that signing/checksum evidence feeds into.
 
+## Frozen Initial Preview Evidence
+
+- Artifact: `VictusX-HP-Diagnostic-v0.1.0-preview.1-win-x64-portable.zip`
+- Application version: `0.1.0-preview.1`
+- Source/build commit: `ccd1f62865f1118bda476085f5d7144f787755bb`
+- Target: `net10.0-windows`, `win-x64`, self-contained single-file application with external replaceable `NvAPIWrapper.dll`
+- SDK/runtime baseline: SDK `10.0.400`; Microsoft.NETCore.App.Runtime.win-x64 and Microsoft.WindowsDesktop.App.Runtime.win-x64 `10.0.11`
+- Signing status: **unsigned — explicitly approved by maintainer**; no signing was performed
+- Artifact size: `49,848,534` bytes
+- Final distributable SHA-256: `601B96C1934629AE8375641EA4C3E4E19DEA7FACB29C4C3349F24E4DB26DF1D8`
+- Checksum evidence file: `VictusX-HP-Diagnostic-v0.1.0-preview.1-win-x64-portable.zip.sha256.txt`
+- Checksum verification: matching results from PowerShell `Get-FileHash -Algorithm SHA256` and Windows `certutil -hashfile ... SHA256`
+- Package inspection: original candidate and fresh ZIP extraction both returned `Preview package: GO`; all 22 extracted files byte-match the inspected candidate
+- Candidate manifest SHA-256: `12D76C915F227D56B0DBE3221C94DD5C005D48387721E2AACACF638623E6931E` (package-content evidence, not the ZIP checksum)
+- Notice review: linked to the reviewed [Third-Party Notices](../THIRD-PARTY-NOTICES.md) and exact 10.0.11 runtime evidence
+- Verified: 2026-09-08; evidence recorded by Codex under the maintainer's explicit task authorization
+
+This exact ZIP must be used unchanged for clean-machine validation. Any rebuild, repack, signing attempt, metadata change, or byte change invalidates this checksum and requires the candidate inspection, archive verification, and checksum evidence to be repeated.
+
 ## Expected Preview Artifact Types
 
 The expected future artifact types are:
 
-- portable ZIP, for example `VictusX-HP-Diagnostic-0.1.0-preview.1-win-x64-portable.zip`;
-- optional installer, if one is introduced later, for example `VictusX-HP-Diagnostic-0.1.0-preview.1-win-x64-setup.exe`;
+- portable ZIP, for example `VictusX-HP-Diagnostic-v0.1.0-preview.1-win-x64-portable.zip`;
+- optional installer, if one is introduced later, for example `VictusX-HP-Diagnostic-v0.1.0-preview.1-win-x64-setup.exe`;
 - checksum file for each distributed artifact, using the artifact file name plus `.sha256.txt`.
 
 The final artifact name and version must match the source revision, package metadata, user-facing notes, clean-machine validation record, and checksum/signing evidence.
@@ -78,11 +97,11 @@ Before creating a ZIP or installer, run `tools/verify-victusx-preview-package.ps
 Example future checksum commands:
 
 ```powershell
-Get-FileHash -Algorithm SHA256 .\VictusX-HP-Diagnostic-0.1.0-preview.1-win-x64-portable.zip
-certutil -hashfile .\VictusX-HP-Diagnostic-0.1.0-preview.1-win-x64-portable.zip SHA256
+Get-FileHash -Algorithm SHA256 .\VictusX-HP-Diagnostic-v0.1.0-preview.1-win-x64-portable.zip
+certutil -hashfile .\VictusX-HP-Diagnostic-v0.1.0-preview.1-win-x64-portable.zip SHA256
 ```
 
-These commands are examples for a future release candidate only. They were not run as part of this source-only plan.
+Both checksum tools were run against the frozen initial-preview ZIP, and their matching result is recorded above.
 
 ## User Verification Guidance
 
@@ -127,10 +146,7 @@ For every released artifact, record:
 
 ## What Remains Blocking
 
-- No exact final distributable has been selected and frozen.
 - Signing is explicitly recorded as unsigned; no digital signature must be claimed.
-- No final SHA-256 checksum exists.
-- Exact final distributable contents are not yet frozen.
 - Clean-machine validation is not complete.
 - Runtime dependency license/notice review and `NU1900` disposition are complete for the current baseline.
 - Icon provenance and source wiring are recorded; retain their checkpoint linkage in final release evidence.
@@ -138,6 +154,6 @@ For every released artifact, record:
 
 ## Recommended Next Safe Task
 
-Define a release-candidate evidence record template that combines [HP Diagnostic Preview Final Blocker Tracker](hp-diagnostic-preview-final-blocker-tracker.md), package contents, `THIRD-PARTY-NOTICES.md` review status, `NU1900` disposition, signing/checksum evidence, and clean-machine validation without publishing artifacts.
+Run clean-machine validation against the exact frozen ZIP and record the artifact SHA-256 in that evidence. Do not rebuild or repack it.
 
 See [Clean-Machine Validation Evidence Plan](clean-machine-validation-evidence-plan.md) for the validation evidence that must match the signed/checksummed artifact.

@@ -10,7 +10,7 @@ This checklist defines what must be inspected in a future VictusX HP Diagnostic 
 - Preview package publish remains **NO-GO**.
 - The HP source profile is `Release` / `net10.0-windows` / `win-x64`, self-contained, single-file, explicitly untrimmed, and configured without debug symbols.
 - `VictusX.exe` embeds the application and self-contained runtime. `NvAPIWrapper.dll` remains external and replaceable. `VictusX.dll.config`, `LICENSE`, `THIRD-PARTY-NOTICES.md`, `Assets/Licenses/**`, and `tools/run-victusx-hp-diagnostic.ps1` are external publish files.
-- `tools/verify-victusx-preview-package.ps1` performs the deterministic file/layout checks below against an explicit directory. Final signing/checksum and clean-machine evidence remain manual blockers.
+- `tools/verify-victusx-preview-package.ps1` performs the deterministic file/layout checks below against an explicit directory. The frozen ZIP checksum is recorded; clean-machine evidence remains the manual blocker.
 
 ## Automated Inspection
 
@@ -34,8 +34,8 @@ Any additional file is fail-closed until the publish contract and inspector are 
 
 | Item | Status | Future inspection requirement |
 | --- | --- | --- |
-| VictusX executable identity | Automated, final candidate pending | Confirm `VictusX.exe`, Windows executable header, readable VictusX product metadata, and extractable icon resource. Final visual confirmation remains part of clean-machine validation. |
-| Final `VictusX.ico` source and wiring | Source complete; final candidate pending | The approved PNG source, generated ICO hashes and frames, factual provenance, `ApplicationIcon`, and single HP tray resource are verified in source. Confirm the exact candidate visually during clean-machine validation. |
+| VictusX executable identity | Verified; final visual check pending | The frozen candidate has a Windows executable header, VictusX product metadata, commit-stamped product version, and extractable icon resource. Final visual confirmation remains part of clean-machine validation. |
+| Final `VictusX.ico` source and wiring | Candidate verified; final visual check pending | The approved PNG source, generated ICO hashes and frames, factual provenance, `ApplicationIcon`, and single HP tray resource are verified. Confirm the frozen candidate visually during clean-machine validation. |
 | Expected runtime files only | Automated | Require the single executable, `VictusX.dll.config`, and only the external `NvAPIWrapper.dll`; reject every unexpected file/binary. Exact 10.0.11 runtime-pack notice evidence is verified separately by the inspector. |
 | No test artifacts | Automated | Reject test directories/assemblies, testhost, xUnit, test-platform, coverage, and test-result artifacts. |
 | No source-only/reference repo files | Automated | Reject source/build files, `.git`, `.github`, reference repositories, context packs, and unexpected tooling. |
@@ -46,7 +46,7 @@ Any additional file is fail-closed until the publish contract and inspector are 
 | No debug symbols unless explicitly intended | Automated | Reject `.pdb`, dump, trace, and log artifacts. |
 | Preview launcher arguments | Automated | Require the source-matching launcher and exactly one application argument: `--hp-victus`. |
 | Read-only safety notes | Pending final publish | Include reviewed preview safety notes that state HP Diagnostic mode is read-only and normal fan/performance control is unavailable. |
-| Checksum preparation | Automated manifest; final artifact pending | Emit SHA-256 for every candidate file and a deterministic manifest digest. The final ZIP/installer checksum and signing record must be generated later from final bytes. |
+| Checksum preparation | Complete for frozen candidate | The 22-file manifest and exact ZIP checksum are recorded in the signing/checksum evidence plan. |
 | Clean-machine evidence linkage | Pending final publish | Confirm the inspected artifact is the exact artifact used for clean-machine validation and signing/checksum evidence. |
 
 ## Fail-Closed Rules
@@ -58,4 +58,4 @@ Any additional file is fail-closed until the publish contract and inspector are 
 
 ## Current Decision
 
-The notice set is reviewed and the publish profile and automated directory inspector are source-ready. Preview package publishing remains **NO-GO** until the exact distributable passes this tool and signing decision/final artifact checksum and clean-machine validation are complete.
+The notice set is reviewed, and the frozen unsigned ZIP plus a fresh extraction both passed this tool with identical 22-file contents. Preview package publishing remains **NO-GO** until clean-machine validation passes against those exact bytes.

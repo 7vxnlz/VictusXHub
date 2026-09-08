@@ -29,6 +29,10 @@ Normal HP diagnostic mode is local/report-backed and should not run explicit HP 
 
 `--hp-wmi-readonly-test` is for controlled developer-only elevated testing. It must not be used by preview users and must not appear in preview launchers, shortcuts, publish profiles, or release instructions.
 
+## Unsigned Preview Warning
+
+The initial VictusX preview is unsigned. Windows may therefore display an unknown or unverified publisher warning. Users must verify the published SHA-256 checksum for the exact distributable before running it; no release material may claim that the executable is digitally signed.
+
 ## Report and Export Locations
 
 - Cached diagnostic report: `%APPDATA%\VictusX\hp-capability-report.json`
@@ -47,4 +51,4 @@ Exported summaries must not include raw binary dumps or imply hardware-control s
 
 ## Release-Blocked Status
 
-No HP diagnostic preview artifact has been released from the current state. Release remains blocked by package-license/notice review, icon replacement, signing/checksum evidence, and clean-machine validation.
+No HP diagnostic preview artifact has been released from the current state. Package notices, icon integration, and the explicitly approved unsigned signing decision are complete. Release remains blocked by the final distributable checksum and clean-machine validation.

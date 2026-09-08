@@ -2,7 +2,9 @@
 
 ## Current Blocker State
 
-Signing and checksum evidence remains open for the future VictusX HP Diagnostic preview. No final release artifact has been selected, nothing has been signed, and no final distributable checksum has been generated.
+Signing status for the initial VictusX HP Diagnostic preview is **unsigned — explicitly approved by maintainer**. No approved code-signing certificate is configured, and no signing was performed. The maintainer does not require repository/history restructuring for a signing provider. A future free, compatible signing path may be considered separately, but it is not a blocker for this initial preview.
+
+The final distributable checksum remains open. Generate it only after the exact distributable is frozen; nothing in this decision substitutes for artifact-specific checksum or clean-machine evidence.
 
 This plan does not authorize publishing, signing, checksum generation, or release readiness.
 
@@ -22,7 +24,7 @@ The final artifact name and version must match the source revision, package meta
 
 ### Unsigned Preview
 
-An unsigned preview may be acceptable only if the maintainer explicitly approves it and user-facing warnings are clear.
+The maintainer explicitly approves the initial preview as unsigned. User-facing warnings remain required.
 
 Risks:
 
@@ -125,13 +127,12 @@ For every released artifact, record:
 
 ## What Remains Blocking
 
-- No final package artifact exists.
-- No signing decision has been made.
-- No signing evidence exists.
+- No exact final distributable has been selected and frozen.
+- Signing is explicitly recorded as unsigned; no digital signature must be claimed.
 - No final SHA-256 checksum exists.
-- Final package contents are unavailable.
+- Exact final distributable contents are not yet frozen.
 - Clean-machine validation is not complete.
-- Runtime dependency license/notice review and `NU1900` disposition remain open.
+- Runtime dependency license/notice review and `NU1900` disposition are complete for the current baseline.
 - Icon provenance and source wiring are recorded; retain their checkpoint linkage in final release evidence.
 - Normal/user-facing fan control remains NO-GO.
 

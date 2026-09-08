@@ -15,9 +15,9 @@ This is the concise current blocker snapshot for the VictusX HP Diagnostic previ
 
 | Item | Status | Required evidence / decision | Primary reference |
 | --- | --- | --- | --- |
-| Signing/checksum evidence | Blocked | Record artifact name, version, commit, signing status, signer/certificate if applicable, SHA-256 hash, reviewer/date, and validation linkage. | [Signing/checksum evidence plan](signing-checksum-evidence-plan.md) |
+| Final distributable checksum | Blocked | After the exact unsigned distributable is frozen, record its name, version, commit, size, SHA-256 hash, reviewer/date, and clean-machine validation linkage. | [Signing/checksum evidence plan](signing-checksum-evidence-plan.md) |
 | Clean-machine validation | Blocked | Validate the exact package candidate on a clean Windows machine/VM, including launch, read-only UI/no-control behavior, Quit/process termination, paths, crash handling, and reviewer/date evidence. | [Clean-machine evidence plan](clean-machine-validation-evidence-plan.md) |
-| Final package contents inspection | Workflow ready; exact distributable pending | Run `tools/verify-victusx-preview-package.ps1` against the exact distributable to verify deterministic layout, identity metadata, external NvAPIWrapper, notice-file matches, forbidden artifacts, and per-file/manifest hashes. Final signing/checksum and clean-machine evidence remain separate. | [Package contents inspection](preview-package-contents-inspection.md), [Packaging readiness audit](windows-packaging-readiness-audit.md) |
+| Final package contents inspection | Workflow ready; exact distributable pending | Run `tools/verify-victusx-preview-package.ps1` against the exact distributable to verify deterministic layout, identity metadata, external NvAPIWrapper, notice-file matches, forbidden artifacts, and per-file/manifest hashes. Final checksum and clean-machine evidence remain separate. | [Package contents inspection](preview-package-contents-inspection.md), [Packaging readiness audit](windows-packaging-readiness-audit.md) |
 
 ## Completed Source-Side Items
 
@@ -35,6 +35,7 @@ This is the concise current blocker snapshot for the VictusX HP Diagnostic previ
 | Self-contained .NET runtime notice matching | Done for verified 10.0.11 baseline | Verbatim exact-pack Core/Windows Desktop license files, Core third-party notices, and packaged identity provenance are byte-matched by the inspector. The Windows Desktop pack supplies no separate notice file, so no substitute was inferred. Repeat the inspection against the final distributable. See [.NET runtime notice checklist](dotnet-runtime-notice-checklist.md). |
 | HP publish profile source | Done | Profile is `Release`, `net10.0-windows`, `win-x64`, self-contained, single-file, untrimmed, native self-extracting, symbol-free, and externally packages license/notices plus the safe HP launcher. |
 | Package inspection workflow | Done for source tooling | The fail-closed inspector accepts one explicit directory, rejects unexpected/forbidden files, verifies source-matching notices and launcher, confirms the external NvAPIWrapper layout, and emits deterministic SHA-256 evidence. A local ignored candidate passed the automated checks; this is not final release evidence. |
+| Initial preview signing decision | Done | **Unsigned — explicitly approved by maintainer.** No approved code-signing certificate is configured and no signing was performed. Release material must warn that Windows may display an unknown or unverified publisher. |
 | Localized inherited branding review | Done | Localized `Strings*.resx` display values use VictusX. Compatibility resource keys and internal identifiers remain unchanged. See [Visible branding audit](victusx-visible-branding-audit.md). |
 
 ## Notes

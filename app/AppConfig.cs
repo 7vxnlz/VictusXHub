@@ -51,10 +51,10 @@ public static class AppConfig
     static AppConfig()
     {
         string configName = "config.json";
-        string appPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VictusX");
+        string appPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VictusXHub");
         string startupConfig = Path.Combine(Application.StartupPath.Trim('\\'), configName);
 
-        fallbackConfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "VictusX", configName);
+        fallbackConfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "VictusXHub", configName);
 
         configFile = File.Exists(startupConfig) ? startupConfig
         : ProcessHelper.IsRunningAsSystem() && File.Exists(fallbackConfigFile) ? fallbackConfigFile

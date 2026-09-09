@@ -24,4 +24,4 @@ These files are verbatim copies of authoritative package or upstream license/not
 | `TaskScheduler-LICENSE.txt` | TaskScheduler 2.12.2 | `dahall/taskscheduler` package commit `8f4803cf060b35f8299db26b45bfd6ff0f599c3c`, `license.md` | `05d265a73e2b97f59751cb993632e690f66b60d717a09c94126eeca673c9a9ba` |
 | `WinForms.DataVisualization-LICENSE.txt` | WinForms.DataVisualization 1.10.2 | Package metadata declares MIT; verbatim license from upstream `dotnet/winforms-datavisualization` commit `022f396f0561532c58d3af6f16cba8daa4386ce6`, `LICENSE.TXT` | `ae48df11a335dc1a615f4f938b69cba73bcf4485c4f97af49b38efb0f216353b` |
 
-The self-contained `win-x64` runtime baseline is pinned above for 10.0.11. The exact distributable must byte-match these external files and the identity record through `tools/verify-victusx-preview-package.ps1`.
+The self-contained `win-x64` runtime baseline is pinned above for 10.0.11. The exact distributable must byte-match these external files and the identity record through `tools/verify-victusxhub-preview-package.ps1`.

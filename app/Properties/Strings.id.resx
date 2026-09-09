@@ -160,7 +160,7 @@
     <value>Aplikasi sudah berjalan</value>
   </data>
   <data name="AppAlreadyRunningText" xml:space="preserve">
-    <value>VictusX sudah berjalan. Periksa system tray untuk menemukan ikonnya.</value>
+    <value>VictusXHub sudah berjalan. Periksa system tray untuk menemukan ikonnya.</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Terapkan</value>
@@ -678,7 +678,7 @@ Apakah Anda masih ingin melanjutkan?</value>
     <value>One Zone</value>
   </data>
   <data name="OpenGHelper" xml:space="preserve">
-    <value>Buka Jendela VictusX</value>
+    <value>Buka Jendela VictusXHub</value>
   </data>
   <data name="OptimalDisplayBrightness" xml:space="preserve">
     <value>Kecerahan Layar Optimal</value>
@@ -735,7 +735,7 @@ Apakah Anda masih ingin melanjutkan?</value>
     <value>Reset</value>
   </data>
   <data name="RestartGPU" xml:space="preserve">
-    <value>Ada yang menggunakan dGPU dan mencegah mode Eco. Biarkan VictusX mencoba memulai ulang dGPU di pengelola perangkat? (Silakan lanjutkan dengan risiko Anda sendiri)</value>
+    <value>Ada yang menggunakan dGPU dan mencegah mode Eco. Biarkan VictusXHub mencoba memulai ulang dGPU di pengelola perangkat? (Silakan lanjutkan dengan risiko Anda sendiri)</value>
   </data>
   <data name="RestartingNVServices" xml:space="preserve">
     <value>Restarting NV Services...</value>

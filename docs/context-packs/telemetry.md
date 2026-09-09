@@ -10,7 +10,7 @@ Use for HP read-only CPU/GPU/fan/battery/display status. Add a source-specific f
 - `app/Hardware/Hp/HpWindowsTelemetrySource.cs`
 - `app/Hardware/Hp/HpGpuTemperaturePoller.cs`
 - `app/Hardware/Hp/HpNvidiaTemperatureSource.cs`
-- `tests/VictusX.Tests/Hardware/Hp/HpReadOnlyTelemetryTests.cs`
+- `tests/VictusXHub.Tests/Hardware/Hp/HpReadOnlyTelemetryTests.cs`
 - `docs/hp-temperature-fan-rpm-telemetry.md`
 - `docs/hp-victus-ui-usefulness-gap-audit.md`
 

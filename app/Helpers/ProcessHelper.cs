@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
@@ -86,7 +86,7 @@ namespace GHelper.Helpers
                             if (stillAlive)
                             {
                                 string message = AppConfig.IsHpVictusHardwareMode()
-                                    ? "VictusX is already running. Check system tray for an icon."
+                                    ? "VictusXHub is already running. Check system tray for an icon."
                                     : Properties.Strings.AppAlreadyRunningText;
                                 MessageBox.Show(message, Properties.Strings.AppAlreadyRunning, MessageBoxButtons.OK);
                                 Application.Exit();

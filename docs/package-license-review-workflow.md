@@ -2,13 +2,13 @@
 
 ## Review Scope
 
-This workflow covers packages that may be distributed with a future VictusX HP diagnostic preview ZIP or installer. It is not legal advice and does not modify license terms.
+This workflow covers packages that may be distributed with a future VictusXHub HP diagnostic preview ZIP or installer. It is not legal advice and does not modify license terms.
 
 Review the final package contents, not only project files. Test-only packages need review only if test tooling or developer bundles are distributed.
 
 ## Direct Package Review Steps
 
-1. Start from `app/VictusX.csproj` and the current resolved restore graph.
+1. Start from `app/VictusXHub.csproj` and the current resolved restore graph.
 2. For each direct application dependency, record package id, version, package source, project usage, and whether it is included in the final package.
 3. Check authoritative package metadata: NuGet package page, package `.nuspec`, repository link, license expression/file, notice file, and project license.
 4. Record required attribution, notice text, source link, and any redistribution conditions visible from those sources.
@@ -24,8 +24,8 @@ Review the final package contents, not only project files. Test-only packages ne
 
 ## Metadata Sources to Check
 
-- `app/VictusX.csproj`
-- `tests/VictusX.Tests/VictusX.Tests.csproj` if developer/test artifacts are distributed
+- `app/VictusXHub.csproj`
+- `tests/VictusXHub.Tests/VictusXHub.Tests.csproj` if developer/test artifacts are distributed
 - clean `project.assets.json` restore output
 - NuGet package metadata and license fields
 - package `.nupkg` contents, including `.nuspec`, `LICENSE`, `NOTICE`, and readme files

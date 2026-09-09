@@ -160,7 +160,7 @@
     <value>Aplicația rulează deja</value>
   </data>
   <data name="AppAlreadyRunningText" xml:space="preserve">
-    <value>VictusX deja rulează. Verificați bara de sistem pentru o iconiță.</value>
+    <value>VictusXHub deja rulează. Verificați bara de sistem pentru o iconiță.</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Aplică</value>
@@ -678,7 +678,7 @@
     <value>One Zone</value>
   </data>
   <data name="OpenGHelper" xml:space="preserve">
-    <value>Deschide fereastra VictusX</value>
+    <value>Deschide fereastra VictusXHub</value>
   </data>
   <data name="OptimalDisplayBrightness" xml:space="preserve">
     <value>Luminozitate optimă a ecranului</value>
@@ -735,7 +735,7 @@
     <value>Reset</value>
   </data>
   <data name="RestartGPU" xml:space="preserve">
-    <value>Ceva folosește dGPU și previne modul Eco. Permiteți VictusX să repornească dGPU în managerul de dispozitive? (Continuați pe propriul risc)</value>
+    <value>Ceva folosește dGPU și previne modul Eco. Permiteți VictusXHub să repornească dGPU în managerul de dispozitive? (Continuați pe propriul risc)</value>
   </data>
   <data name="RestartingNVServices" xml:space="preserve">
     <value>Restarting NV Services...</value>

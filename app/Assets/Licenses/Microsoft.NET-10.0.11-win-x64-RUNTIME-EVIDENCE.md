@@ -1,6 +1,6 @@
 # Microsoft .NET 10.0.11 Win-x64 Runtime Evidence
 
-Applies only to the self-contained VictusX HP preview built for `win-x64` with SDK `10.0.400`.
+Applies only to the self-contained VictusXHub HP preview built for `win-x64` with SDK `10.0.400`.
 
 | Runtime component | Version | Exact restored package provenance |
 | --- | --- | --- |

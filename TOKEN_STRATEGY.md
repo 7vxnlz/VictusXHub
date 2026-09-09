@@ -17,7 +17,7 @@ Do not load `SESSION_STATE.md`, all documentation, a whole source directory, ins
 Prefer exact symbol/file selection after `rg`, and use `git diff` for ongoing work. Read a pack definition as a route; do not materialize it merely because it exists. Use `pack.ps1` only for handoff, cross-file comparison, or budget enforcement. Never pack the whole repository.
 
 ```powershell
-tools/context/measure.ps1 -Path app/Hardware/Hp,tests/VictusX.Tests/Hardware/Hp -Top 20
+tools/context/measure.ps1 -Path app/Hardware/Hp,tests/VictusXHub.Tests/Hardware/Hp -Top 20
 tools/context/pack.ps1 -Pack telemetry -TokenBudget 20000 -OutputPath .tmp/telemetry-context.md
 ```
 

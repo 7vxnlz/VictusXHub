@@ -7,7 +7,7 @@ namespace GHelper.Hardware.Hp;
 public static class HpVictusCapabilityProbe
 {
     private const int CapabilityReportSchemaVersion = HpVictusCapabilityReportMetadata.SchemaVersion;
-    private const string CapabilityReportGeneratedBy = "VictusX";
+    private const string CapabilityReportGeneratedBy = "VictusXHub";
     private const string CapabilityReportMode = "HP read-only diagnostic";
     private const string CapabilityReportSource = "Startup capability snapshot; explicit probe data is developer-only.";
     private const string CimV2ScopePath = @"\\.\root\cimv2";

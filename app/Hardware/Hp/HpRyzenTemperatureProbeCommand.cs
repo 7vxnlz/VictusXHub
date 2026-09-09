@@ -28,7 +28,7 @@ internal static class HpRyzenTemperatureProbeCommand
 
         HpRyzenTemperatureProbeDevice device = ReadDevice();
         HpRyzenTemperatureProbeGateResult gate = HpRyzenTemperatureProbeGate.Evaluate(device);
-        WriteLine("VictusX Ryzen temperature probe (diagnostic-only)");
+        WriteLine("VictusXHub Ryzen temperature probe (diagnostic-only)");
         WriteLine("Target gate: " + (gate.IsAccepted ? "accepted" : "rejected") + " — " + gate.Reason);
         WriteLine("Identity source: " + device.Identity.Source + " — " + device.Identity.Detail);
         WriteLine("Identity raw: Manufacturer=" + device.Identity.Manufacturer + " | Model=" + device.Identity.Model +

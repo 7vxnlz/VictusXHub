@@ -160,7 +160,7 @@
     <value>Програма вже запущена</value>
   </data>
   <data name="AppAlreadyRunningText" xml:space="preserve">
-    <value>VictusX вже запущено. Перевірте значок у системному лотку.</value>
+    <value>VictusXHub вже запущено. Перевірте значок у системному лотку.</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Застосувати</value>
@@ -678,7 +678,7 @@
     <value>Одна зона</value>
   </data>
   <data name="OpenGHelper" xml:space="preserve">
-    <value>Відкрити вікно VictusX</value>
+    <value>Відкрити вікно VictusXHub</value>
   </data>
   <data name="OptimalDisplayBrightness" xml:space="preserve">
     <value>Оптимальна яскравість екрана</value>
@@ -735,7 +735,7 @@
     <value>Скинути</value>
   </data>
   <data name="RestartGPU" xml:space="preserve">
-    <value>Щось використовує dGPU та запобігає Еко-режиму. Дозвольте VictusX спробувати перезапустити dGPU у менеджері пристрою? (Будь ласка, продовжуйте на власний ризик)</value>
+    <value>Щось використовує dGPU та запобігає Еко-режиму. Дозвольте VictusXHub спробувати перезапустити dGPU у менеджері пристрою? (Будь ласка, продовжуйте на власний ризик)</value>
   </data>
   <data name="RestartingNVServices" xml:space="preserve">
     <value>Restarting NV Services...</value>

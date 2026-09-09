@@ -2,7 +2,7 @@
 
 Updated: 2026-09-08
 
-This is the concise current blocker snapshot for the VictusX HP Diagnostic preview. It does not authorize publishing, signing, checksum generation, dependency changes, package creation, or runtime behavior changes.
+This is the concise current blocker snapshot for the VictusXHub HP Diagnostic preview. It does not authorize publishing, signing, checksum generation, dependency changes, package creation, or runtime behavior changes.
 
 ## Current Decisions
 
@@ -22,7 +22,7 @@ This is the concise current blocker snapshot for the VictusX HP Diagnostic previ
 | Item | Status | Evidence |
 | --- | --- | --- |
 | HP inherited-shell UI visual state | Done | Manual confirmation recorded: compact inherited shell, readable footer labels/icons, aligned disabled captions, and read-only Diagnostic side panel. See [HP inherited shell UI checkpoint](hp-inherited-shell-ui-final-checkpoint.md). |
-| Icon identity, provenance, and source wiring | Done pending final visual verification | The owner-approved PNG source, deterministic multi-frame ICO, hashes, and factual ChatGPT image-generation provenance are recorded. One VictusX icon supplies executable and HP tray identity; obsolete performance variants are removed and non-HP behavior is unchanged. See [Icon wiring checkpoint](victusx-icon-wiring-checkpoint.md). |
+| Icon identity, provenance, and source wiring | Done pending final visual verification | The owner-approved PNG source, deterministic multi-frame ICO, hashes, and factual ChatGPT image-generation provenance are recorded. One VictusXHub icon supplies executable and HP tray identity; obsolete performance variants are removed and non-HP behavior is unchanged. See [Icon wiring checkpoint](victusx-icon-wiring-checkpoint.md). |
 | Runtime dependency license identity review | Done | Current restore graph review covers seven direct runtime packages and one transitive package. Artifact presence remains part of final inspection. See [Runtime dependency review](runtime-dependency-license-review.md). |
 | Package-library license/notice files | Done | MIT, Apache-2.0/NOTICE, LGPL-3.0/GPL-3.0, and package notice texts are assembled and publish-wired under `app/Assets/Licenses`. |
 | Final package notice/attribution review | Done for current preview baseline | The restored graph, project GPL, modified-from-G-Helper attribution, eight application package entries, exact .NET 10.0.11 runtime notices, NvAPIWrapper sidecar/notices, and icon provenance are complete and internally consistent. The inspector now fails closed on the fixed notice inventory; repeat against the exact distributable. |
@@ -35,7 +35,7 @@ This is the concise current blocker snapshot for the VictusX HP Diagnostic previ
 | Package inspection workflow | Done for source tooling | The fail-closed inspector accepts one explicit directory, rejects unexpected/forbidden files, verifies source-matching notices and launcher, confirms the external NvAPIWrapper layout, and emits deterministic SHA-256 evidence. A local ignored candidate passed the automated checks; this is not final release evidence. |
 | Initial preview signing decision | Done | **Unsigned — explicitly approved by maintainer.** No approved code-signing certificate is configured and no signing was performed. Release material must warn that Windows may display an unknown or unverified publisher. |
 | Frozen distributable and checksum | Done pending clean-machine validation | `VictusX-HP-Diagnostic-v0.1.0-preview.1-win-x64-portable.zip`, source commit `ccd1f62865f1118bda476085f5d7144f787755bb`, SHA-256 `601B96C1934629AE8375641EA4C3E4E19DEA7FACB29C4C3349F24E4DB26DF1D8`. Candidate and extracted ZIP both pass inspection; all 22 files match. These exact bytes must be used for clean-machine validation. |
-| Localized inherited branding review | Done | Localized `Strings*.resx` display values use VictusX. Compatibility resource keys and internal identifiers remain unchanged. See [Visible branding audit](victusx-visible-branding-audit.md). |
+| Localized inherited branding review | Done | Localized `Strings*.resx` display values use VictusXHub. Compatibility resource keys and internal identifiers remain unchanged. See [Visible branding audit](victusx-visible-branding-audit.md). |
 
 ## Notes
 

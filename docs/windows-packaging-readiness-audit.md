@@ -2,16 +2,16 @@
 
 ## Current Naming and Output
 
-- The solution, project, assembly, executable, and ZIP target use `VictusX` / `VictusX.exe`.
-- The manifest identity is `VictusX.app`, x64 is the only configured platform, and the app runs `asInvoker`.
+- The solution, project, assembly, executable, and ZIP target use `VictusXHub` / `VictusXHub.exe`.
+- The manifest identity is `VictusXHub.app`, x64 is the only configured platform, and the app runs `asInvoker`.
 - Internal `GHelper` root namespace, startup object, resource names, and single-instance event naming remain from the imported base.
-- Explicit VictusX metadata now defines product, read-only diagnostic description, contributor attribution, copyright, and coherent `0.1.0-preview.1` / `0.1.0.0` version fields.
+- Explicit VictusXHub metadata now defines product, read-only diagnostic description, contributor attribution, copyright, and coherent `0.1.0-preview.1` / `0.1.0.0` version fields.
 
 ## Branding and Metadata Risks
 
-- The owner-approved `VictusX.Source.png` and generated multi-resolution `VictusX.ico` now provide distinct executable and HP tray identity; provenance, hashes, and wiring are recorded in the [icon checkpoint](victusx-icon-wiring-checkpoint.md).
+- The owner-approved `VictusXHub.Source.png` and generated multi-resolution `VictusXHub.ico` now provide distinct executable and HP tray identity; provenance, hashes, and wiring are recorded in the [icon checkpoint](victusx-icon-wiring-checkpoint.md).
 - The former icon plan and implementation plan are retained as superseded historical records.
-- The project now supplies explicit VictusX product, description, company/authors, copyright, assembly, file, and informational version metadata. A future packaged smoke test must still confirm the final executable properties match those values.
+- The project now supplies explicit VictusXHub product, description, company/authors, copyright, assembly, file, and informational version metadata. A future packaged smoke test must still confirm the final executable properties match those values.
 - G-Helper and ASUS strings/resources remain in the binary. HP shell isolation hides inherited control/update surfaces, but packaging must not imply that those features support HP hardware.
 - GPLv3, modified-from-G-Helper attribution, seven direct plus one transitive application-package notices, exact .NET 10.0.11 runtime notices, NvAPIWrapper treatment, and icon provenance are reviewed and current-candidate matched.
 - `docs/dependency-notice-inventory.md` records the exact current restore graph; test-only packages are absent from the inspected candidate.
@@ -21,7 +21,7 @@
 ## Package and Installer Status
 
 - The HP preview profile creates a self-contained, single-file `win-x64` build with exact .NET 10.0.11 runtime notice evidence packaged externally.
-- Publish currently creates an unversioned `VictusX.zip`.
+- Publish currently creates an unversioned `VictusXHub.zip`.
 - No installer/MSIX/WiX/Inno Setup project, release workflow, code signing, checksum generation, update channel, uninstall behavior, or packaged shortcut definition exists.
 - [Signing and Checksum Workflow](signing-checksum-workflow.md) defines the future evidence needed before distribution; no signing or checksum has been performed.
 - [Signing And Checksum Evidence Plan](signing-checksum-evidence-plan.md) defines the artifact-specific evidence that must be recorded before a preview can be released.
@@ -57,7 +57,7 @@ The IDE launch profile is not embedded into a published executable. Any preview 
 - Use [HP Inherited Shell UI Final Checkpoint](hp-inherited-shell-ui-final-checkpoint.md) as the manual visual confirmation that HP mode preserves the compact inherited shell, readable footer, aligned disabled captions, and Diagnostic side panel.
 - Review [HP Diagnostic Preview Readiness Checkpoint](hp-diagnostic-preview-readiness-checkpoint.md) for the current read-only dashboard, proof-gap analyzer, close-to-tray behavior, and remaining blocker status.
 - Review [HP Diagnostic Preview Source Readiness Audit](hp-diagnostic-preview-source-readiness-audit.md) before selecting any package candidate.
-- Confirm the explicit product/version/publisher metadata and approved VictusX icon in the exact packaged executable.
+- Confirm the explicit product/version/publisher metadata and approved VictusXHub icon in the exact packaged executable.
 - Choose and document framework-dependent versus self-contained runtime packaging.
 - Add a dedicated HP diagnostic publish profile and versioned artifact name.
 - Provide a shortcut or launcher that always supplies only `--hp-victus`.
@@ -75,11 +75,11 @@ The IDE launch profile is not embedded into a published executable. Any preview 
 
 ## Change Now
 
-Keep the explicit VictusX metadata and approved icon hashes aligned with the future artifact version. Final visual confirmation remains part of clean-machine validation.
+Keep the explicit VictusXHub metadata and approved icon hashes aligned with the future artifact version. Final visual confirmation remains part of clean-machine validation.
 
 See [Third-Party Notices Audit](third-party-notices-audit.md) for the source-attribution and package-notice distribution gate.
 See [Package License And Third-Party Notices Completion Plan](package-license-third-party-notices-completion-plan.md) for the completed notice checklist and exact-distributable repeat requirements.
-See the [VictusX Icon Wiring Checkpoint](victusx-icon-wiring-checkpoint.md) for the implemented HP-preview identity, provenance, and validation record.
+See the [VictusXHub Icon Wiring Checkpoint](victusx-icon-wiring-checkpoint.md) for the implemented HP-preview identity, provenance, and validation record.
 See [Signing and Checksum Workflow](signing-checksum-workflow.md) for future release integrity evidence.
 See [Signing And Checksum Evidence Plan](signing-checksum-evidence-plan.md) for the exact artifact-level evidence required before release.
 See [Clean-Machine Validation Plan](clean-machine-validation-plan.md) for the future portable-preview acceptance procedure.

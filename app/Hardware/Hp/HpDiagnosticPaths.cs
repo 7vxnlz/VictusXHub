@@ -2,7 +2,7 @@ namespace GHelper.Hardware.Hp;
 
 public static class HpDiagnosticPaths
 {
-    public const string ProductDirectoryName = "VictusX";
+    public const string ProductDirectoryName = "VictusXHub";
     public const string CapabilityReportFileName = "hp-capability-report.json";
 
     public static string AppDataDirectory => BuildAppDataDirectory(

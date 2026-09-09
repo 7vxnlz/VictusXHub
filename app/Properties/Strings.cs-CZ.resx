@@ -160,7 +160,7 @@
     <value>Aplikace je již spuštěna</value>
   </data>
   <data name="AppAlreadyRunningText" xml:space="preserve">
-    <value>VictusX je již spuštěn. Zkontrolujte ikonu v systemové liště.</value>
+    <value>VictusXHub je již spuštěn. Zkontrolujte ikonu v systemové liště.</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Použít</value>
@@ -654,7 +654,7 @@ Chcete přesto pokračovat?</value>
     <value>Jedna zóna</value>
   </data>
   <data name="OpenGHelper" xml:space="preserve">
-    <value>Otevřít okno VictusXu</value>
+    <value>Otevřít okno VictusXHubu</value>
   </data>
   <data name="OptimalDisplayBrightness" xml:space="preserve">
     <value>Optimální jas displeje</value>
@@ -711,7 +711,7 @@ Chcete přesto pokračovat?</value>
     <value>Obnovit</value>
   </data>
   <data name="RestartGPU" xml:space="preserve">
-    <value>Něco používá dGPU a brání přepnutí do Eco režimu. Povolit VictusXu zkusit restartovat dGPU ve Správci zařízení? (Na vlastní odpovědnost)</value>
+    <value>Něco používá dGPU a brání přepnutí do Eco režimu. Povolit VictusXHubu zkusit restartovat dGPU ve Správci zařízení? (Na vlastní odpovědnost)</value>
   </data>
   <data name="RPM" xml:space="preserve">
     <value>Otáček za minutu</value>

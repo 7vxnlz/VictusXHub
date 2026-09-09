@@ -160,7 +160,7 @@
     <value>Uygulama zaten çalışıyor</value>
   </data>
   <data name="AppAlreadyRunningText" xml:space="preserve">
-    <value>VictusX zaten çalışıyor. Simge için görev çubuğunu kontrol edin.</value>
+    <value>VictusXHub zaten çalışıyor. Simge için görev çubuğunu kontrol edin.</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Uygula</value>
@@ -678,7 +678,7 @@ Yine de devam etmek istiyor musunuz?</value>
     <value>Tek Bölge</value>
   </data>
   <data name="OpenGHelper" xml:space="preserve">
-    <value>VictusX penceresini aç</value>
+    <value>VictusXHub penceresini aç</value>
   </data>
   <data name="OptimalDisplayBrightness" xml:space="preserve">
     <value>Optimum Ekran Parlaklığı</value>
@@ -735,7 +735,7 @@ Yine de devam etmek istiyor musunuz?</value>
     <value>Sıfırla</value>
   </data>
   <data name="RestartGPU" xml:space="preserve">
-    <value>Bir şey harici GPU'yu kullanıyor ve Eco modunu engelliyor. VictusX aygıt yöneticisinde harici GPU'yu yeniden başlatmayı denesin mi? (Kendi sorumluluğunuzdadır)</value>
+    <value>Bir şey harici GPU'yu kullanıyor ve Eco modunu engelliyor. VictusXHub aygıt yöneticisinde harici GPU'yu yeniden başlatmayı denesin mi? (Kendi sorumluluğunuzdadır)</value>
   </data>
   <data name="RestartingNVServices" xml:space="preserve">
     <value>NV Servisleri Yeniden Başlatılıyor...</value>

@@ -6,7 +6,7 @@ internal static class HpTrayIconSelector
     private const int TurboPerformanceMode = 1;
     private const int SilentPerformanceMode = 2;
 
-    internal const string ResourceName = "GHelper.Assets.VictusX.ico";
+    internal const string ResourceName = "GHelper.Assets.VictusXHub.ico";
 
     internal static string FormatModeStatus(int basePerformanceMode) => basePerformanceMode switch
     {

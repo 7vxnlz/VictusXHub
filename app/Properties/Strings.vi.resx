@@ -160,7 +160,7 @@
     <value>Chương trình đã chạy</value>
   </data>
   <data name="AppAlreadyRunningText" xml:space="preserve">
-    <value>VictusX đã chạy. Hãy kiểm tra khay hệ thống</value>
+    <value>VictusXHub đã chạy. Hãy kiểm tra khay hệ thống</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Áp dụng</value>
@@ -678,7 +678,7 @@ Bạn có muốn tiếp tục không?</value>
     <value>One Zone</value>
   </data>
   <data name="OpenGHelper" xml:space="preserve">
-    <value>Mở cửa sổ VictusX</value>
+    <value>Mở cửa sổ VictusXHub</value>
   </data>
   <data name="OptimalDisplayBrightness" xml:space="preserve">
     <value>Độ sáng màn hình tối ưu</value>
@@ -735,7 +735,7 @@ Bạn có muốn tiếp tục không?</value>
     <value>Reset</value>
   </data>
   <data name="RestartGPU" xml:space="preserve">
-    <value>Something is using dGPU and preventing Eco mode. Let VictusX try to restart dGPU in device manager? (Please proceed at your own risk)</value>
+    <value>Something is using dGPU and preventing Eco mode. Let VictusXHub try to restart dGPU in device manager? (Please proceed at your own risk)</value>
   </data>
   <data name="RestartingNVServices" xml:space="preserve">
     <value>Restarting NV Services...</value>

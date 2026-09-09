@@ -11,7 +11,7 @@ Use for the inherited HP shell, footer, read-only status, and Diagnostic side pa
 - `app/Settings.cs#L2360-L2420`
 - `app/UI/RButton.cs`
 - `tests/AGENTS.md`
-- `tests/VictusX.Tests/Hardware/Hp/HpDiagnosticPreviewConfigurationTests.cs`
+- `tests/VictusXHub.Tests/Hardware/Hp/HpDiagnosticPreviewConfigurationTests.cs`
 - `docs/hp-inherited-shell-ui-final-checkpoint.md`
 - `docs/hp-diagnostic-source-only-readiness-final-checkpoint.md`
 

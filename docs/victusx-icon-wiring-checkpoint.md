@@ -1,10 +1,10 @@
-# VictusX Icon Wiring Checkpoint
+# VictusXHub Icon Wiring Checkpoint
 
 ## Approved Identity
 
 - Approval date: 2026-09-08.
-- `app/Assets/VictusX.Source.png` is the approved source master for the single VictusX application identity.
-- `app/Assets/VictusX.ico` is generated from that source without redesigning or stretching it.
+- `app/Assets/VictusXHub.Source.png` is the approved source master for the single VictusXHub application identity.
+- `app/Assets/VictusXHub.ico` is generated from that source without redesigning or stretching it.
 - The previous Silent, Balanced, and Turbo icon variants are superseded and removed.
 
 ## Provenance
@@ -15,8 +15,8 @@ No separate third-party artwork source or attribution requirement is identified 
 
 | Asset | SHA-256 |
 | --- | --- |
-| `app/Assets/VictusX.Source.png` | `17C680EC0DA1D3EE6C60F39B9BAE123E8E6EC6C9888AC2C3BCD7E5B51A9CD506` |
-| `app/Assets/VictusX.ico` | `D34E7BFF3074B0F3787B214FC97F5979A406801838E01D824D43FE25C20479D3` |
+| `app/Assets/VictusXHub.Source.png` | `17C680EC0DA1D3EE6C60F39B9BAE123E8E6EC6C9888AC2C3BCD7E5B51A9CD506` |
+| `app/Assets/VictusXHub.ico` | `D34E7BFF3074B0F3787B214FC97F5979A406801838E01D824D43FE25C20479D3` |
 
 ## Asset Validation
 
@@ -28,7 +28,7 @@ The 1254x1254 PNG is readable, square, uncorrupted, and opaque RGB. The generate
 
 ## Final Wiring
 
-- `app/VictusX.csproj` uses `app/Assets/VictusX.ico` unconditionally as `ApplicationIcon` and embeds the same file as `GHelper.Assets.VictusX.ico`.
+- `app/VictusXHub.csproj` uses `app/Assets/VictusXHub.ico` unconditionally as `ApplicationIcon` and embeds the same file as `GHelper.Assets.VictusXHub.ico`.
 - HP mode uses that one embedded icon for the tray regardless of performance-mode status. Performance-mode status text remains independent and does not drive visual identity.
 - The executable-associated icon remains the fallback if the embedded HP resource cannot be loaded.
 - Outside HP mode, the inherited `Properties.Resources.standard` startup icon and GPU-mode tray swapping remain unchanged.

@@ -29,7 +29,7 @@ public static class HpDiagnosticReportSchemaV2Refresher
             }
 
             report["ReportSchemaVersion"] = HpVictusCapabilityReportMetadata.SchemaVersion;
-            report["ReportGeneratedBy"] = GetString(report, "ReportGeneratedBy") ?? "VictusX";
+            report["ReportGeneratedBy"] = GetString(report, "ReportGeneratedBy") ?? "VictusXHub";
             report["ReportMode"] = GetString(report, "ReportMode") ?? "HP read-only diagnostic";
             report["ReportSource"] = "Cached report schema-v2 local metadata refresh; no WMI or hardware invocation.";
             report["ReportGeneratedAtUtc"] = DateTimeOffset.UtcNow;

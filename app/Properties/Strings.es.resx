@@ -160,7 +160,7 @@
     <value>La apliación ya está ejecutándose</value>
   </data>
   <data name="AppAlreadyRunningText" xml:space="preserve">
-    <value>VictusX ya está ejecutándose. Compruebe la bandeja del sistema.</value>
+    <value>VictusXHub ya está ejecutándose. Compruebe la bandeja del sistema.</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Aplicar</value>
@@ -678,7 +678,7 @@
     <value>Una zona</value>
   </data>
   <data name="OpenGHelper" xml:space="preserve">
-    <value>Abrir ventana VictusX</value>
+    <value>Abrir ventana VictusXHub</value>
   </data>
   <data name="OptimalDisplayBrightness" xml:space="preserve">
     <value>Brillo óptimo de pantalla</value>

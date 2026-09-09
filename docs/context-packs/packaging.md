@@ -4,7 +4,7 @@ Use for source-only preview readiness, notices, audit warnings, signing plans, a
 
 ## Files
 
-- `app/VictusX.csproj`
+- `app/VictusXHub.csproj`
 - `THIRD-PARTY-NOTICES.md`
 - `docs/hp-diagnostic-preview-final-blocker-tracker.md`
 - `docs/windows-packaging-readiness-audit.md`

@@ -1,9 +1,9 @@
 {
   "profiles": {
-    "VictusX": {
+    "VictusXHub": {
       "commandName": "Project"
     },
-    "VictusX HP Diagnostic": {
+    "VictusXHub HP Diagnostic": {
       "commandName": "Project",
       "commandLineArgs": "--hp-victus"
     }

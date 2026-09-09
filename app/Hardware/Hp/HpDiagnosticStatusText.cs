@@ -2,7 +2,7 @@ namespace GHelper.Hardware.Hp;
 
 public static class HpDiagnosticStatusText
 {
-    public const string Title = "VictusX Read-only Diagnostic";
+    public const string Title = "VictusXHub Read-only Diagnostic";
     public const string ReadOnlyDiagnostic = "Read-only diagnostic";
     public const string ReportNotAvailable = "Report not available";
     public const string ReportCouldNotBeRead = "Report could not be read";

@@ -121,7 +121,7 @@
     <value>Beschleunigung</value>
   </data>
   <data name="ACPIError" xml:space="preserve">
-    <value>Verbindung zu ASUS ACPI fehlgeschlagen. VictusX kann nicht ausgeführt werden. Bitte installiere ASUS System Control Interface.</value>
+    <value>Verbindung zu ASUS ACPI fehlgeschlagen. VictusXHub kann nicht ausgeführt werden. Bitte installiere ASUS System Control Interface.</value>
   </data>
   <data name="AlertAPUMemoryRestart" xml:space="preserve">
     <value>Gerät neu starten, um Änderungen anzuwenden?</value>
@@ -160,7 +160,7 @@
     <value>Die Anwendung läuft bereits</value>
   </data>
   <data name="AppAlreadyRunningText" xml:space="preserve">
-    <value>VictusX läuft bereits. Bitte prüfe den Systemtray.</value>
+    <value>VictusXHub läuft bereits. Bitte prüfe den Systemtray.</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Anwenden</value>
@@ -678,7 +678,7 @@ Trotzdem fortfahren?</value>
     <value>One Zone</value>
   </data>
   <data name="OpenGHelper" xml:space="preserve">
-    <value>VictusX Fenster öffnen</value>
+    <value>VictusXHub Fenster öffnen</value>
   </data>
   <data name="OptimalDisplayBrightness" xml:space="preserve">
     <value>Optimale Bildschirmhelligkeit</value>

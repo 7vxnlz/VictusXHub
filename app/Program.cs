@@ -558,7 +558,7 @@ namespace GHelper
 
             trayIcon = new NotifyIcon
             {
-                Text = "VictusX",
+                Text = "VictusXHub",
                 Icon = GetTrayIcon(),
                 Visible = true
             };
@@ -1101,11 +1101,11 @@ namespace GHelper
         {
             try
             {
-                string logDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "VictusX", "Logs");
+                string logDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "VictusXHub", "Logs");
                 Directory.CreateDirectory(logDirectory);
 
                 var log = new StringBuilder();
-                log.AppendLine("--- VictusX startup exception ---");
+                log.AppendLine("--- VictusXHub startup exception ---");
                 log.AppendLine("Timestamp: " + DateTimeOffset.Now.ToString("O", CultureInfo.InvariantCulture));
                 log.AppendLine("Args: " + string.Join(" ", args.Select(SanitizeStartupLogArg)));
                 log.AppendLine("Exception: " + exception.GetType().FullName);

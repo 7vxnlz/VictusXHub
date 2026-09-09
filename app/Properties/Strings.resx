@@ -160,7 +160,7 @@
     <value>App already running</value>
   </data>
   <data name="AppAlreadyRunningText" xml:space="preserve">
-    <value>VictusX is already running. Check system tray for an icon.</value>
+    <value>VictusXHub is already running. Check system tray for an icon.</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Apply</value>
@@ -678,7 +678,7 @@ Do you still want to continue?</value>
     <value>One Zone</value>
   </data>
   <data name="OpenGHelper" xml:space="preserve">
-    <value>Open VictusX window</value>
+    <value>Open VictusXHub window</value>
   </data>
   <data name="OptimalDisplayBrightness" xml:space="preserve">
     <value>Optimal Display Brightness</value>
@@ -735,7 +735,7 @@ Do you still want to continue?</value>
     <value>Reset</value>
   </data>
   <data name="RestartGPU" xml:space="preserve">
-    <value>Something is using dGPU and preventing Eco mode. Let VictusX try to restart dGPU in device manager? (Please proceed at your own risk)</value>
+    <value>Something is using dGPU and preventing Eco mode. Let VictusXHub try to restart dGPU in device manager? (Please proceed at your own risk)</value>
   </data>
   <data name="RestartingNVServices" xml:space="preserve">
     <value>Restarting NV Services...</value>

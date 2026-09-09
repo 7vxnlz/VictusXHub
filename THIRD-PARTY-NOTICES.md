@@ -6,25 +6,25 @@ Status: **Reviewed for the current preview baseline; exact-distributable matchin
 
 Reviewed: 2026-09-08.
 
-This notice is prepared for a future VictusX HP Diagnostic preview. It does not authorize publishing. The current restored dependency graph and ignored local candidate were compared with this notice and the external `Assets/Licenses` bundle. The self-contained .NET 10.0.11 `win-x64` runtime-pack notices, package-library notices, replaceable NvAPIWrapper sidecar treatment, G-Helper attribution, project license, and icon provenance are internally consistent and inspector-verified. The exact distributable must repeat the same inspection before release.
+This notice is prepared for a future VictusXHub HP Diagnostic preview. It does not authorize publishing. The current restored dependency graph and ignored local candidate were compared with this notice and the external `Assets/Licenses` bundle. The self-contained .NET 10.0.11 `win-x64` runtime-pack notices, package-library notices, replaceable NvAPIWrapper sidecar treatment, G-Helper attribution, project license, and icon provenance are internally consistent and inspector-verified. The exact distributable must repeat the same inspection before release.
 
-## VictusX Project Notice
+## VictusXHub Project Notice
 
 Status: **Reviewed for the current preview baseline**.
 
-VictusX is a modified project based on G-Helper. The package includes the GNU General Public License version 3 text in `LICENSE`. Project source is at `https://github.com/7vxnlz/VictusXHub`; the exact packaged revision must remain linked through executable version metadata and the final signing/checksum evidence.
+VictusXHub is a modified project based on G-Helper. The package includes the GNU General Public License version 3 text in `LICENSE`. Project source is at `https://github.com/7vxnlz/VictusXHub`; the exact packaged revision must remain linked through executable version metadata and the final signing/checksum evidence.
 
 ## G-Helper Attribution
 
 Status: **Reviewed for the current preview baseline**.
 
-VictusX uses [G-Helper](https://github.com/seerge/g-helper) by seerge as its original application base. The project retains inherited application structure, including the `GHelper` root namespace and resource naming. VictusX is a modified project and is not affiliated with, authorized by, or endorsed by G-Helper.
+VictusXHub uses [G-Helper](https://github.com/seerge/g-helper) by seerge as its original application base. The project retains inherited application structure, including the `GHelper` root namespace and resource naming. VictusXHub is a modified project and is not affiliated with, authorized by, or endorsed by G-Helper.
 
 The reviewed upstream source reference recorded by this repository is commit `5c26f5ac970dab9e26347d80976ebf1eece91b1e`. This attribution must remain in future package notices, but it does not replace review of applicable upstream license and notice requirements before distribution.
 
 ## Runtime Dependency Notice Review
 
-The following dependencies exactly match `app/VictusX.csproj` and the local restored application graph. Their license evidence is recorded in the [Runtime Dependency License Review](docs/runtime-dependency-license-review.md). The frozen preview predates the PawnIO diagnostic module; any later candidate must externally contain this complete reviewed notice bundle.
+The following dependencies exactly match `app/VictusXHub.csproj` and the local restored application graph. Their license evidence is recorded in the [Runtime Dependency License Review](docs/runtime-dependency-license-review.md). The frozen preview predates the PawnIO diagnostic module; any later candidate must externally contain this complete reviewed notice bundle.
 
 | Package | Version | Relationship | Requirement | Assembled material |
 | --- | --- | --- | --- | --- |
@@ -40,7 +40,7 @@ The following dependencies exactly match `app/VictusX.csproj` and the local rest
 
 `System.Management` 10.0.10 is the current NuGet package version and is distinct from the superseded .NET runtime-pack 10.0.10 baseline. The self-contained runtime-pack evidence is exclusively 10.0.11.
 
-No runtime package is treated as attribution-only: the applicable license terms are assembled for each one. HidSharpCore additionally requires its NOTICE. NvAPIWrapper additionally requires prominent identification and LGPL combined-work relinking/replacement compliance. The HP preview profile excludes `NvAPIWrapper.dll` from the single-file bundle so it is distributed and replaceable beside `VictusX.exe`; the current candidate and inspector verify that layout.
+No runtime package is treated as attribution-only: the applicable license terms are assembled for each one. HidSharpCore additionally requires its NOTICE. NvAPIWrapper additionally requires prominent identification and LGPL combined-work relinking/replacement compliance. The HP preview profile excludes `NvAPIWrapper.dll` from the single-file bundle so it is distributed and replaceable beside `VictusXHub.exe`; the current candidate and inspector verify that layout.
 
 `app/Assets/Licenses/LICENSE-SOURCES.md` records the authoritative source revision and SHA-256 for each assembled file. The project publishes this directory externally rather than hiding it inside the single-file executable.
 
@@ -72,15 +72,15 @@ The following packages are recorded only in the test project or its resolved tes
 | xunit.extensibility.core | 2.9.3 | Resolved test transitive; **Pending review if distributed** |
 | xunit.extensibility.execution | 2.9.3 | Resolved test transitive; **Pending review if distributed** |
 
-## VictusX Icon Provenance
+## VictusXHub Icon Provenance
 
 Status: **Owner-approved source and technical integration recorded**.
 
-The project owner directed creation of `app/Assets/VictusX.Source.png` specifically for VictusXHub in the owner's ChatGPT image-generation design session and approved it as the single application identity. The owner states that the design was newly created rather than sourced from an existing third-party icon and that no vendor logo, icon, or marketing asset was intentionally used as source material. No separate third-party artwork attribution requirement is identified by this factual record. The generated `VictusX.ico` and source master hashes, icon frames, superseded variants, and executable/HP-tray wiring are recorded in the [VictusX Icon Wiring Checkpoint](docs/victusx-icon-wiring-checkpoint.md).
+The project owner directed creation of `app/Assets/VictusXHub.Source.png` specifically for VictusXHub in the owner's ChatGPT image-generation design session and approved it as the single application identity. The owner states that the design was newly created rather than sourced from an existing third-party icon and that no vendor logo, icon, or marketing asset was intentionally used as source material. No separate third-party artwork attribution requirement is identified by this factual record. The generated `VictusXHub.ico` and source master hashes, icon frames, superseded variants, and executable/HP-tray wiring are recorded in the [VictusXHub Icon Wiring Checkpoint](docs/victusx-icon-wiring-checkpoint.md).
 
 ## Trademark Notice
 
-HP, OMEN, and Victus names are used only to identify compatibility targets and research context. VictusX is not affiliated with, authorized by, endorsed by, or certified by HP Inc. No statement in this draft implies an HP or OMEN endorsement.
+HP, OMEN, and Victus names are used only to identify compatibility targets and research context. VictusXHub is not affiliated with, authorized by, endorsed by, or certified by HP Inc. No statement in this draft implies an HP or OMEN endorsement.
 
 ## Preview Release Blocker
 

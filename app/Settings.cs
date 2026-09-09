@@ -307,8 +307,8 @@ namespace GHelper
             buttonAutoTDP.BorderColor = colorTurbo;
 
             Text = AppConfig.IsHpVictusHardwareMode()
-                ? "VictusX"
-                : "VictusX " + (ProcessHelper.IsUserAdministrator() ? "—" : "-") + " " + AppConfig.GetModelShort();
+                ? "VictusXHub"
+                : "VictusXHub " + (ProcessHelper.IsUserAdministrator() ? "—" : "-") + " " + AppConfig.GetModelShort();
             TopMost = AppConfig.Is("topmost");
 
             //This will auto position the window again when it resizes. Might mess with position if people drag the window somewhere else.
@@ -664,7 +664,7 @@ namespace GHelper
             if (!AppConfig.IsHpVictusHardwareMode() || sender is not RButton { Tag: int requestedRate }) return;
             HpDisplayRefreshRateApplyResult result = ApplyHpRefreshRate(requestedRate);
             if (!result.Succeeded)
-                MessageBox.Show(this, result.Message, "VictusX Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, result.Message, "VictusXHub Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void UpdateHpRefreshRateButtons(int? currentRateHz)
@@ -941,7 +941,7 @@ namespace GHelper
                 ShowIcon = false,
                 ShowInTaskbar = false,
                 StartPosition = FormStartPosition.Manual,
-                Text = "VictusX Diagnostic"
+                Text = "VictusXHub Diagnostic"
             };
             hpDiagnosticForm.InitTheme(true);
             hpDiagnosticForm.FormClosing += (_, e) =>
@@ -1029,7 +1029,7 @@ namespace GHelper
             }
             catch (ExternalException)
             {
-                MessageBox.Show(this, "The diagnostic summary could not be copied to the clipboard.", "VictusX Diagnostic", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "The diagnostic summary could not be copied to the clipboard.", "VictusXHub Diagnostic", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1038,7 +1038,7 @@ namespace GHelper
             string diagnosticDirectory = HpDiagnosticPaths.AppDataDirectory;
             if (!Directory.Exists(diagnosticDirectory))
             {
-                MessageBox.Show(this, "The local VictusX diagnostic folder is not available yet:" + Environment.NewLine + diagnosticDirectory, "VictusX Diagnostic", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "The local VictusXHub diagnostic folder is not available yet:" + Environment.NewLine + diagnosticDirectory, "VictusXHub Diagnostic", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -1048,7 +1048,7 @@ namespace GHelper
             }
             catch (Exception)
             {
-                MessageBox.Show(this, "The local VictusX diagnostic folder could not be opened.", "VictusX Diagnostic", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "The local VictusXHub diagnostic folder could not be opened.", "VictusXHub Diagnostic", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1064,12 +1064,12 @@ namespace GHelper
             try
             {
                 string filePath = HpDiagnosticReportExporter.Export(BuildHpDiagnosticSummary());
-                MessageBox.Show(this, HpDiagnosticStatusText.ReadOnlyDiagnostic + " report exported to:" + Environment.NewLine + filePath, "VictusX Diagnostic", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, HpDiagnosticStatusText.ReadOnlyDiagnostic + " report exported to:" + Environment.NewLine + filePath, "VictusXHub Diagnostic", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
                 Logger.WriteLine("HP diagnostic export failed: " + ex.Message);
-                MessageBox.Show(this, "The read-only diagnostic report could not be exported.", "VictusX Diagnostic", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, "The read-only diagnostic report could not be exported.", "VictusXHub Diagnostic", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1153,7 +1153,7 @@ namespace GHelper
 
         private string BuildHpDiagnosticSummary()
         {
-            return "VictusX Read-only Diagnostic" + Environment.NewLine + Environment.NewLine +
+            return "VictusXHub Read-only Diagnostic" + Environment.NewLine + Environment.NewLine +
                 HpDiagnosticDashboardFormatter.BuildCompleteSummary(
                     hpCurrentUserDiagnosticSummary,
                     CreateHpDiagnosticDashboardInput(),
@@ -2036,9 +2036,9 @@ namespace GHelper
             contextMenuStrip.ShowImageMargin = false;
             contextMenuStrip.ImageScalingSize = new Size(16, 16);
 
-            var openVictusX = new ToolStripMenuItem("Open VictusX");
-            openVictusX.Click += (sender, args) => ShowHpReadOnlyMainShell();
-            contextMenuStrip.Items.Add(openVictusX);
+            var openVictusXHub = new ToolStripMenuItem("Open VictusXHub");
+            openVictusXHub.Click += (sender, args) => ShowHpReadOnlyMainShell();
+            contextMenuStrip.Items.Add(openVictusXHub);
 
             var openDiagnostic = new ToolStripMenuItem("Open Diagnostic");
             openDiagnostic.Click += (sender, args) => ShowHpReadOnlyDiagnostic();
@@ -2115,7 +2115,7 @@ namespace GHelper
             HpDisplayRefreshRateApplyResult result = ApplyHpRefreshRate(requestedRate);
             BeginInvoke((Action)SetHpReadOnlyContextMenu);
             if (!result.Succeeded)
-                MessageBox.Show(result.Message, "VictusX Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(result.Message, "VictusXHub Display", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public void InitContextMenuTheme()

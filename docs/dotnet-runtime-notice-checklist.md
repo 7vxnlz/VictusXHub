@@ -2,7 +2,7 @@
 
 Updated: 2026-09-06
 
-This checklist defines the artifact-specific evidence required before a self-contained VictusX HP Diagnostic preview can claim that .NET runtime license and notice obligations were reviewed. It does not authorize publishing and does not replace final package inspection.
+This checklist defines the artifact-specific evidence required before a self-contained VictusXHub HP Diagnostic preview can claim that .NET runtime license and notice obligations were reviewed. It does not authorize publishing and does not replace final package inspection.
 
 ## Current Status
 

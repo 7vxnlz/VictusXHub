@@ -4,7 +4,7 @@ Updated: 2026-09-09
 
 ## Canonical Current Truth
 
-- Product/device: VictusX is a .NET 10 Windows utility targeting the exact validated HP Victus 16-s0035nt, SKU `7Z5Z2EA#AB8`, BIOS `F.31`, Thermal Policy V1. Never generalize HP support across models, BIOS versions, or policy generations.
+- Product/device: VictusXHub is a .NET 10 Windows utility targeting the exact validated HP Victus 16-s0035nt, SKU `7Z5Z2EA#AB8`, BIOS `F.31`, Thermal Policy V1. Never generalize HP support across models, BIOS versions, or policy generations.
 - HP mode uses the compact inherited shell. Unsupported controls stay visible but disabled/read-only. Diagnostic is a read-only owned side panel with grouped Device, Live status, and Capabilities summaries; Advanced retains source/blocker and fan-research evidence, while copy/export includes both layers. Repeated activation reuses the existing instance.
 - Verified read-only status includes CPU load, battery/AC/charging, device detection, NVIDIA temperature when NVAPI is available, exact-device Ryzen `Core (Tctl/Tdie)` temperature when the process has usable PawnIO access, named HP battery-care support and enabled/disabled state when the recognized inventory value is explicit, exact-SKU keyboard-backlight capability evidence, and exact-device GPU-switch capability from cached SystemDesignData. Main-shell and tray refresh-rate actions use one Windows-native validated path and appear only for one unambiguous internal panel with matching mode geometry; there is no vendor write path.
 - Unavailable: V1 fan RPM, keyboard state/levels, numeric charge limits, and current GPU mode. CPU temperature is runtime-proven on the exact target using PawnIO.Modules 0.2.2 `AMDFamily17`, fixed SMN `0x00059800`, and `Core (Tctl/Tdie)` semantics; production telemetry preserves the exact HP/CPU gate and fails closed to Unavailable when PawnIO is unavailable or access is denied in a normal non-elevated session. It has no RyzenSMU, EC, fan, control, or WinRing0 path. `FanGetLevel` is raw-only and is never RPM or percent; `FanMaxGet` is inconclusive. HP performance mode is unavailable and controls remain disabled.
@@ -15,7 +15,7 @@ Updated: 2026-09-09
 ## Verification Baseline
 
 - Branch: `main` tracking `origin/main`.
-- Last verified: with SDK 10.0.400 and the 10.0.11 `win-x64` .NET Core/Windows Desktop runtime-pack baseline, `dotnet build VictusX.sln --no-restore` passed with zero warnings; `dotnet test VictusX.sln --no-build` passed 454/454. No application, hardware, vendor-write, real display-mode, or physical-device temperature diagnostic command was run.
+- Last verified: with SDK 10.0.400 and the 10.0.11 `win-x64` .NET Core/Windows Desktop runtime-pack baseline, `dotnet build VictusXHub.sln --no-restore` passed with zero warnings; `dotnet test VictusXHub.sln --no-build` passed 454/454. No application, hardware, vendor-write, real display-mode, or physical-device temperature diagnostic command was run.
 - NU1900 is not suppressed. The last network-capable audit found no vulnerable packages; repeat against the exact release candidate.
 
 ## Context Routing

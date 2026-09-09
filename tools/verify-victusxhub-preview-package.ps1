@@ -206,7 +206,7 @@ if ($actualPaths.ContainsKey("THIRD-PARTY-NOTICES.md")) {
         '| HidSharpCore | 1.3.0 | Direct |',
         '| NAudio.Wasapi | 2.3.0 | Direct |',
         '| NvAPIWrapper.Net | 0.8.1.101 | Direct |',
-        '| PawnIO.Modules `AMDFamily17.bin`, `LpcACPIEC.bin` | 0.2.2 | Embedded diagnostic-only modules |',
+        '| PawnIO.Modules `AMDFamily17.bin` | 0.2.2 | Embedded diagnostic-only module |',
         '| System.Management | 10.0.10 | Direct |',
         '| TaskScheduler | 2.12.2 | Direct |',
         '| WinForms.DataVisualization | 1.10.2 | Direct |',

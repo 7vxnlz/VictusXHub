@@ -26,7 +26,7 @@ This is a read-only telemetry milestone: optional NVIDIA GPU temperature and exa
 | CPU load and battery/AC | Existing Windows-native GetSystemTimes/GetSystemPowerStatus; unchanged |
 | CPU temperature | Exact-target `Core (Tctl/Tdie)` only, through the verified PawnIO AMDFamily17 module and fixed SMN read. A fresh valid elevated-session sample displays in the Diagnostic; normal non-elevated access denial, invalid data, or staleness displays Unavailable. Inherited ASUS/ACPI/WMI thermal sources remain excluded. |
 | GPU temperature | Existing NvAPIWrapper.Net 0.8.1.101, through installed NVIDIA display driver. Separate HpNvidiaTemperatureSource performs only physical-device enumeration and GetThermalSettings. Exactly one device and one ThermalSettingsTarget.GPU sensor are required; ambiguous, non-NVIDIA, absent or failed sources remain unavailable. No NvidiaGpuControl instance is created. |
-| Fan RPM | Unavailable. No proven V1 tachometer source was found. FanGetLevel remains raw-only; no multiplication, endian guess or conversion to RPM is adopted. |
+| Fan RPM | Unavailable. No proven V1 tachometer source was found. FanGetLevel remains raw-only; no multiplication, endian guess or conversion to RPM is adopted. The former 8BD4 EC `0x11`/`0x14` candidate was removed because those bytes are fan-level mirrors, not independently validated tachometer feedback. |
 | FanGetRpm 0x38 | Not implemented or invoked. Reference generation gating restricts this to V2; this target is V1. Plausible values would not prove correct interpretation. |
 
 ## Selected Reference Evidence

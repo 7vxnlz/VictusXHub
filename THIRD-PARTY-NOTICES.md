@@ -36,7 +36,7 @@ The following dependencies exactly match `app/VictusXHub.csproj` and the local r
 | TaskScheduler | 2.12.2 | Direct | MIT attribution and license text | `TaskScheduler-LICENSE.txt` |
 | WinForms.DataVisualization | 1.10.2 | Direct | MIT attribution and license text | `WinForms.DataVisualization-LICENSE.txt` |
 | NAudio.Core | 2.3.0 | Transitive | MIT attribution and license text | Covered by `NAudio-LICENSE.txt` |
-| PawnIO.Modules `AMDFamily17.bin`, `LpcACPIEC.bin` | 0.2.2 | Embedded diagnostic-only modules | LGPL-2.1-or-later license; exact release/archive/module provenance | `PawnIO.Modules-0.2.2-LGPL-2.1.txt`, `LICENSE-SOURCES.md` |
+| PawnIO.Modules `AMDFamily17.bin` | 0.2.2 | Embedded diagnostic-only module | LGPL-2.1-or-later license; exact release/archive/module provenance | `PawnIO.Modules-0.2.2-LGPL-2.1.txt`, `LICENSE-SOURCES.md` |
 
 `System.Management` 10.0.10 is the current NuGet package version and is distinct from the superseded .NET runtime-pack 10.0.10 baseline. The self-contained runtime-pack evidence is exclusively 10.0.11.
 
@@ -44,7 +44,7 @@ No runtime package is treated as attribution-only: the applicable license terms 
 
 `app/Assets/Licenses/LICENSE-SOURCES.md` records the authoritative source revision and SHA-256 for each assembled file. The project publishes this directory externally rather than hiding it inside the single-file executable.
 
-Post-freeze diagnostic commands embed only official PawnIO.Modules 0.2.2 modules: `AMDFamily17.bin` for an exact-gated SMN temperature read and `LpcACPIEC.bin` for a fixed exact-board ACPI EC read candidate. They do not distribute a PawnIO driver or installer and do not initialize `RyzenSMU`. The frozen preview ZIP predates these development milestones and remains unchanged; any later candidate must repeat package inspection with this notice material.
+Post-freeze diagnostic commands embed only official PawnIO.Modules 0.2.2 `AMDFamily17.bin` for the exact-gated SMN temperature read. They do not distribute a PawnIO driver or installer and do not initialize `RyzenSMU`. The frozen preview ZIP predates this development milestone and remains unchanged; any later candidate must repeat package inspection with this notice material.
 
 The former Microsoft.Management.Infrastructure package family is not part of the current project or restored dependency graph after its duplicate readiness probe was removed. Final artifact inspection must confirm that no stale MMI files are distributed. Before distribution, compare this list and the assembled files with the final ZIP or installer contents. The self-contained `win-x64` preview baseline uses Microsoft.NETCore.App.Runtime.win-x64 and Microsoft.WindowsDesktop.App.Runtime.win-x64 10.0.11; verbatim exact-pack license/notice files and runtime-pack provenance are packaged under `Assets/Licenses` and fail closed in the preview inspector. See [Dependency Notice Inventory](docs/dependency-notice-inventory.md) and [Package License Review Workflow](docs/package-license-review-workflow.md).
 

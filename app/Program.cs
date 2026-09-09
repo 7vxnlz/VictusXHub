@@ -65,11 +65,6 @@ namespace GHelper
                 return;
             }
 
-            if (HpFanRpmEcProbeCommand.TryRun(args))
-            {
-                return;
-            }
-
             if (TryRunHpFanLevelResearchDryRun(args))
             {
                 return;

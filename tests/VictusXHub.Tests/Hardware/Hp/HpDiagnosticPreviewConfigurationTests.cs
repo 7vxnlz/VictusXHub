@@ -128,6 +128,8 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     public void FanLevelDryRun_ExitsBeforeAllHardwareStartupAndHasNoUiOrTransportDependency()
     {
         string program = ReadRepositoryFile("app", "Program.cs").Replace("\r\n", "\n");
+        Assert.DoesNotContain("HpFanRpmEcProbeCommand", program, StringComparison.Ordinal);
+        Assert.DoesNotContain("--hp-fan-rpm-ec-readonly-probe", program, StringComparison.Ordinal);
         int probeRoute = program.IndexOf("HpRyzenTemperatureProbeCommand.TryRun(args)", StringComparison.Ordinal);
         int fanRoute = program.IndexOf("TryRunHpFanLevelResearchDryRun(args)", StringComparison.Ordinal);
         int applicationStartup = program.IndexOf("MainCore(args)", StringComparison.Ordinal);
@@ -500,8 +502,8 @@ public sealed class HpDiagnosticPreviewConfigurationTests
         Assert.Contains("SystemDesignDataDecoded.ThermalPolicyVersion", settings, StringComparison.Ordinal);
         Assert.Contains("FanGetCountDecoded.FanCount", settings, StringComparison.Ordinal);
         Assert.Contains("GpuSwitchingCapability = gpuMode.SwitchingCapabilityText", settings, StringComparison.Ordinal);
-        Assert.Contains("FanCount = HpReadOnlyTelemetryFormatter.FormatFanCount(fanCount)", settings, StringComparison.Ordinal);
-        Assert.Contains("ThermalPolicy = HpReadOnlyTelemetryFormatter.FormatThermalPolicy(thermalPolicyVersion)", settings, StringComparison.Ordinal);
+        Assert.Contains("FanCount = HpReadOnlyTelemetryFormatter.FormatFanCount(fanCount.Value)", settings, StringComparison.Ordinal);
+        Assert.Contains("ThermalPolicy = HpReadOnlyTelemetryFormatter.FormatThermalPolicy(thermalPolicyVersion.Value)", settings, StringComparison.Ordinal);
         Assert.Contains("labelGPU.Text = $\"GPU Mode: {gpuMode.CapabilityText}\";", settings, StringComparison.Ordinal);
         Assert.Contains("panelGPU,", settings, StringComparison.Ordinal);
         Assert.DoesNotContain("labelGPU.Enabled = true", settings, StringComparison.Ordinal);

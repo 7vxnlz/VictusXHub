@@ -42,6 +42,7 @@ namespace GHelper
         Label? hpReadOnlyTelemetrySource;
         Label? hpReadOnlyTelemetryHealth;
         HpDiagnosticReportLoadResult? hpCachedDiagnosticReport;
+        HpHistoricalCapabilityEvidence? hpHistoricalCapabilityEvidence;
         HpFanMaxPulseHistoryLoadResult? hpPulseHistory;
         HpFanProofGapAnalysis? hpFanProofGaps;
         HpReadOnlyTelemetryProvider? hpLiveTelemetryProvider;
@@ -556,8 +557,8 @@ namespace GHelper
                 GetSnapshotOrReportValue(snapshot?.Model, hpCachedDiagnosticReport, "Model"),
                 GetSnapshotOrReportValue(snapshot?.SystemSku, hpCachedDiagnosticReport, "Sku"),
                 GetHpGpuModeSwitchRaw(snapshot, hpCachedDiagnosticReport));
-            byte? fanCount = GetHpFanCount(snapshot, hpCachedDiagnosticReport);
-            byte? thermalPolicyVersion = GetHpThermalPolicyVersion(snapshot, hpCachedDiagnosticReport);
+            HpCapabilityEvidenceValue fanCount = GetHpFanCount(snapshot, hpCachedDiagnosticReport, hpHistoricalCapabilityEvidence);
+            HpCapabilityEvidenceValue thermalPolicyVersion = GetHpThermalPolicyVersion(snapshot, hpCachedDiagnosticReport, hpHistoricalCapabilityEvidence);
             HpReadOnlyTelemetryDisplay display = HpReadOnlyTelemetryFormatter.Format(
                 hpLiveTelemetry, DateTimeOffset.UtcNow, detected, cachedIdentity);
             hpTrayTelemetryStatus = display.TrayStatus;
@@ -592,8 +593,8 @@ namespace GHelper
                 Sku = GetSnapshotOrReportValue(snapshot?.SystemSku, hpCachedDiagnosticReport, "Sku"),
                 BiosVersion = GetSnapshotOrReportValue(snapshot?.BiosVersion, hpCachedDiagnosticReport, "BiosVersion"),
                 HpVictusDetection = detected switch { true => "Detected", false => "Not supported", _ => "Unavailable" },
-                FanCount = HpReadOnlyTelemetryFormatter.FormatFanCount(fanCount),
-                ThermalPolicy = HpReadOnlyTelemetryFormatter.FormatThermalPolicy(thermalPolicyVersion),
+                FanCount = HpReadOnlyTelemetryFormatter.FormatFanCount(fanCount.Value),
+                ThermalPolicy = HpReadOnlyTelemetryFormatter.FormatThermalPolicy(thermalPolicyVersion.Value),
                 CpuLoad = display.CpuLoad,
                 GpuTemperature = display.GpuTemperature,
                 BatteryPower = display.BatteryPower,
@@ -621,26 +622,28 @@ namespace GHelper
                      ? raw : null;
         }
 
-        private static byte? GetHpFanCount(
-            HpVictusCapabilitySnapshot? snapshot, HpDiagnosticReportLoadResult? report)
+        private static HpCapabilityEvidenceValue GetHpFanCount(
+            HpVictusCapabilitySnapshot? snapshot, HpDiagnosticReportLoadResult? report, HpHistoricalCapabilityEvidence? historical)
         {
             if (snapshot?.FanGetCountInvocationSucceeded == true && snapshot.FanGetCountDecodeSucceeded)
-                return snapshot.FanGetCountDecoded?.FanCount;
+                return HpHistoricalCapabilityEvidenceLoader.ResolveFanCount(snapshot.FanGetCountDecoded?.FanCount, null);
 
-            return report?.GetBool("FanGetCountDecodeSucceeded") == true &&
+            byte? decodedReportValue = report?.GetBool("FanGetCountDecodeSucceeded") == true &&
                 byte.TryParse(report.GetValue("FanGetCountDecoded.FanCount"), out byte count)
                     ? count : null;
+            return HpHistoricalCapabilityEvidenceLoader.ResolveFanCount(decodedReportValue, historical);
         }
 
-        private static byte? GetHpThermalPolicyVersion(
-            HpVictusCapabilitySnapshot? snapshot, HpDiagnosticReportLoadResult? report)
+        private static HpCapabilityEvidenceValue GetHpThermalPolicyVersion(
+            HpVictusCapabilitySnapshot? snapshot, HpDiagnosticReportLoadResult? report, HpHistoricalCapabilityEvidence? historical)
         {
             if (snapshot?.SystemDesignDataInvocationSucceeded == true && snapshot.SystemDesignDataDecodeSucceeded)
-                return snapshot.SystemDesignDataDecoded?.ThermalPolicyVersion;
+                return HpHistoricalCapabilityEvidenceLoader.ResolveThermalPolicy(snapshot.SystemDesignDataDecoded?.ThermalPolicyVersion, null);
 
-            return report?.GetBool("SystemDesignDataDecodeSucceeded") == true &&
+            byte? decodedReportValue = report?.GetBool("SystemDesignDataDecodeSucceeded") == true &&
                 byte.TryParse(report.GetValue("SystemDesignDataDecoded.ThermalPolicyVersion"), out byte version)
                     ? version : null;
+            return HpHistoricalCapabilityEvidenceLoader.ResolveThermalPolicy(decodedReportValue, historical);
         }
 
         private static int? ReadHpDisplayRefreshRate()
@@ -1077,6 +1080,8 @@ namespace GHelper
         {
             HpDiagnosticReportSchemaV2Refresher.TryRefreshExistingReport(HpVictusCapabilityProbe.ReportPath);
             hpCachedDiagnosticReport = HpDiagnosticReportLoader.Load(HpVictusCapabilityProbe.ReportPath);
+            hpHistoricalCapabilityEvidence = HpHistoricalCapabilityEvidenceLoader.Load(
+                HpDiagnosticPaths.AppDataDirectory, HpDiagnosticPaths.LegacyAppDataDirectory);
             hpPulseHistory = HpFanMaxPulseHistoryLoader.Load(HpFanMaxExperimentLogWriter.ExperimentDirectory);
             hpFanProofGaps = HpFanProofGapAnalyzer.Analyze(HpFanMaxExperimentLogWriter.ExperimentDirectory, hpCachedDiagnosticReport);
             if (hpReadOnlyTelemetrySource is not null)
@@ -1164,6 +1169,8 @@ namespace GHelper
         {
             HpVictusCapabilitySnapshot? snapshot = Program.hpVictusCapabilitySnapshot;
             HpDiagnosticReportLoadResult? report = hpCachedDiagnosticReport;
+            HpCapabilityEvidenceValue thermalPolicy = GetHpThermalPolicyVersion(snapshot, report, hpHistoricalCapabilityEvidence);
+            HpCapabilityEvidenceValue fanCount = GetHpFanCount(snapshot, report, hpHistoricalCapabilityEvidence);
             HpFanMaxPulseHistoryEntry? pulse = hpPulseHistory?.Entry;
             HpFanProofGapAnalysis? proofGaps = hpFanProofGaps;
             return new HpDiagnosticDashboardInput
@@ -1182,9 +1189,9 @@ namespace GHelper
                 HpqBIntMReadiness = GetSnapshotOrReportAvailability(snapshot?.HpqBIntMAvailability, report, "HpqBIntMAvailability"),
                 HpqBDataInReadiness = GetSnapshotOrReportAvailability(snapshot?.HpqBDataInAvailability, report, "HpqBDataInAvailability"),
                 SystemDesignDataDecodeStatus = FormatDecodedStatus(snapshot?.SystemDesignDataInvocationSucceeded == true && snapshot.SystemDesignDataDecodeSucceeded, report, "SystemDesignDataDecodeSucceeded"),
-                ThermalPolicyVersion = GetHpThermalPolicyVersion(snapshot, report)?.ToString(),
+                ThermalPolicyVersion = FormatThermalPolicyEvidence(thermalPolicy),
                 SoftwareFanControlSupport = FormatDeclaredSupport(snapshot, report),
-                FanCount = GetSnapshotOrDecodedReportValue(snapshot?.FanGetCountInvocationSucceeded == true && snapshot.FanGetCountDecodeSucceeded, snapshot?.FanGetCountDecoded?.FanCount, report, "FanGetCountDecodeSucceeded", "FanGetCountDecoded.FanCount"),
+                FanCount = FormatFanCountEvidence(fanCount),
                 MaxFanState = FormatMaxFanState(snapshot, report),
                 Fan1RawLevel = GetSnapshotOrDecodedReportValue(snapshot?.FanGetLevelInvocationSucceeded == true && snapshot.FanGetLevelDecodeSucceeded, snapshot?.FanGetLevelDecoded?.Fan1RawValue, report, "FanGetLevelDecodeSucceeded", "FanGetLevelDecoded.Fan1RawValue"),
                 Fan2RawLevel = GetSnapshotOrDecodedReportValue(snapshot?.FanGetLevelInvocationSucceeded == true && snapshot.FanGetLevelDecodeSucceeded, snapshot?.FanGetLevelDecoded?.Fan2RawValue, report, "FanGetLevelDecodeSucceeded", "FanGetLevelDecoded.Fan2RawValue"),
@@ -1302,6 +1309,30 @@ namespace GHelper
         private static string FormatDecodedStatus(bool hasDecodedSnapshot, HpDiagnosticReportLoadResult? report, string decodeSucceededPath)
         {
             return hasDecodedSnapshot || report?.GetBool(decodeSucceededPath) == true ? "Succeeded" : "Not available";
+        }
+
+        private static string? FormatThermalPolicyEvidence(HpCapabilityEvidenceValue evidence)
+        {
+            return evidence.Value is byte version
+                ? FormatHistoricalCapabilityEvidence($"V{version}", evidence.Provenance)
+                : null;
+        }
+
+        private static string? FormatFanCountEvidence(HpCapabilityEvidenceValue evidence)
+        {
+            return evidence.Value is byte count
+                ? FormatHistoricalCapabilityEvidence(count.ToString(), evidence.Provenance)
+                : null;
+        }
+
+        private static string FormatHistoricalCapabilityEvidence(string value, HpCapabilityEvidenceProvenance provenance)
+        {
+            return provenance switch
+            {
+                HpCapabilityEvidenceProvenance.HistoricalLocalEvidence => value + " (Historical local evidence)",
+                HpCapabilityEvidenceProvenance.LegacyVictusXHistoricalEvidence => value + " (Legacy VictusX historical evidence)",
+                _ => value
+            };
         }
 
         private static string FormatDeclaredSupport(HpVictusCapabilitySnapshot? snapshot, HpDiagnosticReportLoadResult? report)

@@ -32,6 +32,7 @@
     <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticReportLoader.cs" Link="Hardware\Hp\HpDiagnosticReportLoader.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticReportSchemaV2Refresher.cs" Link="Hardware\Hp\HpDiagnosticReportSchemaV2Refresher.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticPaths.cs" Link="Hardware\Hp\HpDiagnosticPaths.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpHistoricalCapabilityEvidenceLoader.cs" Link="Hardware\Hp\HpHistoricalCapabilityEvidenceLoader.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticStatusText.cs" Link="Hardware\Hp\HpDiagnosticStatusText.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpVictusCapabilityReportMetadata.cs" Link="Hardware\Hp\HpVictusCapabilityReportMetadata.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpFanGetCountDecoder.cs" Link="Hardware\Hp\HpFanGetCountDecoder.cs" />

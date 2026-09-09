@@ -68,6 +68,21 @@ public sealed class HpDiagnosticDashboardFormatterTests
         Assert.Contains(capabilities.Rows, row => row.Label == "Display Control" && row.Value == "Unavailable" && row.Status == HpDiagnosticDashboardStatus.Normal);
     }
 
+    [Fact]
+    public void AdvancedDiagnostics_PreservesHistoricalCapabilityProvenance()
+    {
+        IReadOnlyList<HpDiagnosticDashboardSection> sections = HpDiagnosticDashboardFormatter.BuildSections(new()
+        {
+            ThermalPolicyVersion = "V1 (Legacy VictusX historical evidence)",
+            FanCount = "2 (Legacy VictusX historical evidence)"
+        });
+
+        HpDiagnosticDashboardSection decoded = Assert.Single(sections, section => section.Title == "Read-only telemetry");
+        HpDiagnosticDashboardSection fan = Assert.Single(sections, section => section.Title == "Fan read-only status");
+        Assert.Contains(decoded.Rows, row => row.Label == "Thermal policy version" && row.Value == "V1 (Legacy VictusX historical evidence)");
+        Assert.Contains(fan.Rows, row => row.Label == "Fan count" && row.Value == "2 (Legacy VictusX historical evidence)");
+    }
+
     [Theory]
     [InlineData(null, "Unavailable", HpDiagnosticDashboardStatus.Normal)]
     [InlineData("Unavailable", "Unavailable", HpDiagnosticDashboardStatus.Normal)]

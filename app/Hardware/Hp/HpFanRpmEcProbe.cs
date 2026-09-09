@@ -261,6 +261,7 @@ internal sealed class HpFanRpmEcProbeBackend
             value = 0;
             if (!WaitForInputBufferReady(out detail) || !WriteEcReadCommand(out detail) ||
                 !WaitForInputBufferReady(out detail) || !WriteFixedAddress(register, out detail) ||
+                !WaitForInputBufferReady(out detail) ||
                 !WaitForOutputBufferReady(out detail))
             {
                 return false;

@@ -57,7 +57,7 @@ public sealed class HpFanRpmEcProbeTests
         Assert.Equal((ushort)0x66, ReadConstant<ushort>("CommandPort"));
         Assert.Equal((ushort)0x62, ReadConstant<ushort>("DataPort"));
 
-        string source = ReadRepositoryFile("app", "Hardware", "Hp", "HpFanRpmEcProbe.cs");
+        string source = ReadRepositoryFile("app", "Hardware", "Hp", "HpFanRpmEcProbe.cs").Replace("\r\n", "\n", StringComparison.Ordinal);
         Assert.DoesNotContain("0x81", source, StringComparison.Ordinal);
         Assert.DoesNotContain("ReadEc(address", source, StringComparison.Ordinal);
         Assert.DoesNotContain("WriteEc(", source, StringComparison.Ordinal);
@@ -67,6 +67,32 @@ public sealed class HpFanRpmEcProbeTests
         Assert.Contains("mutex?.ReleaseMutex();", source, StringComparison.Ordinal);
         Assert.Contains("handle.Dispose();", source, StringComparison.Ordinal);
         Assert.Contains("last status 0x", source, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void FixedReadTransaction_UsesTheCompletePostAddressIbfHandshake()
+    {
+        string source = ReadRepositoryFile("app", "Hardware", "Hp", "HpFanRpmEcProbe.cs").Replace("\r\n", "\n", StringComparison.Ordinal);
+        const string transaction = "!WaitForInputBufferReady(out detail) || !WriteEcReadCommand(out detail) ||\n" +
+            "                !WaitForInputBufferReady(out detail) || !WriteFixedAddress(register, out detail) ||\n" +
+            "                !WaitForInputBufferReady(out detail) ||\n" +
+            "                !WaitForOutputBufferReady(out detail)";
+
+        Assert.Contains(transaction, source, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void PostAddressIbfFailure_ShortCircuitsBeforeAnyDataPortRead()
+    {
+        string source = ReadRepositoryFile("app", "Hardware", "Hp", "HpFanRpmEcProbe.cs").Replace("\r\n", "\n", StringComparison.Ordinal);
+        int transaction = source.IndexOf("private bool TryReadFixedRegister", StringComparison.Ordinal);
+        int dataRead = source.IndexOf("return ReadEcData(out value, out detail);", transaction, StringComparison.Ordinal);
+        int postAddressIbfWait = source.IndexOf("!WaitForInputBufferReady(out detail) ||\n                !WaitForOutputBufferReady(out detail)", transaction, StringComparison.Ordinal);
+
+        Assert.True(transaction >= 0);
+        Assert.True(postAddressIbfWait > transaction);
+        Assert.True(dataRead > postAddressIbfWait);
+        Assert.Contains("if (!WaitForInputBufferReady", source[transaction..dataRead], StringComparison.Ordinal);
     }
 
     [Fact]

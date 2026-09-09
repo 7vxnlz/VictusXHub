@@ -109,6 +109,9 @@
     <EmbeddedResource Include="Hardware\Hp\Resources\PawnIO\AMDFamily17.bin">
       <LogicalName>GHelper.Hardware.Hp.Resources.PawnIO.AMDFamily17.bin</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Hardware\Hp\Resources\PawnIO\LpcACPIEC.bin">
+      <LogicalName>GHelper.Hardware.Hp.Resources.PawnIO.LpcACPIEC.bin</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 	<Target Name="KillRunningVictusXHub" BeforeTargets="Build" Condition="'$(GITHUB_ACTIONS)'!='true'">

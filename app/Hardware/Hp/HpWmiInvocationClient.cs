@@ -72,14 +72,17 @@ public sealed class HpWmiInvocationClient
             return HpWmiInvocationResult.Rejected(request.CommandDefinition, reason);
         }
 
-        if (!request.HpWmiReadOnlyTestModeEnabled)
+        bool startupSystemDesignData = request.AllowSystemDesignDataAtStartup &&
+            IsApprovedStartupSystemDesignData(request.CommandDefinition);
+
+        if (!startupSystemDesignData && !request.HpWmiReadOnlyTestModeEnabled)
         {
             const string reason = "skipped by missing explicit --hp-wmi-readonly-test flag";
             _log?.Invoke($"HP WMI invocation sandbox skipped '{request.CommandDefinition.Name}': {reason}");
             return HpWmiInvocationResult.Rejected(request.CommandDefinition, reason);
         }
 
-        if (!request.ProcessElevated)
+        if (!startupSystemDesignData && !request.ProcessElevated)
         {
             const string reason = "skipped because process is not elevated; run controlled HP WMI read-only tests as Administrator";
             _log?.Invoke($"HP WMI invocation sandbox skipped '{request.CommandDefinition.Name}': {reason}");
@@ -198,6 +201,17 @@ public sealed class HpWmiInvocationClient
         string.Equals(commandName, FanGetCountCommandName, StringComparison.OrdinalIgnoreCase) ||
         string.Equals(commandName, FanMaxGetCommandName, StringComparison.OrdinalIgnoreCase) ||
         string.Equals(commandName, FanGetLevelCommandName, StringComparison.OrdinalIgnoreCase);
+
+    // This is the sole normal-startup exception to the developer-test gate. The complete
+    // catalog contract is repeated here so a same-name or broader request cannot bypass it.
+    private static bool IsApprovedStartupSystemDesignData(HpBiosWmiCommandDefinition definition) =>
+        string.Equals(definition.Name, SystemDesignDataCommandName, StringComparison.Ordinal) &&
+        definition.CommandId == 0x28 &&
+        string.Equals(definition.MethodName, "hpqBIOSInt128", StringComparison.Ordinal) &&
+        definition.ExpectedInputSize == 0 &&
+        definition.ExpectedOutputSize == 128 &&
+        definition.Access == HpBiosWmiCommandAccess.ReadOnly &&
+        definition.Safety == HpBiosWmiCommandSafety.SafeReadOnlyInvocation;
 
     private HpWmiInvocationResult InvokeSafeReadOnlyCommand(HpBiosWmiCommandDefinition definition)
     {

@@ -558,7 +558,7 @@ namespace GHelper
                 GetSnapshotOrReportValue(snapshot?.SystemSku, hpCachedDiagnosticReport, "Sku"),
                 GetHpGpuModeSwitchRaw(snapshot, hpCachedDiagnosticReport));
             HpCapabilityEvidenceValue fanCount = GetHpFanCount(snapshot, hpCachedDiagnosticReport, hpHistoricalCapabilityEvidence);
-            HpCapabilityEvidenceValue thermalPolicyVersion = GetHpThermalPolicyVersion(snapshot, hpCachedDiagnosticReport, hpHistoricalCapabilityEvidence);
+            HpCapabilityEvidenceValue thermalPolicyVersion = GetHpThermalPolicyVersion(snapshot, hpHistoricalCapabilityEvidence);
             HpReadOnlyTelemetryDisplay display = HpReadOnlyTelemetryFormatter.Format(
                 hpLiveTelemetry, DateTimeOffset.UtcNow, detected, cachedIdentity);
             hpTrayTelemetryStatus = display.TrayStatus;
@@ -635,15 +635,12 @@ namespace GHelper
         }
 
         private static HpCapabilityEvidenceValue GetHpThermalPolicyVersion(
-            HpVictusCapabilitySnapshot? snapshot, HpDiagnosticReportLoadResult? report, HpHistoricalCapabilityEvidence? historical)
+            HpVictusCapabilitySnapshot? snapshot, HpHistoricalCapabilityEvidence? historical)
         {
             if (snapshot?.SystemDesignDataInvocationSucceeded == true && snapshot.SystemDesignDataDecodeSucceeded)
                 return HpHistoricalCapabilityEvidenceLoader.ResolveThermalPolicy(snapshot.SystemDesignDataDecoded?.ThermalPolicyVersion, null);
 
-            byte? decodedReportValue = report?.GetBool("SystemDesignDataDecodeSucceeded") == true &&
-                byte.TryParse(report.GetValue("SystemDesignDataDecoded.ThermalPolicyVersion"), out byte version)
-                    ? version : null;
-            return HpHistoricalCapabilityEvidenceLoader.ResolveThermalPolicy(decodedReportValue, historical);
+            return HpHistoricalCapabilityEvidenceLoader.ResolveThermalPolicy(null, historical);
         }
 
         private static int? ReadHpDisplayRefreshRate()
@@ -1169,7 +1166,7 @@ namespace GHelper
         {
             HpVictusCapabilitySnapshot? snapshot = Program.hpVictusCapabilitySnapshot;
             HpDiagnosticReportLoadResult? report = hpCachedDiagnosticReport;
-            HpCapabilityEvidenceValue thermalPolicy = GetHpThermalPolicyVersion(snapshot, report, hpHistoricalCapabilityEvidence);
+            HpCapabilityEvidenceValue thermalPolicy = GetHpThermalPolicyVersion(snapshot, hpHistoricalCapabilityEvidence);
             HpCapabilityEvidenceValue fanCount = GetHpFanCount(snapshot, report, hpHistoricalCapabilityEvidence);
             HpFanMaxPulseHistoryEntry? pulse = hpPulseHistory?.Entry;
             HpFanProofGapAnalysis? proofGaps = hpFanProofGaps;
@@ -1313,9 +1310,15 @@ namespace GHelper
 
         private static string? FormatThermalPolicyEvidence(HpCapabilityEvidenceValue evidence)
         {
-            return evidence.Value is byte version
-                ? FormatHistoricalCapabilityEvidence($"V{version}", evidence.Provenance)
-                : null;
+            if (evidence.Value is not byte version)
+            {
+                return null;
+            }
+
+            string value = $"V{version}";
+            return evidence.Provenance == HpCapabilityEvidenceProvenance.CurrentDecodedReadOnlyEvidence
+                ? value + " (Current startup SystemDesignData)"
+                : FormatHistoricalCapabilityEvidence(value, evidence.Provenance);
         }
 
         private static string? FormatFanCountEvidence(HpCapabilityEvidenceValue evidence)

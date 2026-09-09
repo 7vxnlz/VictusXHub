@@ -73,8 +73,8 @@ public static class HpVictusCapabilityProbe
         bool hpWmiInvocationRequiresElevation = true;
         bool systemDesignDataInvocationAllowed =
             hpVictusMode &&
-            hpWmiReadOnlyTestMode &&
-            accessDeniedDiagnostics.ProcessElevated;
+            systemDesignDataDryRun.Success &&
+            !systemDesignDataDryRun.Invoked;
         bool fanGetCountInvocationAllowed =
             hpVictusMode &&
             hpWmiReadOnlyTestMode &&
@@ -104,9 +104,7 @@ public static class HpVictusCapabilityProbe
         var systemDesignDataInvocation = TryInvokeSystemDesignData(
             invocationClient,
             hpWmiSnapshot,
-            HpBiosWmiCommandCatalog.Definitions,
-            hpWmiReadOnlyTestMode,
-            accessDeniedDiagnostics.ProcessElevated);
+            HpBiosWmiCommandCatalog.Definitions);
         HpSystemDesignDataReportDecodeResult systemDesignDataDecode = HpSystemDesignDataReportDecoder.TryDecode(
             systemDesignDataInvocation.CommandName,
             systemDesignDataInvocation.Success,
@@ -362,9 +360,7 @@ public static class HpVictusCapabilityProbe
     private static HpWmiInvocationResult TryInvokeSystemDesignData(
         HpWmiInvocationClient invocationClient,
         HpWmiReadOnlySnapshot hpWmiSnapshot,
-        IEnumerable<HpBiosWmiCommandDefinition> definitions,
-        bool hpWmiReadOnlyTestModeEnabled,
-        bool processElevated)
+        IEnumerable<HpBiosWmiCommandDefinition> definitions)
     {
         HpBiosWmiCommandDefinition? definition = definitions.FirstOrDefault(candidate =>
             string.Equals(candidate.Name, "SystemDesignData", StringComparison.OrdinalIgnoreCase));
@@ -378,8 +374,7 @@ public static class HpVictusCapabilityProbe
             new HpWmiInvocationRequest(
                 definition,
                 global::AppConfig.IsHpVictusHardwareMode(),
-                hpWmiReadOnlyTestModeEnabled,
-                processElevated),
+                AllowSystemDesignDataAtStartup: true),
             hpWmiSnapshot);
     }
 
@@ -467,7 +462,7 @@ public static class HpVictusCapabilityProbe
 
         if (!hpWmiReadOnlyTestMode)
         {
-            return "Real HP WMI invocation skipped: missing explicit --hp-wmi-readonly-test flag";
+            return "Only the startup SystemDesignData read is eligible in normal --hp-victus mode; all other HP WMI invocations require --hp-wmi-readonly-test and elevation";
         }
 
         if (!processElevated)
@@ -490,7 +485,7 @@ public static class HpVictusCapabilityProbe
 
         if (!hpWmiReadOnlyTestMode)
         {
-            return "Continue using --hp-victus for safe non-invoking probes; use --hp-wmi-readonly-test only for controlled developer testing.";
+            return "Startup may perform the approved read-only SystemDesignData request; use --hp-wmi-readonly-test only for controlled elevated developer testing of other commands.";
         }
 
         if (!processElevated)

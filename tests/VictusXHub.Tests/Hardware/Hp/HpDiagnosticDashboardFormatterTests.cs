@@ -83,6 +83,18 @@ public sealed class HpDiagnosticDashboardFormatterTests
         Assert.Contains(fan.Rows, row => row.Label == "Fan count" && row.Value == "2 (Legacy VictusX historical evidence)");
     }
 
+    [Fact]
+    public void AdvancedDiagnostics_PreservesCurrentSystemDesignDataProvenance()
+    {
+        IReadOnlyList<HpDiagnosticDashboardSection> sections = HpDiagnosticDashboardFormatter.BuildSections(new()
+        {
+            ThermalPolicyVersion = "V1 (Current startup SystemDesignData)"
+        });
+
+        HpDiagnosticDashboardSection telemetry = Assert.Single(sections, section => section.Title == "Read-only telemetry");
+        Assert.Contains(telemetry.Rows, row => row.Label == "Thermal policy version" && row.Value == "V1 (Current startup SystemDesignData)");
+    }
+
     [Theory]
     [InlineData(null, "Unavailable", HpDiagnosticDashboardStatus.Normal)]
     [InlineData("Unavailable", "Unavailable", HpDiagnosticDashboardStatus.Normal)]

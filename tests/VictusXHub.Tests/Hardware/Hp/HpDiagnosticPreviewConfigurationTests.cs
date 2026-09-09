@@ -22,6 +22,27 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     }
 
     [Fact]
+    public void HpStartup_AllowsOnlyThePinnedSystemDesignDataRead()
+    {
+        string catalog = ReadRepositoryFile("app", "Hardware", "Hp", "HpBiosWmiCommandCatalog.cs");
+        string client = ReadRepositoryFile("app", "Hardware", "Hp", "HpWmiInvocationClient.cs");
+        string probe = ReadRepositoryFile("app", "Hardware", "Hp", "HpVictusCapabilityProbe.cs");
+
+        Assert.Contains("\"SystemDesignData\",", catalog, StringComparison.Ordinal);
+        Assert.Contains("0x28", catalog, StringComparison.Ordinal);
+        Assert.Contains("\"hpqBIOSInt128\"", catalog, StringComparison.Ordinal);
+        Assert.Contains("0,\n            128,", catalog.Replace("\r\n", "\n"), StringComparison.Ordinal);
+        Assert.Contains("HpBiosWmiCommandAccess.ReadOnly", catalog, StringComparison.Ordinal);
+        Assert.Contains("HpBiosWmiCommandSafety.SafeReadOnlyInvocation", catalog, StringComparison.Ordinal);
+        Assert.Contains("IsApprovedStartupSystemDesignData", client, StringComparison.Ordinal);
+        Assert.Contains("AllowSystemDesignDataAtStartup", client, StringComparison.Ordinal);
+        Assert.Contains("definition.CommandId == 0x28", client, StringComparison.Ordinal);
+        Assert.Contains("definition.ExpectedOutputSize == 128", client, StringComparison.Ordinal);
+        Assert.Contains("AllowSystemDesignDataAtStartup: true", probe, StringComparison.Ordinal);
+        Assert.Equal(1, CountOccurrences(probe, "AllowSystemDesignDataAtStartup: true"));
+    }
+
+    [Fact]
     public void Launcher_UsesOnlyTheSafeHpVictusArgument()
     {
         string launcher = ReadRepositoryFile("tools", "run-victusxhub-hp-diagnostic.ps1");
@@ -497,9 +518,15 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     {
         string source = ReadRepositoryFile("app", "Hardware", "Hp", "HpGpuModeReadOnlyStatus.cs");
         string settings = ReadRepositoryFile("app", "Settings.cs");
+        int thermalPolicyStart = settings.IndexOf("private static HpCapabilityEvidenceValue GetHpThermalPolicyVersion", StringComparison.Ordinal);
+        int thermalPolicyEnd = settings.IndexOf("private static int? ReadHpDisplayRefreshRate", thermalPolicyStart, StringComparison.Ordinal);
+        string thermalPolicyResolver = settings[thermalPolicyStart..thermalPolicyEnd];
 
         Assert.Contains("SystemDesignDataDecoded.GpuModeSwitchRaw", settings, StringComparison.Ordinal);
-        Assert.Contains("SystemDesignDataDecoded.ThermalPolicyVersion", settings, StringComparison.Ordinal);
+        Assert.Contains("ResolveThermalPolicy(snapshot.SystemDesignDataDecoded?.ThermalPolicyVersion, null)", thermalPolicyResolver, StringComparison.Ordinal);
+        Assert.Contains("ResolveThermalPolicy(null, historical)", thermalPolicyResolver, StringComparison.Ordinal);
+        Assert.DoesNotContain("report?.GetBool(\"SystemDesignDataDecodeSucceeded\")", thermalPolicyResolver, StringComparison.Ordinal);
+        Assert.Contains("Current startup SystemDesignData", settings, StringComparison.Ordinal);
         Assert.Contains("FanGetCountDecoded.FanCount", settings, StringComparison.Ordinal);
         Assert.Contains("GpuSwitchingCapability = gpuMode.SwitchingCapabilityText", settings, StringComparison.Ordinal);
         Assert.Contains("FanCount = HpReadOnlyTelemetryFormatter.FormatFanCount(fanCount.Value)", settings, StringComparison.Ordinal);
@@ -600,6 +627,19 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     {
         string repositoryRoot = FindRepositoryRoot();
         return File.ReadAllText(Path.Combine([repositoryRoot, .. segments]));
+    }
+
+    private static int CountOccurrences(string value, string fragment)
+    {
+        int count = 0;
+        int index = 0;
+        while ((index = value.IndexOf(fragment, index, StringComparison.Ordinal)) >= 0)
+        {
+            count++;
+            index += fragment.Length;
+        }
+
+        return count;
     }
 
     private static string FindRepositoryRoot()

@@ -20,4 +20,4 @@ Updated: 2026-09-09
 
 ## Context Routing
 
-Use one route from `docs/context-packs/` only when it helps the task: `fan-research`, `telemetry`, `ui`, `packaging`, or `identity`. Search before reading selected implementation/tests. Historical evidence is demand-loaded. Reference comparisons require `REFERENCE_POLICY.md` and `docs/reference-index.md`.
+Use one route from `docs/context-packs/` only when it helps the task: `fan-research`, `telemetry`, `ui`, `packaging`, or `identity`. Search before reading selected implementation/tests. Historical evidence is demand-loaded. Reference comparisons require `docs/development/REFERENCE_POLICY.md` and `docs/reference-index.md`.

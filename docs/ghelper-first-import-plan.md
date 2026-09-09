@@ -29,12 +29,12 @@
 ## Must Not Be Overwritten
 
 - `AGENTS.md`
-- `AI_CONTEXT.md`
-- `SESSION_STATE.md`
-- `TOKEN_STRATEGY.md`
-- `CONTEXT_RECIPES.md`
-- `REFERENCE_POLICY.md`
-- `REFERENCE_SOURCES.md`
+- `.github/ai/AI_CONTEXT.md`
+- `.github/ai/SESSION_STATE.md`
+- `.github/ai/TOKEN_STRATEGY.md`
+- `.github/ai/CONTEXT_RECIPES.md`
+- `docs/development/REFERENCE_POLICY.md`
+- `docs/development/REFERENCE_SOURCES.md`
 - `.repomixignore`
 - `repomix.config.json`
 - `.github/copilot-instructions.md`

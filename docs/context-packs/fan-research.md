@@ -14,4 +14,4 @@ Use for SetFanMax/SetFanLevel safety, serialization, gates, logs, and evidence d
 - `docs/set-fan-level-percentage-dry-run-checkpoint.md`
 - `docs/set-fan-level-first-write-harness-scaffold.md`
 
-Read the exact runner/test or deeper evidence document only after searching for the task symbol. Reference work additionally requires `REFERENCE_POLICY.md` and `docs/reference-index.md`. Do not pack sibling repositories.
+Read the exact runner/test or deeper evidence document only after searching for the task symbol. Reference work additionally requires `docs/development/REFERENCE_POLICY.md` and `docs/reference-index.md`. Do not pack sibling repositories.

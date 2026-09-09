@@ -1,6 +1,6 @@
 # HP Reference Index
 
-Use this index to jump to exact read-only reference files. Revisions are tracked in `REFERENCE_SOURCES.md`; verify the SHA before relying on a source. Paths below are relative to `D:\Projects\Workspace\references\`. References provide behavior evidence, not target-device validation or permission to copy code.
+Use this index to jump to exact read-only reference files. Revisions are tracked in `development/REFERENCE_SOURCES.md`; verify the SHA before relying on a source. Paths below are relative to `D:\Projects\Workspace\references\`. References provide behavior evidence, not target-device validation or permission to copy code.
 
 | Feature / symbol | Reference file and symbol | Why it matters |
 | --- | --- | --- |
@@ -22,7 +22,7 @@ Use this index to jump to exact read-only reference files. Revisions are tracked
 ## Search Workflow
 
 1. Search VictusX first.
-2. Read `REFERENCE_POLICY.md` and confirm the SHA in `REFERENCE_SOURCES.md`.
+2. Read `development/REFERENCE_POLICY.md` and confirm the SHA in `development/REFERENCE_SOURCES.md`.
 3. Open only the indexed file(s), then search the exact symbol and callers.
 4. Record paths, symbols, revision, device context, and confidence in the resulting evidence document.
 5. Never modify or pack a reference repository.

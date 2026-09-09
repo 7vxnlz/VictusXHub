@@ -2,7 +2,7 @@
 
 ## Preserve Before G-Helper Import
 
-- AI workflow files: `AGENTS.md`, `AI_CONTEXT.md`, `SESSION_STATE.md`, `TOKEN_STRATEGY.md`, `CONTEXT_RECIPES.md`, `REFERENCE_POLICY.md`, `REFERENCE_SOURCES.md`, `.repomixignore`, `repomix.config.json`
+- AI workflow files: `AGENTS.md`, `.github/ai/AI_CONTEXT.md`, `.github/ai/SESSION_STATE.md`, `.github/ai/TOKEN_STRATEGY.md`, `.github/ai/CONTEXT_RECIPES.md`, `docs/development/REFERENCE_POLICY.md`, `docs/development/REFERENCE_SOURCES.md`, `.repomixignore`, `repomix.config.json`
 - GitHub AI guidance: `.github/copilot-instructions.md`, `.github/prompts/`
 - Planning docs: `docs/`
 - Current skeleton record: `VictusControl.sln`, `src/`, `tests/` should be archived or explicitly listed before removal
@@ -16,12 +16,12 @@
 ## Must Not Be Overwritten By G-Helper Import
 
 - `AGENTS.md`
-- `AI_CONTEXT.md`
-- `SESSION_STATE.md`
-- `TOKEN_STRATEGY.md`
-- `CONTEXT_RECIPES.md`
-- `REFERENCE_POLICY.md`
-- `REFERENCE_SOURCES.md`
+- `.github/ai/AI_CONTEXT.md`
+- `.github/ai/SESSION_STATE.md`
+- `.github/ai/TOKEN_STRATEGY.md`
+- `.github/ai/CONTEXT_RECIPES.md`
+- `docs/development/REFERENCE_POLICY.md`
+- `docs/development/REFERENCE_SOURCES.md`
 - `.repomixignore`
 - `repomix.config.json`
 - `.github/copilot-instructions.md`

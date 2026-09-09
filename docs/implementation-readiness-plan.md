@@ -123,6 +123,6 @@ v0.1.0: add solution skeleton
 
 ## Immediately After The Milestone
 
-After `v0.1.0-solution-skeleton`, update `SESSION_STATE.md` with the created projects and build/test status. Then make the next planning decision before coding hardware:
+After `v0.1.0-solution-skeleton`, update `.github/ai/SESSION_STATE.md` with the created projects and build/test status. Then make the next planning decision before coding hardware:
 
 Recommended next step: define the first domain and hardware-abstraction contracts for device identity and capability detection, still without HP WMI command implementation.

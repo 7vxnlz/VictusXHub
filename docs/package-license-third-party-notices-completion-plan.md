@@ -5,7 +5,7 @@ Status: completed for the current preview baseline on 2026-09-08. Preserve this 
 ## Current License/Notice State
 
 - Top-level `LICENSE` is present and contains the GNU General Public License version 3 text.
-- `README.md` credits G-Helper as the original application base and lists HP/Omen reference repositories.
+- `docs/README.md` credits G-Helper as the original application base and lists HP/Omen reference repositories.
 - Top-level `THIRD-PARTY-NOTICES.md` is reviewed for the current preview baseline and matches the current candidate.
 - [Third-Party Notices Audit](third-party-notices-audit.md), [Dependency Notice Inventory](dependency-notice-inventory.md), and [Package License Review Workflow](package-license-review-workflow.md) define the current evidence and review process.
 - [Runtime Dependency License Review Evidence Checklist](runtime-dependency-license-review-evidence-checklist.md) defines the exact per-runtime-package evidence required before the draft notices can become reviewed release evidence.
@@ -60,7 +60,7 @@ User-facing package wording should keep `VictusX` as the app name and `HP Diagno
 ## Files To Review Before Release
 
 - `LICENSE`
-- `README.md`
+- `docs/README.md`
 - future `THIRD-PARTY-NOTICES.md` or equivalent package notice file
 - `app/VictusX.csproj`
 - `tests/VictusX.Tests/VictusX.Tests.csproj` if test artifacts are distributed

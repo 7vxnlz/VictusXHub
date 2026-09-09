@@ -6,8 +6,8 @@ This is a repository-evidence checkpoint for a future HP diagnostic preview. It 
 
 ## G-Helper Attribution
 
-- `README.md` identifies VictusX as a G-Helper-based project and credits [G-Helper](https://github.com/seerge/g-helper) by seerge as the original application base.
-- `SESSION_STATE.md` records the reviewed G-Helper source commit as `5c26f5ac970dab9e26347d80976ebf1eece91b1e`.
+- `docs/README.md` identifies VictusX as a G-Helper-based project and credits [G-Helper](https://github.com/seerge/g-helper) by seerge as the original application base.
+- `.github/ai/SESSION_STATE.md` records the reviewed G-Helper source commit as `5c26f5ac970dab9e26347d80976ebf1eece91b1e`.
 - The intentionally retained `GHelper` root namespace, startup object, resource names, and imported application structure are further evidence that a preview needs prominent upstream attribution and a clear modified-project statement.
 - The repository top-level `LICENSE` is the unmodified GNU General Public License, version 3 text. No separate VictusX copyright notice, modification notice, or packaged-source notice file was found.
 

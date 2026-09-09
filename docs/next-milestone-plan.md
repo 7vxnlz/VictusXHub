@@ -31,8 +31,8 @@ Expected implementation scope:
 - `src/VictusControl.Infrastructure/VictusControl.Infrastructure.csproj` only for embedded resources or necessary built-in configuration
 - `tests/VictusControl.Application.Tests/` for merge/orchestration behavior if added
 - `tests/VictusControl.Infrastructure.Tests/` for JSON parsing, matching, fallback, and conservative defaults
-- `SESSION_STATE.md` after implementation verification
-- `AI_CONTEXT.md` only if the architecture description changes meaningfully
+- `.github/ai/SESSION_STATE.md` after implementation verification
+- `.github/ai/AI_CONTEXT.md` only if the architecture description changes meaningfully
 
 The first profile may target the known HP Victus 16 identity only as an identity match, not as proof that fan control, thermal mode control, keyboard backlight control, telemetry, EC access, or BIOS writes are supported.
 
@@ -139,7 +139,7 @@ Later HP WMI capability probing should extend this pipeline by adding read-only 
 
 ## Immediately After This Milestone
 
-After `v0.5.0-static-capability-profile-loader`, update `SESSION_STATE.md` with the loader, resource data, tests, and verification result.
+After `v0.5.0-static-capability-profile-loader`, update `.github/ai/SESSION_STATE.md` with the loader, resource data, tests, and verification result.
 
 The next planning decision should choose between:
 

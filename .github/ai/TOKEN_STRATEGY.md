@@ -1,8 +1,8 @@
 # Token Strategy
 
-Optimize relevance before breadth. Repository instructions already injected into the session should not be reread. Start with the compact `AI_WORKING_STATE.md`, then use exact `rg` searches, one domain route when useful, and only the implementation/tests needed by the task. The nearest scoped `AGENTS.md` remains mandatory for that domain.
+Optimize relevance before breadth. Repository instructions already injected into the session should not be reread. Start with the compact `.github/ai/AI_WORKING_STATE.md`, then use exact `rg` searches, one domain route when useful, and only the implementation/tests needed by the task. The nearest scoped `AGENTS.md` remains mandatory for that domain.
 
-Do not load `SESSION_STATE.md`, all documentation, a whole source directory, installed skill documentation speculatively, or reference repositories by default. Skills and historical evidence are demand-loaded only when the task triggers them.
+Do not load `.github/ai/SESSION_STATE.md`, all documentation, a whole source directory, installed skill documentation speculatively, or reference repositories by default. Skills and historical evidence are demand-loaded only when the task triggers them.
 
 ## Targets
 
@@ -10,7 +10,7 @@ Do not load `SESSION_STATE.md`, all documentation, a whole source directory, ins
 - Medium cross-cutting task: <= 20k approximate tokens and <= 12 selected files.
 - Investigation: <= 30k approximate tokens and <= 20 selected files.
 - Above 30k: justify expansion first and prefer splitting the task. These are targets, never correctness- or safety-breaking limits.
-- References: 1-5 exact files, after reading `REFERENCE_POLICY.md` and checking `docs/reference-index.md`.
+- References: 1-5 exact files, after reading `docs/development/REFERENCE_POLICY.md` and checking `docs/reference-index.md`.
 
 ## Selection and Tools
 

@@ -43,7 +43,7 @@ internal static class HpHistoricalCapabilityEvidenceLoader
                 : HpCapabilityEvidenceValue.Unavailable;
 
     public static HpCapabilityEvidenceValue ResolveFanCount(byte? currentDecoded, HpHistoricalCapabilityEvidence? historical) =>
-        currentDecoded.HasValue
+        currentDecoded is 1 or 2
             ? new HpCapabilityEvidenceValue(currentDecoded, HpCapabilityEvidenceProvenance.CurrentDecodedReadOnlyEvidence)
             : historical is { } evidence
                 ? new HpCapabilityEvidenceValue(evidence.FanCount, evidence.Provenance)

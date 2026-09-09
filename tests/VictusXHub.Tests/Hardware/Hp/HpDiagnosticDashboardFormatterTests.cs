@@ -84,15 +84,18 @@ public sealed class HpDiagnosticDashboardFormatterTests
     }
 
     [Fact]
-    public void AdvancedDiagnostics_PreservesCurrentSystemDesignDataProvenance()
+    public void AdvancedDiagnostics_PreservesCurrentStartupProvenance()
     {
         IReadOnlyList<HpDiagnosticDashboardSection> sections = HpDiagnosticDashboardFormatter.BuildSections(new()
         {
-            ThermalPolicyVersion = "V1 (Current startup SystemDesignData)"
+            ThermalPolicyVersion = "V1 (Current startup SystemDesignData)",
+            FanCount = "2 (Current startup FanGetCount)"
         });
 
         HpDiagnosticDashboardSection telemetry = Assert.Single(sections, section => section.Title == "Read-only telemetry");
+        HpDiagnosticDashboardSection fan = Assert.Single(sections, section => section.Title == "Fan read-only status");
         Assert.Contains(telemetry.Rows, row => row.Label == "Thermal policy version" && row.Value == "V1 (Current startup SystemDesignData)");
+        Assert.Contains(fan.Rows, row => row.Label == "Fan count" && row.Value == "2 (Current startup FanGetCount)");
     }
 
     [Theory]

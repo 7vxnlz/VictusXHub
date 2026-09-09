@@ -19,6 +19,20 @@ public sealed class HpHistoricalCapabilityEvidenceLoaderTests
         Assert.Equal(HpCapabilityEvidenceProvenance.CurrentDecodedReadOnlyEvidence, fanCount.Provenance);
     }
 
+    [Theory]
+    [InlineData(0)]
+    [InlineData(3)]
+    [InlineData(255)]
+    public void InvalidCurrentFanCount_FailsClosedToHistoricalEvidence(int currentFanCount)
+    {
+        HpHistoricalCapabilityEvidence historical = new(1, 2, HpCapabilityEvidenceProvenance.LegacyVictusXHistoricalEvidence);
+
+        HpCapabilityEvidenceValue fanCount = HpHistoricalCapabilityEvidenceLoader.ResolveFanCount((byte)currentFanCount, historical);
+
+        Assert.Equal((byte)2, fanCount.Value);
+        Assert.Equal(HpCapabilityEvidenceProvenance.LegacyVictusXHistoricalEvidence, fanCount.Provenance);
+    }
+
     [Fact]
     public void CurrentVictusXHubEvidence_IsPreferredOverLegacyEvidence()
     {

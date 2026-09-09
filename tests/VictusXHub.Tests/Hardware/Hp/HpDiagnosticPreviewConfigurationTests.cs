@@ -22,7 +22,7 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     }
 
     [Fact]
-    public void HpStartup_AllowsOnlyThePinnedSystemDesignDataRead()
+    public void HpStartup_AllowsOnlyThePinnedSystemDesignDataAndFanGetCountReads()
     {
         string catalog = ReadRepositoryFile("app", "Hardware", "Hp", "HpBiosWmiCommandCatalog.cs");
         string client = ReadRepositoryFile("app", "Hardware", "Hp", "HpWmiInvocationClient.cs");
@@ -36,10 +36,28 @@ public sealed class HpDiagnosticPreviewConfigurationTests
         Assert.Contains("HpBiosWmiCommandSafety.SafeReadOnlyInvocation", catalog, StringComparison.Ordinal);
         Assert.Contains("IsApprovedStartupSystemDesignData", client, StringComparison.Ordinal);
         Assert.Contains("AllowSystemDesignDataAtStartup", client, StringComparison.Ordinal);
+        Assert.Contains("IsApprovedStartupFanGetCount", client, StringComparison.Ordinal);
+        Assert.Contains("AllowFanGetCountAtStartup", client, StringComparison.Ordinal);
         Assert.Contains("definition.CommandId == 0x28", client, StringComparison.Ordinal);
         Assert.Contains("definition.ExpectedOutputSize == 128", client, StringComparison.Ordinal);
+        Assert.Contains("\"FanGetCount\",", catalog, StringComparison.Ordinal);
+        Assert.Contains("0x10", catalog, StringComparison.Ordinal);
+        Assert.Contains("\"hpqBIOSInt4\"", catalog, StringComparison.Ordinal);
+        Assert.Contains("4,\n            4,", catalog.Replace("\r\n", "\n"), StringComparison.Ordinal);
+        Assert.Contains("definition.CommandId == 0x10", client, StringComparison.Ordinal);
+        Assert.Contains("definition.ExpectedInputSize == 4", client, StringComparison.Ordinal);
+        Assert.Contains("definition.ExpectedOutputSize == 4", client, StringComparison.Ordinal);
         Assert.Contains("AllowSystemDesignDataAtStartup: true", probe, StringComparison.Ordinal);
         Assert.Equal(1, CountOccurrences(probe, "AllowSystemDesignDataAtStartup: true"));
+        Assert.Contains("AllowFanGetCountAtStartup: true", probe, StringComparison.Ordinal);
+        Assert.Equal(1, CountOccurrences(probe, "AllowFanGetCountAtStartup: true"));
+        Assert.Contains("var fanGetCountInvocation = TryInvokeFanGetCount(", probe, StringComparison.Ordinal);
+        Assert.DoesNotContain("AllowFanGetLevelAtStartup", client + probe, StringComparison.Ordinal);
+        Assert.DoesNotContain("AllowFanMaxGetAtStartup", client + probe, StringComparison.Ordinal);
+
+        string dashboard = ReadRepositoryFile("app", "Hardware", "Hp", "HpDiagnosticDashboardFormatter.cs");
+        Assert.Contains("SystemDesignData and FanGetCount requests", dashboard, StringComparison.Ordinal);
+        Assert.DoesNotContain("FanGetLevel request", dashboard, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -527,7 +545,9 @@ public sealed class HpDiagnosticPreviewConfigurationTests
         Assert.Contains("ResolveThermalPolicy(null, historical)", thermalPolicyResolver, StringComparison.Ordinal);
         Assert.DoesNotContain("report?.GetBool(\"SystemDesignDataDecodeSucceeded\")", thermalPolicyResolver, StringComparison.Ordinal);
         Assert.Contains("Current startup SystemDesignData", settings, StringComparison.Ordinal);
-        Assert.Contains("FanGetCountDecoded.FanCount", settings, StringComparison.Ordinal);
+        Assert.Contains("snapshot.FanGetCountDecoded?.FanCount", settings, StringComparison.Ordinal);
+        Assert.DoesNotContain("report?.GetBool(\"FanGetCountDecodeSucceeded\")", settings, StringComparison.Ordinal);
+        Assert.Contains("Current startup FanGetCount", settings, StringComparison.Ordinal);
         Assert.Contains("GpuSwitchingCapability = gpuMode.SwitchingCapabilityText", settings, StringComparison.Ordinal);
         Assert.Contains("FanCount = HpReadOnlyTelemetryFormatter.FormatFanCount(fanCount.Value)", settings, StringComparison.Ordinal);
         Assert.Contains("ThermalPolicy = HpReadOnlyTelemetryFormatter.FormatThermalPolicy(thermalPolicyVersion.Value)", settings, StringComparison.Ordinal);

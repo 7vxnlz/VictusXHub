@@ -557,7 +557,7 @@ namespace GHelper
                 GetSnapshotOrReportValue(snapshot?.Model, hpCachedDiagnosticReport, "Model"),
                 GetSnapshotOrReportValue(snapshot?.SystemSku, hpCachedDiagnosticReport, "Sku"),
                 GetHpGpuModeSwitchRaw(snapshot, hpCachedDiagnosticReport));
-            HpCapabilityEvidenceValue fanCount = GetHpFanCount(snapshot, hpCachedDiagnosticReport, hpHistoricalCapabilityEvidence);
+            HpCapabilityEvidenceValue fanCount = GetHpFanCount(snapshot, hpHistoricalCapabilityEvidence);
             HpCapabilityEvidenceValue thermalPolicyVersion = GetHpThermalPolicyVersion(snapshot, hpHistoricalCapabilityEvidence);
             HpReadOnlyTelemetryDisplay display = HpReadOnlyTelemetryFormatter.Format(
                 hpLiveTelemetry, DateTimeOffset.UtcNow, detected, cachedIdentity);
@@ -623,15 +623,12 @@ namespace GHelper
         }
 
         private static HpCapabilityEvidenceValue GetHpFanCount(
-            HpVictusCapabilitySnapshot? snapshot, HpDiagnosticReportLoadResult? report, HpHistoricalCapabilityEvidence? historical)
+            HpVictusCapabilitySnapshot? snapshot, HpHistoricalCapabilityEvidence? historical)
         {
             if (snapshot?.FanGetCountInvocationSucceeded == true && snapshot.FanGetCountDecodeSucceeded)
                 return HpHistoricalCapabilityEvidenceLoader.ResolveFanCount(snapshot.FanGetCountDecoded?.FanCount, null);
 
-            byte? decodedReportValue = report?.GetBool("FanGetCountDecodeSucceeded") == true &&
-                byte.TryParse(report.GetValue("FanGetCountDecoded.FanCount"), out byte count)
-                    ? count : null;
-            return HpHistoricalCapabilityEvidenceLoader.ResolveFanCount(decodedReportValue, historical);
+            return HpHistoricalCapabilityEvidenceLoader.ResolveFanCount(null, historical);
         }
 
         private static HpCapabilityEvidenceValue GetHpThermalPolicyVersion(
@@ -1167,7 +1164,7 @@ namespace GHelper
             HpVictusCapabilitySnapshot? snapshot = Program.hpVictusCapabilitySnapshot;
             HpDiagnosticReportLoadResult? report = hpCachedDiagnosticReport;
             HpCapabilityEvidenceValue thermalPolicy = GetHpThermalPolicyVersion(snapshot, hpHistoricalCapabilityEvidence);
-            HpCapabilityEvidenceValue fanCount = GetHpFanCount(snapshot, report, hpHistoricalCapabilityEvidence);
+            HpCapabilityEvidenceValue fanCount = GetHpFanCount(snapshot, hpHistoricalCapabilityEvidence);
             HpFanMaxPulseHistoryEntry? pulse = hpPulseHistory?.Entry;
             HpFanProofGapAnalysis? proofGaps = hpFanProofGaps;
             return new HpDiagnosticDashboardInput
@@ -1323,9 +1320,15 @@ namespace GHelper
 
         private static string? FormatFanCountEvidence(HpCapabilityEvidenceValue evidence)
         {
-            return evidence.Value is byte count
-                ? FormatHistoricalCapabilityEvidence(count.ToString(), evidence.Provenance)
-                : null;
+            if (evidence.Value is not byte count)
+            {
+                return null;
+            }
+
+            string value = count.ToString();
+            return evidence.Provenance == HpCapabilityEvidenceProvenance.CurrentDecodedReadOnlyEvidence
+                ? value + " (Current startup FanGetCount)"
+                : FormatHistoricalCapabilityEvidence(value, evidence.Provenance);
         }
 
         private static string FormatHistoricalCapabilityEvidence(string value, HpCapabilityEvidenceProvenance provenance)

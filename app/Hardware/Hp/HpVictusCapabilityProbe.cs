@@ -77,8 +77,6 @@ public static class HpVictusCapabilityProbe
             !systemDesignDataDryRun.Invoked;
         bool fanGetCountInvocationAllowed =
             hpVictusMode &&
-            hpWmiReadOnlyTestMode &&
-            accessDeniedDiagnostics.ProcessElevated &&
             fanGetCountDryRun.Success &&
             !fanGetCountDryRun.Invoked;
         bool fanMaxGetInvocationAllowed =
@@ -113,9 +111,7 @@ public static class HpVictusCapabilityProbe
         var fanGetCountInvocation = TryInvokeFanGetCount(
             invocationClient,
             hpWmiSnapshot,
-            HpBiosWmiCommandCatalog.Definitions,
-            hpWmiReadOnlyTestMode,
-            accessDeniedDiagnostics.ProcessElevated);
+            HpBiosWmiCommandCatalog.Definitions);
         HpFanGetCountReportDecodeResult fanGetCountDecode = HpFanGetCountReportDecoder.TryDecode(
             fanGetCountInvocation.CommandName,
             fanGetCountInvocation.Success,
@@ -381,9 +377,7 @@ public static class HpVictusCapabilityProbe
     private static HpWmiInvocationResult TryInvokeFanGetCount(
         HpWmiInvocationClient invocationClient,
         HpWmiReadOnlySnapshot hpWmiSnapshot,
-        IEnumerable<HpBiosWmiCommandDefinition> definitions,
-        bool hpWmiReadOnlyTestModeEnabled,
-        bool processElevated)
+        IEnumerable<HpBiosWmiCommandDefinition> definitions)
     {
         HpBiosWmiCommandDefinition? definition = definitions.FirstOrDefault(candidate =>
             string.Equals(candidate.Name, "FanGetCount", StringComparison.OrdinalIgnoreCase));
@@ -397,8 +391,7 @@ public static class HpVictusCapabilityProbe
             new HpWmiInvocationRequest(
                 definition,
                 global::AppConfig.IsHpVictusHardwareMode(),
-                hpWmiReadOnlyTestModeEnabled,
-                processElevated),
+                AllowFanGetCountAtStartup: true),
             hpWmiSnapshot);
     }
 
@@ -462,7 +455,7 @@ public static class HpVictusCapabilityProbe
 
         if (!hpWmiReadOnlyTestMode)
         {
-            return "Only the startup SystemDesignData read is eligible in normal --hp-victus mode; all other HP WMI invocations require --hp-wmi-readonly-test and elevation";
+            return "Only the startup SystemDesignData and FanGetCount reads are eligible in normal --hp-victus mode; all other HP WMI invocations require --hp-wmi-readonly-test and elevation";
         }
 
         if (!processElevated)
@@ -485,7 +478,7 @@ public static class HpVictusCapabilityProbe
 
         if (!hpWmiReadOnlyTestMode)
         {
-            return "Startup may perform the approved read-only SystemDesignData request; use --hp-wmi-readonly-test only for controlled elevated developer testing of other commands.";
+            return "Startup may perform the approved read-only SystemDesignData and FanGetCount requests; use --hp-wmi-readonly-test only for controlled elevated developer testing of other commands.";
         }
 
         if (!processElevated)

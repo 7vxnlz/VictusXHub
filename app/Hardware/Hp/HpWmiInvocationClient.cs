@@ -74,15 +74,18 @@ public sealed class HpWmiInvocationClient
 
         bool startupSystemDesignData = request.AllowSystemDesignDataAtStartup &&
             IsApprovedStartupSystemDesignData(request.CommandDefinition);
+        bool startupFanGetCount = request.AllowFanGetCountAtStartup &&
+            IsApprovedStartupFanGetCount(request.CommandDefinition);
+        bool approvedStartupDiscovery = startupSystemDesignData || startupFanGetCount;
 
-        if (!startupSystemDesignData && !request.HpWmiReadOnlyTestModeEnabled)
+        if (!approvedStartupDiscovery && !request.HpWmiReadOnlyTestModeEnabled)
         {
             const string reason = "skipped by missing explicit --hp-wmi-readonly-test flag";
             _log?.Invoke($"HP WMI invocation sandbox skipped '{request.CommandDefinition.Name}': {reason}");
             return HpWmiInvocationResult.Rejected(request.CommandDefinition, reason);
         }
 
-        if (!startupSystemDesignData && !request.ProcessElevated)
+        if (!approvedStartupDiscovery && !request.ProcessElevated)
         {
             const string reason = "skipped because process is not elevated; run controlled HP WMI read-only tests as Administrator";
             _log?.Invoke($"HP WMI invocation sandbox skipped '{request.CommandDefinition.Name}': {reason}");
@@ -210,6 +213,17 @@ public sealed class HpWmiInvocationClient
         string.Equals(definition.MethodName, "hpqBIOSInt128", StringComparison.Ordinal) &&
         definition.ExpectedInputSize == 0 &&
         definition.ExpectedOutputSize == 128 &&
+        definition.Access == HpBiosWmiCommandAccess.ReadOnly &&
+        definition.Safety == HpBiosWmiCommandSafety.SafeReadOnlyInvocation;
+
+    // This is the second and final normal-startup exception to the developer-test gate.
+    // The catalog contract is repeated so a same-name or broader request cannot bypass it.
+    private static bool IsApprovedStartupFanGetCount(HpBiosWmiCommandDefinition definition) =>
+        string.Equals(definition.Name, FanGetCountCommandName, StringComparison.Ordinal) &&
+        definition.CommandId == 0x10 &&
+        string.Equals(definition.MethodName, "hpqBIOSInt4", StringComparison.Ordinal) &&
+        definition.ExpectedInputSize == 4 &&
+        definition.ExpectedOutputSize == 4 &&
         definition.Access == HpBiosWmiCommandAccess.ReadOnly &&
         definition.Safety == HpBiosWmiCommandSafety.SafeReadOnlyInvocation;
 

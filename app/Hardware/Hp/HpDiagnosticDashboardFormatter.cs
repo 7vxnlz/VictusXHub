@@ -171,7 +171,7 @@ public static class HpDiagnosticDashboardFormatter
             ]),
             new("Diagnostic boundaries",
             [
-                Row("Data source", "Startup may issue only the approved read-only SystemDesignData request; opening Diagnostic invokes no additional WMI."),
+                Row("Data source", "Startup may issue only the approved read-only SystemDesignData and FanGetCount requests; opening Diagnostic invokes no additional WMI."),
                 Row("Explicit probe data", HpDiagnosticStatusText.NormalHpModeDoesNotRunExplicitProbes),
                 Row("Developer-only tests", HpDiagnosticStatusText.ExplicitTestsAreDeveloperOnly),
                 Row("Hardware actions", NoDiagnosticHardwareActions)

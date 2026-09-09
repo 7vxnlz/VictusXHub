@@ -5,4 +5,5 @@ public sealed record HpWmiInvocationRequest(
     bool HpVictusModeEnabled = false,
     bool HpWmiReadOnlyTestModeEnabled = false,
     bool ProcessElevated = false,
-    bool AllowSystemDesignDataAtStartup = false);
+    bool AllowSystemDesignDataAtStartup = false,
+    bool AllowFanGetCountAtStartup = false);

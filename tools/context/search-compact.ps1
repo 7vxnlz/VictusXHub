@@ -20,11 +20,18 @@ if ($null -eq (Get-Command rg -ErrorAction SilentlyContinue)) { throw "rg is req
 $countLines = @(& rg --count --no-heading --color never -- $Pattern @Path 2>$null)
 if ($LASTEXITCODE -gt 1) { throw "rg failed with exit code $LASTEXITCODE." }
 
-$files = foreach ($line in $countLines) {
+$singleFile = if ($Path.Count -eq 1) {
+    $candidate = Get-Item -LiteralPath $Path[0] -ErrorAction SilentlyContinue
+    if ($null -ne $candidate -and -not $candidate.PSIsContainer) { $candidate }
+}
+$files = @(foreach ($line in $countLines) {
     if ($line -match '^(?<Path>.*):(?<Count>\d+)$') {
         [pscustomobject]@{ Path = $matches.Path; Count = [int]$matches.Count }
     }
-}
+    elseif ($null -ne $singleFile -and $line -match '^\d+$') {
+        [pscustomobject]@{ Path = $singleFile.FullName; Count = [int]$line }
+    }
+})
 $totalMatches = [int](($files | Measure-Object -Property Count -Sum).Sum)
 $topFiles = @($files | Sort-Object Path | Sort-Object Count -Descending | Select-Object -First $MaxFiles)
 $previewArguments = @("--line-number", "--no-heading", "--color", "never")

@@ -34,3 +34,5 @@ Use `tools/context/measure.ps1` before expanding a large selection and `tools/co
 For normal repo work, prefer `tools/context/*-compact.ps1` for search, large reads, build/test, and diff review; use raw commands when their exact output is necessary.
 
 For other high-output shell work, use `invoke-compact.ps1` with `-FilePath` and `-ArgumentList`; dedicated wrappers remain preferred.
+
+For routine image checks, prefer `image-info-compact.ps1`; render an image only when visual inspection is necessary.

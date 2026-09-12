@@ -70,6 +70,7 @@ function Get-ToolCategory {
     $name = [string]$Payload.name
     if ($name -eq "exec") {
         $requestData = if ($null -ne $Payload.arguments) { [string]$Payload.arguments } else { [string]$Payload.input }
+        if ($requestData -match '(?i)tools\.view_image\s*\(') { return "tool: image inspection" }
         return (Get-ShellCategory -RequestData $requestData)
     }
     if ($name -eq "js") { return "tool: js" }
@@ -142,7 +143,6 @@ $tokenTotals = @{
 }
 $categoryCounts = @{}
 $outputCategoryTotals = @{}
-$callCategories = @{}
 $largestOutputs = [System.Collections.Generic.List[object]]::new()
 $sessions = [System.Collections.Generic.List[object]]::new()
 $eventCount = [long]0
@@ -158,6 +158,7 @@ $largeContentReads = [long]0
 $outputsOver8k = [long]0
 
 foreach ($file in $selectedFiles) {
+    $callCategories = @{}
     $fileEvents = [long]0
     $firstTimestamp = $null
     $lastTimestamp = $null

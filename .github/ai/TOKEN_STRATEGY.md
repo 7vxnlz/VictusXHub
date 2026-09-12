@@ -36,6 +36,7 @@ tools/context/build-compact.ps1
 tools/context/test-compact.ps1 -Target tests/VictusXHub.Tests/VictusXHub.Tests.csproj -NoBuild
 tools/context/diff-compact.ps1
 tools/context/invoke-compact.ps1 -FilePath git -ArgumentList @('show', '--stat')
+tools/context/image-info-compact.ps1 -Path app/Assets/VictusX.Source.png
 ```
 
 `invoke-compact.ps1` accepts an executable plus argument array, not a command string; it records the full local log while returning only safe aggregate status.

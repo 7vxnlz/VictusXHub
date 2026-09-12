@@ -29,7 +29,7 @@ tools/context/pack.ps1 -Pack telemetry -TokenBudget 20000 -OutputPath .tmp/telem
 
 `tools/context/audit-codex-session.ps1 -Latest` reports local aggregate session metadata only. Use `-Last 5` to compare recent sessions or `-Json` for structured statistics; `ApproxTokens` remains characters/4, not billing.
 
-Use compact defaults for routine work, retaining raw commands for concrete debugging or omitted evidence:
+Use compact defaults for routine work. Search is navigation-first and large reads require an exact range; raise wrapper limits explicitly when more evidence is needed. Retain raw commands for concrete debugging or omitted evidence:
 
 ```powershell
 tools/context/search-compact.ps1 -Pattern 'HpDiagnostic' -Path app,tests

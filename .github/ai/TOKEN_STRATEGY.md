@@ -22,3 +22,7 @@ tools/context/pack.ps1 -Pack telemetry -TokenBudget 20000 -OutputPath .tmp/telem
 ```
 
 `measure.ps1` uses characters/4 for relative context weight, not billing. `pack.ps1` accepts the named pack's checked whole-file and `#Lstart-Lend` selectors, rejects missing/out-of-repository files, requires generated files under `.tmp/`, and enforces its budget. Repomix is optional and whole-file-only.
+
+## Local session audit
+
+`tools/context/audit-codex-session.ps1 -Latest` reports local aggregate session metadata only. Use `-Last 5` to compare recent sessions or `-Json` for structured statistics; `ApproxTokens` remains characters/4, not billing.

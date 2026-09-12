@@ -4,6 +4,8 @@ Optimize relevance before breadth. Repository instructions already injected into
 
 Do not load `.github/ai/SESSION_STATE.md`, all documentation, a whole source directory, installed skill documentation speculatively, or reference repositories by default. Skills and historical evidence are demand-loaded only when the task triggers them.
 
+For substantial VictusXHub tasks, use the repository-local `victusxhub-workflow` skill and initially load only the relevant reference.
+
 ## Targets
 
 - Normal focused implementation: <= 12k approximate tokens and <= 8 selected files.

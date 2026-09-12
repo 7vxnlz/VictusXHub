@@ -50,6 +50,17 @@ function Get-ShellCategory {
     if ($command -match '(?i)git\s+diff(?:\s|$)') { return "git diff" }
     if ($command -match '(?i)git\s+status(?:\s|$)') { return "git status" }
     if ($command -match '(?i)git\s+log(?:\s|$)') { return "git log" }
+    if ($command -match '(?i)Get-ChildItem(?:\s|$)') { return "Get-ChildItem" }
+    if ($command -match '(?i)Select-String(?:\s|$)') { return "Select-String" }
+    if ($command -match '(?i)git\s+show(?:\s|$)') { return "git show" }
+    if ($command -match '(?i)git\s+grep(?:\s|$)') { return "git grep" }
+    if ($command -match '(?i)dotnet\s+restore(?:\s|$)') { return "dotnet restore" }
+    if ($command -match '(?i)dotnet\s+publish(?:\s|$)') { return "dotnet publish" }
+    if ($command -match '(?i)Get-(?:Process|Service|CimInstance|WinEvent|ItemProperty|Acl)(?:\s|$)') { return "Windows inspection" }
+    if ($command -match '(?i)git\s+') { return "other git" }
+    if ($command -match '(?i)(?:Get|Test|Resolve|Join|Split)-(?:Item|Path|Location|Command|FileHash)(?:\s|$)') { return "PowerShell filesystem" }
+    if ($command -match '(?i)\b(?:powershell|pwsh)(?:\.exe)?\b') { return "PowerShell child process" }
+    if ($command -match '(?i)\b(?:where(?:\.exe)?|findstr|robocopy)\b') { return "Windows command" }
     return "other shell"
 }
 
@@ -130,6 +141,7 @@ $tokenTotals = @{
     output_tokens = [long]0; reasoning_output_tokens = [long]0; total_tokens = [long]0
 }
 $categoryCounts = @{}
+$outputCategoryTotals = @{}
 $callCategories = @{}
 $largestOutputs = [System.Collections.Generic.List[object]]::new()
 $sessions = [System.Collections.Generic.List[object]]::new()
@@ -205,6 +217,7 @@ foreach ($file in $selectedFiles) {
             }
             $approxTokens = [long][Math]::Ceiling((Get-OutputCharacterCount -Output $payload.output) / 4.0)
             if ($approxTokens -le 0) { continue }
+            Add-Count -Table $outputCategoryTotals -Name $category -Increment $approxTokens
             $largestOutputs.Add([pscustomobject]@{ Category = $category; ApproxTokens = $approxTokens })
             if ($approxTokens -gt 8000) { $outputsOver8k++ }
             if ($category -eq "rg" -and $approxTokens -gt 2000) { $broadSearchOutputs++ }
@@ -227,6 +240,8 @@ $largestSafeOutputs = @($largestOutputs | Sort-Object -Property ApproxTokens -De
     ForEach-Object { [ordered]@{ Category = $_.Category; ApproxTokens = $_.ApproxTokens } })
 $safeCategories = @($categoryCounts.GetEnumerator() | Sort-Object -Property Key | Sort-Object -Property Value -Descending |
     ForEach-Object { [ordered]@{ Category = $_.Key; Count = $_.Value } })
+$safeOutputCategories = @($outputCategoryTotals.GetEnumerator() | Sort-Object -Property Key | Sort-Object -Property Value -Descending |
+    ForEach-Object { [ordered]@{ Category = $_.Key; ApproxTokens = $_.Value } })
 
 $report = [ordered]@{
     SessionSource = $sessionRoot
@@ -246,6 +261,7 @@ $report = [ordered]@{
         Total = [long](($categoryCounts.Values | Measure-Object -Sum).Sum)
         Categories = $safeCategories
     }
+    ToolOutputApproxTokens = $safeOutputCategories
     LargestToolOutputs = $largestSafeOutputs
     PotentialWasteSignals = [ordered]@{
         BroadSearchOutputsOver2000ApproxTokens = $broadSearchOutputs
@@ -275,6 +291,9 @@ Write-Output ("Model switches: {0}" -f $report.Context.ModelSwitches)
 Write-Output ""
 Write-Output "Tool calls:"
 foreach ($entry in $report.ToolCalls.Categories) { Write-Output ("{0,-28} {1,6}" -f $entry.Category, $entry.Count) }
+Write-Output ""
+Write-Output "Tool output estimates (ApproxTokens = characters / 4):"
+foreach ($entry in $report.ToolOutputApproxTokens) { Write-Output ("{0,-28} ~{1,6:N0}" -f $entry.Category, $entry.ApproxTokens) }
 Write-Output ""
 Write-Output "Largest tool outputs (ApproxTokens = characters / 4):"
 if ($report.LargestToolOutputs.Count -eq 0) { Write-Output "None reported" }

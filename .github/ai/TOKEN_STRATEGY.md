@@ -35,4 +35,7 @@ tools/context/read-compact.ps1 -Path app/Program.cs -StartLine 1 -EndLine 160
 tools/context/build-compact.ps1
 tools/context/test-compact.ps1 -Target tests/VictusXHub.Tests/VictusXHub.Tests.csproj -NoBuild
 tools/context/diff-compact.ps1
+tools/context/invoke-compact.ps1 -FilePath git -ArgumentList @('show', '--stat')
 ```
+
+`invoke-compact.ps1` accepts an executable plus argument array, not a command string; it records the full local log while returning only safe aggregate status.

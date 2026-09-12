@@ -32,3 +32,5 @@
 Use `tools/context/measure.ps1` before expanding a large selection and `tools/context/pack.ps1` to materialize only a named pack. Historical evidence stays in `docs/`; do not use `.github/ai/SESSION_STATE.md` as default context.
 
 For normal repo work, prefer `tools/context/*-compact.ps1` for search, large reads, build/test, and diff review; use raw commands when their exact output is necessary.
+
+For other high-output shell work, use `invoke-compact.ps1` with `-FilePath` and `-ArgumentList`; dedicated wrappers remain preferred.

@@ -12,6 +12,8 @@ internal readonly record struct HpKeyboardBacklightStatus(
     HpKeyboardBacklightAvailability Availability,
     bool? IsOn)
 {
+    private string? UnavailableDetail { get; init; }
+
     internal static HpKeyboardBacklightStatus Unavailable { get; } =
         new(HpKeyboardBacklightAvailability.Unavailable, null);
 
@@ -25,7 +27,15 @@ internal readonly record struct HpKeyboardBacklightStatus(
         if (!gate.IsAccepted)
             return Unavailable;
 
-        if (!result.IsCaptured || result.RawReturnCode is not 0 || result.RawData is not { Length: HpKeyboardStatusReadOnlyProbeResult.RequiredDataLength } data ||
+        if (!result.IsCaptured)
+        {
+            return new(HpKeyboardBacklightAvailability.SupportedStateUnavailable, null)
+            {
+                UnavailableDetail = result.Availability + ": " + result.Detail.Trim()
+            };
+        }
+
+        if (result.RawReturnCode is not 0 || result.RawData is not { Length: HpKeyboardStatusReadOnlyProbeResult.RequiredDataLength } data ||
             data.Skip(1).Any(value => value != 0))
         {
             return new(HpKeyboardBacklightAvailability.SupportedStateUnavailable, null);
@@ -69,7 +79,9 @@ internal readonly record struct HpKeyboardBacklightStatus(
         HpKeyboardBacklightAvailability.SupportedStateAvailable =>
             "Keyboard backlight: " + CurrentStateText + " (Current startup KeyboardStatus).",
         HpKeyboardBacklightAvailability.SupportedStateUnavailable =>
-            "Keyboard backlight: Unavailable (Current startup KeyboardStatus returned an unrecognized raw shape or value).",
+            UnavailableDetail is not null
+                ? "Keyboard backlight: Unavailable (Current startup KeyboardStatus; " + UnavailableDetail + ")."
+                : "Keyboard backlight: Unavailable (Current startup KeyboardStatus returned an unrecognized raw shape or value).",
         HpKeyboardBacklightAvailability.NotSupported => "Keyboard backlight: Not supported for the detected non-HP/Victus identity.",
         _ => "Keyboard backlight: Unavailable; no exact-device current-state source was available."
     };

@@ -45,6 +45,22 @@ public sealed class HpKeyboardBacklightReadOnlyStatusTests
     }
 
     [Fact]
+    public void AccessDenied_RetainsTransportReasonWithoutClaimingMalformedData()
+    {
+        var result = HpKeyboardStatusReadOnlyProbeResult.FromInvocation(
+            HpWmiInvocationResult.Failed(GetStatusCommand(), "ManagementException: Access denied"));
+
+        HpKeyboardBacklightStatus status = Resolve(result);
+
+        Assert.Null(status.IsOn);
+        Assert.Equal("Supported", status.SupportText);
+        Assert.Contains("Current startup KeyboardStatus", status.EvidenceText);
+        Assert.Contains("TransportUnavailable", status.EvidenceText);
+        Assert.Contains("Access denied", status.EvidenceText);
+        Assert.DoesNotContain("unrecognized raw", status.EvidenceText);
+    }
+
+    [Fact]
     public void ExactTarget_WithWrongLength_FailsClosed()
     {
         HpKeyboardStatusReadOnlyProbeResult malformed = HpKeyboardStatusReadOnlyProbeResult.FromInvocation(
@@ -54,6 +70,8 @@ public sealed class HpKeyboardBacklightReadOnlyStatusTests
 
         Assert.Equal(HpKeyboardBacklightAvailability.SupportedStateUnavailable, status.Availability);
         Assert.Null(status.IsOn);
+        Assert.Contains("InvalidOutputLength", status.EvidenceText);
+        Assert.Contains("127", status.EvidenceText);
     }
 
     [Fact]

@@ -90,6 +90,92 @@ public sealed class HpKeyboardStatusReadOnlyProbeTests
     }
 
     [Fact]
+    public void EvidenceWriter_FormatsCapturedRawBytesDeterministicallyWithoutStateInterpretation()
+    {
+        byte[] bytes = new byte[128];
+        bytes[0] = 0xE4;
+        bytes[3] = 0x64;
+        bytes[127] = 0x01;
+        HpKeyboardStatusReadOnlyProbeResult result = HpKeyboardStatusReadOnlyProbeResult.FromInvocation(
+            HpWmiInvocationResult.SuccessfulInvocation(GetStatusCommand(), bytes, 0));
+
+        string evidence = HpKeyboardStatusReadOnlyProbeEvidenceWriter.Format(new(
+            new DateTimeOffset(2026, 9, 13, 0, 0, 0, TimeSpan.Zero),
+            HpKeyboardStatusReadOnlyProbeGateResult.Accepted,
+            result));
+
+        Assert.Contains("TimestampUtc: 2026-09-13T00:00:00.0000000+00:00", evidence, StringComparison.Ordinal);
+        Assert.Contains("IdentityGate: accepted", evidence, StringComparison.Ordinal);
+        Assert.Contains("Transport: Captured", evidence, StringComparison.Ordinal);
+        Assert.Contains("RawReturnCode: 0x00000000", evidence, StringComparison.Ordinal);
+        Assert.Contains("ReturnedDataLength: 128", evidence, StringComparison.Ordinal);
+        Assert.Contains("RawByte0: 0xE4", evidence, StringComparison.Ordinal);
+        Assert.Contains("NonZeroIndexes: 0,3,127", evidence, StringComparison.Ordinal);
+        Assert.Contains("RawDataHex: " + Convert.ToHexString(bytes), evidence, StringComparison.Ordinal);
+        Assert.DoesNotContain("On", evidence, StringComparison.Ordinal);
+        Assert.DoesNotContain("Off", evidence, StringComparison.Ordinal);
+        Assert.DoesNotContain("Bright", evidence, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("Dim", evidence, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void EvidenceWriter_OverwritesTheDeterministicPathAndPersistsBeforeConsoleFailure()
+    {
+        string root = Path.Combine(Path.GetTempPath(), "VictusXHub.Tests", Guid.NewGuid().ToString("N"));
+        string path = HpKeyboardStatusReadOnlyProbeEvidenceWriter.BuildEvidencePath(root);
+        try
+        {
+            HpKeyboardStatusReadOnlyProbeResult first = CreateCapturedResult(0x64);
+            HpKeyboardStatusReadOnlyProbeResult second = CreateCapturedResult(0xE4);
+            var timestamp = new DateTimeOffset(2026, 9, 13, 0, 0, 0, TimeSpan.Zero);
+
+            Assert.True(HpKeyboardStatusReadOnlyProbeEvidenceWriter.Write(new(timestamp, HpKeyboardStatusReadOnlyProbeGateResult.Accepted, first), path).IsPersisted);
+            Assert.True(HpKeyboardStatusReadOnlyProbeEvidenceWriter.Write(new(timestamp, HpKeyboardStatusReadOnlyProbeGateResult.Accepted, second), path).IsPersisted);
+
+            Action<string> simulatedConsoleWrite = _ => throw new IOException("simulated console failure");
+            Assert.Throws<IOException>(() => simulatedConsoleWrite("Evidence file: " + path));
+            string content = File.ReadAllText(path);
+            Assert.Contains("RawByte0: 0xE4", content, StringComparison.Ordinal);
+            Assert.DoesNotContain("RawByte0: 0x64", content, StringComparison.Ordinal);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, recursive: true);
+            }
+        }
+    }
+
+    [Fact]
+    public void EvidenceWriter_FileFailureIsNeutralAndHasNoInvocationSurface()
+    {
+        string root = Path.Combine(Path.GetTempPath(), "VictusXHub.Tests", Guid.NewGuid().ToString("N"));
+        try
+        {
+            Directory.CreateDirectory(root);
+            string blockingFile = Path.Combine(root, "blocking-file");
+            File.WriteAllText(blockingFile, "block");
+            HpKeyboardStatusReadOnlyProbeEvidenceWriteResult write = HpKeyboardStatusReadOnlyProbeEvidenceWriter.Write(
+                new(DateTimeOffset.UtcNow, HpKeyboardStatusReadOnlyProbeGateResult.Accepted, CreateCapturedResult(0x00)),
+                Path.Combine(blockingFile, "evidence.txt"));
+
+            Assert.False(write.IsPersisted);
+            Assert.False(string.IsNullOrWhiteSpace(write.Error));
+            string writer = ReadRepositoryFile("app", "Hardware", "Hp", "HpKeyboardStatusReadOnlyProbeEvidenceWriter.cs");
+            Assert.DoesNotContain("TryInvoke", writer, StringComparison.Ordinal);
+            Assert.DoesNotContain("HpWmiInvocationClient", writer, StringComparison.Ordinal);
+        }
+        finally
+        {
+            if (Directory.Exists(root))
+            {
+                Directory.Delete(root, recursive: true);
+            }
+        }
+    }
+
+    [Fact]
     public void ProbeRoute_IsExplicitAndCannotRunFromNormalStartupOrDiagnosticPaths()
     {
         string program = ReadRepositoryFile("app", "Program.cs");
@@ -102,6 +188,10 @@ public sealed class HpKeyboardStatusReadOnlyProbeTests
         Assert.Contains("args.Length == 2", command, StringComparison.Ordinal);
         Assert.Contains("--hp-victus --hp-keyboard-status-readonly-probe", command, StringComparison.Ordinal);
         Assert.Equal(1, CountOccurrences(command, ".TryInvoke("));
+        Assert.True(command.LastIndexOf("HpKeyboardStatusReadOnlyProbeEvidenceWriter.Write", StringComparison.Ordinal) >
+                    command.IndexOf("HpKeyboardStatusReadOnlyProbeResult.FromInvocation", StringComparison.Ordinal));
+        Assert.True(command.LastIndexOf("HpKeyboardStatusReadOnlyProbeEvidenceWriter.Write", StringComparison.Ordinal) <
+                    command.IndexOf("WriteLines(HpKeyboardStatusReadOnlyProbeFormatter.Format(result))", StringComparison.Ordinal));
         Assert.DoesNotContain("hpqBIOSInt4", command, StringComparison.Ordinal);
         Assert.DoesNotContain("0x05", command, StringComparison.Ordinal);
         Assert.DoesNotContain("KeyboardStatus", capabilityProbe, StringComparison.Ordinal);
@@ -126,6 +216,14 @@ public sealed class HpKeyboardStatusReadOnlyProbeTests
     private static HpBiosWmiCommandDefinition GetStatusCommand() => Assert.Single(
         HpBiosWmiCommandCatalog.Definitions,
         definition => definition.Name == "KeyboardStatus");
+
+    private static HpKeyboardStatusReadOnlyProbeResult CreateCapturedResult(byte firstByte)
+    {
+        byte[] bytes = new byte[128];
+        bytes[0] = firstByte;
+        return HpKeyboardStatusReadOnlyProbeResult.FromInvocation(
+            HpWmiInvocationResult.SuccessfulInvocation(GetStatusCommand(), bytes, 0));
+    }
 
     private static string ReadRepositoryFile(params string[] segments)
     {

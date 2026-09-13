@@ -15,6 +15,7 @@
     <Compile Include="..\..\app\Hardware\Hp\HpBatteryCareReadOnlyContracts.cs" Link="Hardware\Hp\HpBatteryCareReadOnlyContracts.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpKeyboardBacklightReadOnlyStatus.cs" Link="Hardware\Hp\HpKeyboardBacklightReadOnlyStatus.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpKeyboardStatusReadOnlyProbe.cs" Link="Hardware\Hp\HpKeyboardStatusReadOnlyProbe.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpKeyboardStatusReadOnlyProbeEvidenceWriter.cs" Link="Hardware\Hp\HpKeyboardStatusReadOnlyProbeEvidenceWriter.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpGpuModeReadOnlyStatus.cs" Link="Hardware\Hp\HpGpuModeReadOnlyStatus.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpFanLevelFirstWritePreflight.cs" Link="Hardware\Hp\HpFanLevelFirstWritePreflight.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpFanLevelResearchDryRunCommand.cs" Link="Hardware\Hp\HpFanLevelResearchDryRunCommand.cs" />

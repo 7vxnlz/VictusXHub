@@ -31,6 +31,8 @@ internal static class HpKeyboardStatusReadOnlyProbeCommand
         WriteLine("Target gate: " + (gate.IsAccepted ? "accepted" : "rejected") + " — " + gate.Reason);
         if (!gate.IsAccepted)
         {
+            WriteEvidenceStatus(HpKeyboardStatusReadOnlyProbeEvidenceWriter.Write(
+                new HpKeyboardStatusReadOnlyProbeEvidence(DateTimeOffset.UtcNow, gate, null)));
             Environment.ExitCode = 2;
             return true;
         }
@@ -46,6 +48,8 @@ internal static class HpKeyboardStatusReadOnlyProbeCommand
                 ProcessElevated: global::GHelper.Helpers.ProcessHelper.IsUserAdministrator()),
             new HpWmiReadOnlyClient().Probe());
         HpKeyboardStatusReadOnlyProbeResult result = HpKeyboardStatusReadOnlyProbeResult.FromInvocation(invocation);
+        WriteEvidenceStatus(HpKeyboardStatusReadOnlyProbeEvidenceWriter.Write(
+            new HpKeyboardStatusReadOnlyProbeEvidence(DateTimeOffset.UtcNow, gate, result)));
         WriteLines(HpKeyboardStatusReadOnlyProbeFormatter.Format(result));
         Environment.ExitCode = result.IsCaptured ? 0 : 1;
         return true;
@@ -94,6 +98,13 @@ internal static class HpKeyboardStatusReadOnlyProbeCommand
         {
             WriteLine(line);
         }
+    }
+
+    private static void WriteEvidenceStatus(HpKeyboardStatusReadOnlyProbeEvidenceWriteResult evidence)
+    {
+        WriteLine(evidence.IsPersisted
+            ? "Evidence file: " + evidence.FilePath
+            : "Evidence file unavailable: " + evidence.Error);
     }
 
     private static void WriteLine(string line)

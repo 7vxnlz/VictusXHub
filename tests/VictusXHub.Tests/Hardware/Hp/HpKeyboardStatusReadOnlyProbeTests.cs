@@ -107,6 +107,7 @@ public sealed class HpKeyboardStatusReadOnlyProbeTests
         Assert.Contains("TimestampUtc: 2026-09-13T00:00:00.0000000+00:00", evidence, StringComparison.Ordinal);
         Assert.Contains("IdentityGate: accepted", evidence, StringComparison.Ordinal);
         Assert.Contains("Transport: Captured", evidence, StringComparison.Ordinal);
+        Assert.Contains("InvocationAttempted: true", evidence, StringComparison.Ordinal);
         Assert.Contains("RawReturnCode: 0x00000000", evidence, StringComparison.Ordinal);
         Assert.Contains("ReturnedDataLength: 128", evidence, StringComparison.Ordinal);
         Assert.Contains("RawByte0: 0xE4", evidence, StringComparison.Ordinal);
@@ -116,6 +117,35 @@ public sealed class HpKeyboardStatusReadOnlyProbeTests
         Assert.DoesNotContain("Off", evidence, StringComparison.Ordinal);
         Assert.DoesNotContain("Bright", evidence, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("Dim", evidence, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void EvidenceWriter_PreservesWhetherTransportWasAttemptedAndItsNeutralDetail()
+    {
+        HpKeyboardStatusReadOnlyProbeResult result = HpKeyboardStatusReadOnlyProbeResult.FromInvocation(
+            HpWmiInvocationResult.Rejected(GetStatusCommand(), "process is not elevated"));
+
+        string evidence = HpKeyboardStatusReadOnlyProbeEvidenceWriter.Format(new(
+            new DateTimeOffset(2026, 9, 13, 0, 0, 0, TimeSpan.Zero),
+            HpKeyboardStatusReadOnlyProbeGateResult.Accepted,
+            result));
+
+        Assert.Contains("Transport: TransportUnavailable", evidence, StringComparison.Ordinal);
+        Assert.Contains("InvocationAttempted: false", evidence, StringComparison.Ordinal);
+        Assert.Contains("TransportDetail: process is not elevated", evidence, StringComparison.Ordinal);
+        Assert.Contains("RawDataHex: unavailable", evidence, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void InvocationFailure_MapsToNeutralTransportFailureWithoutRawData()
+    {
+        HpKeyboardStatusReadOnlyProbeResult result = HpKeyboardStatusReadOnlyProbeResult.FromInvocation(
+            HpWmiInvocationResult.Failed(GetStatusCommand(), "ManagementException: provider rejected the request"));
+
+        Assert.Equal(HpKeyboardStatusReadOnlyProbeAvailability.TransportUnavailable, result.Availability);
+        Assert.True(result.Invoked);
+        Assert.Null(result.RawData);
+        Assert.Equal("ManagementException: provider rejected the request", result.Detail);
     }
 
     [Fact]
@@ -188,6 +218,7 @@ public sealed class HpKeyboardStatusReadOnlyProbeTests
         Assert.Contains("args.Length == 2", command, StringComparison.Ordinal);
         Assert.Contains("--hp-victus --hp-keyboard-status-readonly-probe", command, StringComparison.Ordinal);
         Assert.Equal(1, CountOccurrences(command, ".TryInvoke("));
+        Assert.Contains("Environment.ExitCode = result.IsCaptured ? 0 : 1;", command, StringComparison.Ordinal);
         Assert.True(command.LastIndexOf("HpKeyboardStatusReadOnlyProbeEvidenceWriter.Write", StringComparison.Ordinal) >
                     command.IndexOf("HpKeyboardStatusReadOnlyProbeResult.FromInvocation", StringComparison.Ordinal));
         Assert.True(command.LastIndexOf("HpKeyboardStatusReadOnlyProbeEvidenceWriter.Write", StringComparison.Ordinal) <

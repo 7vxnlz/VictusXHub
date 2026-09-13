@@ -76,6 +76,8 @@ internal static class HpKeyboardStatusReadOnlyProbeEvidenceWriter
             "TimestampUtc: " + evidence.TimestampUtc.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture),
             "IdentityGate: " + (evidence.IdentityGate.IsAccepted ? "accepted" : "rejected"),
             "Transport: " + (result?.Availability.ToString() ?? "NotInvoked"),
+            "InvocationAttempted: " + (result?.Invoked.ToString().ToLowerInvariant() ?? "unavailable"),
+            "TransportDetail: " + (result?.Detail ?? "not invoked"),
             "RawReturnCode: " + FormatReturnCode(result?.RawReturnCode),
             "ReturnedDataLength: " + (result?.ReturnedDataLength?.ToString(CultureInfo.InvariantCulture) ?? "unavailable"),
             "RawByte0: " + (rawData is { Length: > 0 } ? "0x" + rawData[0].ToString("X2", CultureInfo.InvariantCulture) : "unavailable"),

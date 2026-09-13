@@ -39,4 +39,5 @@ public sealed record HpBiosWmiCommandDefinition(
     int ExpectedOutputSize,
     HpBiosWmiCommandAccess Access,
     HpBiosWmiCommandSafety Safety,
-    string Description);
+    string Description,
+    uint BiosCommand = 0x20008);

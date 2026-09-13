@@ -15,7 +15,7 @@ public sealed class HpWmiInvocationClient
     private const string FanGetCountCommandName = "FanGetCount";
     private const string FanMaxGetCommandName = "FanMaxGet";
     private const string FanGetLevelCommandName = "FanGetLevel";
-    private const uint DefaultBiosCommand = 0x20008;
+    private const string KeyboardStatusCommandName = "KeyboardStatus";
 
     private static readonly byte[] BiosSign = [0x53, 0x45, 0x43, 0x55];
 
@@ -92,9 +92,9 @@ public sealed class HpWmiInvocationClient
             return HpWmiInvocationResult.Rejected(request.CommandDefinition, reason);
         }
 
-        if (!IsApprovedInvocationCommand(request.CommandDefinition.Name))
+        if (!IsApprovedInvocationCommand(request.CommandDefinition))
         {
-            const string reason = "only SystemDesignData, FanGetCount, FanMaxGet, and FanGetLevel are approved for real HP BIOS WMI invocation";
+            const string reason = "only SystemDesignData, FanGetCount, FanMaxGet, FanGetLevel, and the exact KeyboardStatus raw-capture contract are approved for real HP BIOS WMI invocation";
             _log?.Invoke($"HP WMI invocation sandbox rejected '{request.CommandDefinition.Name}': {reason}");
             return HpWmiInvocationResult.Rejected(request.CommandDefinition, reason);
         }
@@ -199,11 +199,22 @@ public sealed class HpWmiInvocationClient
         return null;
     }
 
-    private static bool IsApprovedInvocationCommand(string commandName) =>
-        string.Equals(commandName, SystemDesignDataCommandName, StringComparison.OrdinalIgnoreCase) ||
-        string.Equals(commandName, FanGetCountCommandName, StringComparison.OrdinalIgnoreCase) ||
-        string.Equals(commandName, FanMaxGetCommandName, StringComparison.OrdinalIgnoreCase) ||
-        string.Equals(commandName, FanGetLevelCommandName, StringComparison.OrdinalIgnoreCase);
+    private static bool IsApprovedInvocationCommand(HpBiosWmiCommandDefinition definition) =>
+        string.Equals(definition.Name, SystemDesignDataCommandName, StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(definition.Name, FanGetCountCommandName, StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(definition.Name, FanMaxGetCommandName, StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(definition.Name, FanGetLevelCommandName, StringComparison.OrdinalIgnoreCase) ||
+        IsApprovedKeyboardStatus(definition);
+
+    private static bool IsApprovedKeyboardStatus(HpBiosWmiCommandDefinition definition) =>
+        string.Equals(definition.Name, KeyboardStatusCommandName, StringComparison.Ordinal) &&
+        definition.BiosCommand == 0x20009 &&
+        definition.CommandId == 0x04 &&
+        string.Equals(definition.MethodName, "hpqBIOSInt128", StringComparison.Ordinal) &&
+        definition.ExpectedInputSize == 1 &&
+        definition.ExpectedOutputSize == 128 &&
+        definition.Access == HpBiosWmiCommandAccess.ReadOnly &&
+        definition.Safety == HpBiosWmiCommandSafety.SafeReadOnlyInvocation;
 
     // This is the sole normal-startup exception to the developer-test gate. The complete
     // catalog contract is repeated here so a same-name or broader request cannot bypass it.
@@ -248,7 +259,7 @@ public sealed class HpWmiInvocationClient
             }
 
             inputData["Sign"] = BiosSign;
-            inputData["Command"] = DefaultBiosCommand;
+            inputData["Command"] = definition.BiosCommand;
             inputData["CommandType"] = definition.CommandId;
             inputData["Size"] = (uint)definition.ExpectedInputSize;
             if (definition.ExpectedInputSize > 0)

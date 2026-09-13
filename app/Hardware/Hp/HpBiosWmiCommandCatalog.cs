@@ -115,15 +115,16 @@ public static class HpBiosWmiCommandCatalog
             "Read-intent keyboard type command candidate."),
 
         new(
-            "KeyboardBrightness",
+            "KeyboardStatus",
             HpBiosWmiCommandFamily.Keyboard,
             0x04,
-            "hpqBIOSInt4",
-            4,
-            4,
+            "hpqBIOSInt128",
+            1,
+            128,
             HpBiosWmiCommandAccess.ReadOnly,
-            HpBiosWmiCommandSafety.ReadIntent,
-            "Read-intent keyboard brightness command candidate. Brightness writes remain forbidden."),
+            HpBiosWmiCommandSafety.SafeReadOnlyInvocation,
+            "Exact-device developer-only keyboard STATUS raw-capture contract. Returned data remains uninterpreted.",
+            0x20009),
 
         new(
             "KeyboardColorTable",

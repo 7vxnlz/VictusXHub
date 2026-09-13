@@ -60,6 +60,11 @@ namespace GHelper
         [STAThread]
         public static void Main(string[] args)
         {
+            if (HpKeyboardStatusReadOnlyProbeCommand.TryRun(args))
+            {
+                return;
+            }
+
             if (HpRyzenTemperatureProbeCommand.TryRun(args))
             {
                 return;

@@ -14,6 +14,7 @@
     <Compile Include="..\..\app\Hardware\Hp\HpGpuTemperaturePoller.cs" Link="Hardware\Hp\HpGpuTemperaturePoller.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpBatteryCareReadOnlyContracts.cs" Link="Hardware\Hp\HpBatteryCareReadOnlyContracts.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpKeyboardBacklightReadOnlyStatus.cs" Link="Hardware\Hp\HpKeyboardBacklightReadOnlyStatus.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpKeyboardStatusReadOnlyProbe.cs" Link="Hardware\Hp\HpKeyboardStatusReadOnlyProbe.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpGpuModeReadOnlyStatus.cs" Link="Hardware\Hp\HpGpuModeReadOnlyStatus.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpFanLevelFirstWritePreflight.cs" Link="Hardware\Hp\HpFanLevelFirstWritePreflight.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpFanLevelResearchDryRunCommand.cs" Link="Hardware\Hp\HpFanLevelResearchDryRunCommand.cs" />
@@ -26,6 +27,7 @@
     <Compile Include="..\..\app\Hardware\Hp\HpWindowsTelemetrySource.cs" Link="Hardware\Hp\HpWindowsTelemetrySource.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpBiosWmiCommandCatalog.cs" Link="Hardware\Hp\HpBiosWmiCommandCatalog.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpBiosWmiCommandDefinition.cs" Link="Hardware\Hp\HpBiosWmiCommandDefinition.cs" />
+    <Compile Include="..\..\app\Hardware\Hp\HpWmiInvocationResult.cs" Link="Hardware\Hp\HpWmiInvocationResult.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticReportExporter.cs" Link="Hardware\Hp\HpDiagnosticReportExporter.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticDashboardModel.cs" Link="Hardware\Hp\HpDiagnosticDashboardModel.cs" />
     <Compile Include="..\..\app\Hardware\Hp\HpDiagnosticDashboardFormatter.cs" Link="Hardware\Hp\HpDiagnosticDashboardFormatter.cs" />

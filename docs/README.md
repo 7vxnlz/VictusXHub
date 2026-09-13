@@ -24,11 +24,11 @@ VictusXHub is an open-source Windows utility for HP Victus laptops, originally b
 | Fan RPM | Unavailable |
 | Performance Mode | Unavailable |
 | GPU Switching | Unavailable |
-| Keyboard Lighting state | Working (read-only current state) |
+| Keyboard Lighting state | Working — exact-device read-only On/Off state |
 | Battery Care | Unavailable |
 | Fan Control | Blocked / not validated |
 
-Normal HP startup may collect the approved read-only SystemDesignData, FanGetCount, and exact-device KeyboardStatus discovery data. Opening Diagnostic does not issue additional HP WMI requests. Keyboard Lighting is read-only state only; no keyboard control is validated. FanGetLevel remains raw-only and is never presented as RPM or percent.
+Normal HP startup may collect the approved read-only SystemDesignData, FanGetCount, and exact-device KeyboardStatus discovery data. On `7Z5Z2EA#AB8` / BIOS `F.31` / board `8BD4`, KeyboardStatus maps only `0x00` to Off and `0xE4` to On; keyboard control, color, and brightness support are not validated. If the current process cannot access `root\wmi` / `hpqBIntM`, live HP reads remain unavailable; validated exact-device historical evidence may still provide Thermal Policy V1 and fan count 2, never KeyboardStatus. Opening Diagnostic does not issue additional HP WMI requests. FanGetLevel remains raw-only and is never presented as RPM or percent.
 
 ## Supported hardware
 

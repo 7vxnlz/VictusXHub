@@ -22,7 +22,7 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     }
 
     [Fact]
-    public void HpStartup_AllowsOnlyThePinnedSystemDesignDataAndFanGetCountReads()
+    public void HpStartup_AllowsOnlyThePinnedSystemDesignDataFanGetCountAndExactKeyboardStatusReads()
     {
         string catalog = ReadRepositoryFile("app", "Hardware", "Hp", "HpBiosWmiCommandCatalog.cs");
         string client = ReadRepositoryFile("app", "Hardware", "Hp", "HpWmiInvocationClient.cs");
@@ -38,6 +38,9 @@ public sealed class HpDiagnosticPreviewConfigurationTests
         Assert.Contains("AllowSystemDesignDataAtStartup", client, StringComparison.Ordinal);
         Assert.Contains("IsApprovedStartupFanGetCount", client, StringComparison.Ordinal);
         Assert.Contains("AllowFanGetCountAtStartup", client, StringComparison.Ordinal);
+        Assert.Contains("IsApprovedStartupKeyboardStatus", client, StringComparison.Ordinal);
+        Assert.Contains("AllowKeyboardStatusAtStartup", client, StringComparison.Ordinal);
+        Assert.Contains("ExactKeyboardStatusDeviceGateAccepted", client, StringComparison.Ordinal);
         Assert.Contains("definition.CommandId == 0x28", client, StringComparison.Ordinal);
         Assert.Contains("definition.ExpectedOutputSize == 128", client, StringComparison.Ordinal);
         Assert.Contains("\"FanGetCount\",", catalog, StringComparison.Ordinal);
@@ -52,11 +55,14 @@ public sealed class HpDiagnosticPreviewConfigurationTests
         Assert.Contains("AllowFanGetCountAtStartup: true", probe, StringComparison.Ordinal);
         Assert.Equal(1, CountOccurrences(probe, "AllowFanGetCountAtStartup: true"));
         Assert.Contains("var fanGetCountInvocation = TryInvokeFanGetCount(", probe, StringComparison.Ordinal);
+        Assert.Contains("var keyboardStatusInvocation = TryInvokeKeyboardStatus(", probe, StringComparison.Ordinal);
+        Assert.Contains("AllowKeyboardStatusAtStartup: true", probe, StringComparison.Ordinal);
+        Assert.Equal(1, CountOccurrences(probe, "AllowKeyboardStatusAtStartup: true"));
         Assert.DoesNotContain("AllowFanGetLevelAtStartup", client + probe, StringComparison.Ordinal);
         Assert.DoesNotContain("AllowFanMaxGetAtStartup", client + probe, StringComparison.Ordinal);
 
         string dashboard = ReadRepositoryFile("app", "Hardware", "Hp", "HpDiagnosticDashboardFormatter.cs");
-        Assert.Contains("SystemDesignData and FanGetCount requests", dashboard, StringComparison.Ordinal);
+        Assert.Contains("SystemDesignData, FanGetCount, and exact-device KeyboardStatus requests", dashboard, StringComparison.Ordinal);
         Assert.DoesNotContain("FanGetLevel request", dashboard, StringComparison.Ordinal);
     }
 
@@ -509,13 +515,14 @@ public sealed class HpDiagnosticPreviewConfigurationTests
     }
 
     [Fact]
-    public void HpKeyboardBacklightStatus_UsesIdentityOnlyAndKeepsControlsDisabled()
+    public void HpKeyboardBacklightStatus_UsesExactDeviceRawStateAndKeepsControlsDisabled()
     {
         string source = ReadRepositoryFile("app", "Hardware", "Hp", "HpKeyboardBacklightReadOnlyStatus.cs");
         string settings = ReadRepositoryFile("app", "Settings.cs");
 
-        Assert.Contains("7Z5Z2EA", source, StringComparison.Ordinal);
-        Assert.Contains("16-s0035", source, StringComparison.Ordinal);
+        Assert.Contains("HpKeyboardStatusReadOnlyProbeGateResult", source, StringComparison.Ordinal);
+        Assert.Contains("0xE4", source, StringComparison.Ordinal);
+        Assert.Contains("data.Skip(1).Any(value => value != 0)", source, StringComparison.Ordinal);
         Assert.Contains("Supported, state unavailable", source, StringComparison.Ordinal);
         Assert.Contains("labelBacklight.Text = $\"Keyboard Lighting: {keyboard.CapabilityText}\";", settings, StringComparison.Ordinal);
         Assert.Contains("labelBacklight,", settings, StringComparison.Ordinal);

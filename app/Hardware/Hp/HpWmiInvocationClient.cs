@@ -76,7 +76,10 @@ public sealed class HpWmiInvocationClient
             IsApprovedStartupSystemDesignData(request.CommandDefinition);
         bool startupFanGetCount = request.AllowFanGetCountAtStartup &&
             IsApprovedStartupFanGetCount(request.CommandDefinition);
-        bool approvedStartupDiscovery = startupSystemDesignData || startupFanGetCount;
+        bool startupKeyboardStatus = request.AllowKeyboardStatusAtStartup &&
+            request.ExactKeyboardStatusDeviceGateAccepted &&
+            IsApprovedStartupKeyboardStatus(request.CommandDefinition);
+        bool approvedStartupDiscovery = startupSystemDesignData || startupFanGetCount || startupKeyboardStatus;
 
         if (!approvedStartupDiscovery && !request.HpWmiReadOnlyTestModeEnabled)
         {
@@ -94,7 +97,7 @@ public sealed class HpWmiInvocationClient
 
         if (!IsApprovedInvocationCommand(request.CommandDefinition))
         {
-            const string reason = "only SystemDesignData, FanGetCount, FanMaxGet, FanGetLevel, and the exact KeyboardStatus raw-capture contract are approved for real HP BIOS WMI invocation";
+            const string reason = "only SystemDesignData, FanGetCount, FanMaxGet, FanGetLevel, and the exact KeyboardStatus contract are approved for real HP BIOS WMI invocation";
             _log?.Invoke($"HP WMI invocation sandbox rejected '{request.CommandDefinition.Name}': {reason}");
             return HpWmiInvocationResult.Rejected(request.CommandDefinition, reason);
         }
@@ -227,7 +230,7 @@ public sealed class HpWmiInvocationClient
         definition.Access == HpBiosWmiCommandAccess.ReadOnly &&
         definition.Safety == HpBiosWmiCommandSafety.SafeReadOnlyInvocation;
 
-    // This is the second and final normal-startup exception to the developer-test gate.
+    // This is the second normal-startup exception to the developer-test gate.
     // The catalog contract is repeated so a same-name or broader request cannot bypass it.
     private static bool IsApprovedStartupFanGetCount(HpBiosWmiCommandDefinition definition) =>
         string.Equals(definition.Name, FanGetCountCommandName, StringComparison.Ordinal) &&
@@ -237,6 +240,11 @@ public sealed class HpWmiInvocationClient
         definition.ExpectedOutputSize == 4 &&
         definition.Access == HpBiosWmiCommandAccess.ReadOnly &&
         definition.Safety == HpBiosWmiCommandSafety.SafeReadOnlyInvocation;
+
+    // KeyboardStatus is a third startup exception only after the independent exact-device
+    // gate supplied on HpWmiInvocationRequest has accepted the physical target.
+    private static bool IsApprovedStartupKeyboardStatus(HpBiosWmiCommandDefinition definition) =>
+        IsApprovedKeyboardStatus(definition);
 
     private HpWmiInvocationResult InvokeSafeReadOnlyCommand(HpBiosWmiCommandDefinition definition)
     {

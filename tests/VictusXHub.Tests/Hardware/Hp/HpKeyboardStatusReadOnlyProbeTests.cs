@@ -206,7 +206,7 @@ public sealed class HpKeyboardStatusReadOnlyProbeTests
     }
 
     [Fact]
-    public void ProbeRoute_IsExplicitAndCannotRunFromNormalStartupOrDiagnosticPaths()
+    public void DeveloperProbeRoute_RemainsExplicitAndRawOnly()
     {
         string program = ReadRepositoryFile("app", "Program.cs");
         string command = ReadRepositoryFile("app", "Hardware", "Hp", "HpKeyboardStatusReadOnlyProbeCommand.cs");
@@ -225,7 +225,8 @@ public sealed class HpKeyboardStatusReadOnlyProbeTests
                     command.IndexOf("WriteLines(HpKeyboardStatusReadOnlyProbeFormatter.Format(result))", StringComparison.Ordinal));
         Assert.DoesNotContain("hpqBIOSInt4", command, StringComparison.Ordinal);
         Assert.DoesNotContain("0x05", command, StringComparison.Ordinal);
-        Assert.DoesNotContain("KeyboardStatus", capabilityProbe, StringComparison.Ordinal);
+        Assert.DoesNotContain("HpKeyboardStatusReadOnlyProbeCommand.TryRun", capabilityProbe, StringComparison.Ordinal);
+        Assert.Contains("TryInvokeKeyboardStatus(", capabilityProbe, StringComparison.Ordinal);
     }
 
     private static HpKeyboardStatusReadOnlyProbeDevice CreateDevice(

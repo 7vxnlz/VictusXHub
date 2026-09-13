@@ -548,10 +548,7 @@ namespace GHelper
             HpVictusCapabilitySnapshot? snapshot = Program.hpVictusCapabilitySnapshot;
             bool cachedIdentity = snapshot is null;
             bool? detected = snapshot?.IsHpVictus ?? hpCachedDiagnosticReport?.GetHpVictusDetected();
-            HpKeyboardBacklightStatus keyboard = HpKeyboardBacklightStatus.Resolve(
-                detected,
-                GetSnapshotOrReportValue(snapshot?.Model, hpCachedDiagnosticReport, "Model"),
-                GetSnapshotOrReportValue(snapshot?.SystemSku, hpCachedDiagnosticReport, "Sku"));
+            HpKeyboardBacklightStatus keyboard = snapshot?.KeyboardBacklightStatus ?? HpKeyboardBacklightStatus.Unavailable;
             HpGpuModeStatus gpuMode = HpGpuModeStatus.Resolve(
                 detected,
                 GetSnapshotOrReportValue(snapshot?.Model, hpCachedDiagnosticReport, "Model"),
@@ -1163,6 +1160,7 @@ namespace GHelper
         {
             HpVictusCapabilitySnapshot? snapshot = Program.hpVictusCapabilitySnapshot;
             HpDiagnosticReportLoadResult? report = hpCachedDiagnosticReport;
+            HpKeyboardBacklightStatus keyboard = snapshot?.KeyboardBacklightStatus ?? HpKeyboardBacklightStatus.Unavailable;
             HpCapabilityEvidenceValue thermalPolicy = GetHpThermalPolicyVersion(snapshot, hpHistoricalCapabilityEvidence);
             HpCapabilityEvidenceValue fanCount = GetHpFanCount(snapshot, hpHistoricalCapabilityEvidence);
             HpFanMaxPulseHistoryEntry? pulse = hpPulseHistory?.Entry;
@@ -1185,6 +1183,7 @@ namespace GHelper
                 SystemDesignDataDecodeStatus = FormatDecodedStatus(snapshot?.SystemDesignDataInvocationSucceeded == true && snapshot.SystemDesignDataDecodeSucceeded, report, "SystemDesignDataDecodeSucceeded"),
                 ThermalPolicyVersion = FormatThermalPolicyEvidence(thermalPolicy),
                 SoftwareFanControlSupport = FormatDeclaredSupport(snapshot, report),
+                KeyboardBacklight = keyboard.EvidenceText,
                 FanCount = FormatFanCountEvidence(fanCount),
                 MaxFanState = FormatMaxFanState(snapshot, report),
                 Fan1RawLevel = GetSnapshotOrDecodedReportValue(snapshot?.FanGetLevelInvocationSucceeded == true && snapshot.FanGetLevelDecodeSucceeded, snapshot?.FanGetLevelDecoded?.Fan1RawValue, report, "FanGetLevelDecodeSucceeded", "FanGetLevelDecoded.Fan1RawValue"),

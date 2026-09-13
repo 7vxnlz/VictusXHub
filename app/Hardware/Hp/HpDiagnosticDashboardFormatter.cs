@@ -81,7 +81,8 @@ public static class HpDiagnosticDashboardFormatter
             [
                 Row("SystemDesignData decoded", input.SystemDesignDataDecodeStatus),
                 Row("Thermal policy version", input.ThermalPolicyVersion),
-                Row("Software fan control declared by firmware", input.SoftwareFanControlSupport)
+                Row("Software fan control declared by firmware", input.SoftwareFanControlSupport),
+                Row("Keyboard backlight", input.KeyboardBacklight)
             ]),
             new("Fan read-only status",
             [
@@ -171,7 +172,7 @@ public static class HpDiagnosticDashboardFormatter
             ]),
             new("Diagnostic boundaries",
             [
-                Row("Data source", "Startup may issue only the approved read-only SystemDesignData and FanGetCount requests; opening Diagnostic invokes no additional WMI."),
+                Row("Data source", "Startup may issue only the approved read-only SystemDesignData, FanGetCount, and exact-device KeyboardStatus requests; opening Diagnostic invokes no additional WMI."),
                 Row("Explicit probe data", HpDiagnosticStatusText.NormalHpModeDoesNotRunExplicitProbes),
                 Row("Developer-only tests", HpDiagnosticStatusText.ExplicitTestsAreDeveloperOnly),
                 Row("Hardware actions", NoDiagnosticHardwareActions)

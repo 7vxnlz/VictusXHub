@@ -64,6 +64,7 @@ public sealed record HpDiagnosticDashboardInput
     public string? SystemDesignDataDecodeStatus { get; init; }
     public string? ThermalPolicyVersion { get; init; }
     public string? SoftwareFanControlSupport { get; init; }
+    public string? KeyboardBacklight { get; init; }
     public string? FanCount { get; init; }
     public string? MaxFanState { get; init; }
     public string? Fan1RawLevel { get; init; }

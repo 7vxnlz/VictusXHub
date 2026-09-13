@@ -75,7 +75,7 @@ internal static class HpKeyboardStatusReadOnlyProbeCommand
             ["Keyboard STATUS probe rejected: require exactly --hp-victus --hp-keyboard-status-readonly-probe."]);
     }
 
-    private static HpKeyboardStatusReadOnlyProbeDevice ReadDevice() =>
+    internal static HpKeyboardStatusReadOnlyProbeDevice ReadDevice() =>
         new(HpRyzenTemperatureProbeCommand.ReadDevice(), ReadBoardProduct());
 
     private static string ReadBoardProduct()

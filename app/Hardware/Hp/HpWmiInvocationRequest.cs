@@ -6,4 +6,6 @@ public sealed record HpWmiInvocationRequest(
     bool HpWmiReadOnlyTestModeEnabled = false,
     bool ProcessElevated = false,
     bool AllowSystemDesignDataAtStartup = false,
-    bool AllowFanGetCountAtStartup = false);
+    bool AllowFanGetCountAtStartup = false,
+    bool AllowKeyboardStatusAtStartup = false,
+    bool ExactKeyboardStatusDeviceGateAccepted = false);

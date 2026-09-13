@@ -89,12 +89,14 @@ public sealed class HpDiagnosticDashboardFormatterTests
         IReadOnlyList<HpDiagnosticDashboardSection> sections = HpDiagnosticDashboardFormatter.BuildSections(new()
         {
             ThermalPolicyVersion = "V1 (Current startup SystemDesignData)",
+            KeyboardBacklight = "Keyboard backlight: On (Current startup KeyboardStatus).",
             FanCount = "2 (Current startup FanGetCount)"
         });
 
         HpDiagnosticDashboardSection telemetry = Assert.Single(sections, section => section.Title == "Read-only telemetry");
         HpDiagnosticDashboardSection fan = Assert.Single(sections, section => section.Title == "Fan read-only status");
         Assert.Contains(telemetry.Rows, row => row.Label == "Thermal policy version" && row.Value == "V1 (Current startup SystemDesignData)");
+        Assert.Contains(telemetry.Rows, row => row.Label == "Keyboard backlight" && row.Value == "Keyboard backlight: On (Current startup KeyboardStatus).");
         Assert.Contains(fan.Rows, row => row.Label == "Fan count" && row.Value == "2 (Current startup FanGetCount)");
     }
 

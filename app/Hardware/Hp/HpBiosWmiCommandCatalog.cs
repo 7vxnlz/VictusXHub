@@ -123,7 +123,7 @@ public static class HpBiosWmiCommandCatalog
             128,
             HpBiosWmiCommandAccess.ReadOnly,
             HpBiosWmiCommandSafety.SafeReadOnlyInvocation,
-            "Exact-device developer-only keyboard STATUS raw-capture contract. Returned data remains uninterpreted.",
+            "Exact-device keyboard STATUS read-only contract; developer probe output remains raw-only.",
             0x20009),
 
         new(

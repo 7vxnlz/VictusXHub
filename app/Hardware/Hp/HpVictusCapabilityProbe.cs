@@ -60,6 +60,10 @@ public static class HpVictusCapabilityProbe
             "FanGetCount",
             hpWmiSnapshot,
             HpBiosWmiCommandCatalog.Definitions);
+        var keyboardStatusDryRun = invocationClient.DryRun(
+            "KeyboardStatus",
+            hpWmiSnapshot,
+            HpBiosWmiCommandCatalog.Definitions);
         var fanMaxGetDryRun = invocationClient.DryRun(
             "FanMaxGet",
             hpWmiSnapshot,
@@ -79,6 +83,13 @@ public static class HpVictusCapabilityProbe
             hpVictusMode &&
             fanGetCountDryRun.Success &&
             !fanGetCountDryRun.Invoked;
+        HpKeyboardStatusReadOnlyProbeGateResult keyboardStatusGate = HpKeyboardStatusReadOnlyProbeGate.Evaluate(
+            HpKeyboardStatusReadOnlyProbeCommand.ReadDevice());
+        bool keyboardStatusInvocationAllowed =
+            hpVictusMode &&
+            keyboardStatusGate.IsAccepted &&
+            keyboardStatusDryRun.Success &&
+            !keyboardStatusDryRun.Invoked;
         bool fanMaxGetInvocationAllowed =
             hpVictusMode &&
             hpWmiReadOnlyTestMode &&
@@ -117,6 +128,15 @@ public static class HpVictusCapabilityProbe
             fanGetCountInvocation.Success,
             fanGetCountInvocation.Invoked,
             fanGetCountInvocation.ReturnedBytes);
+        var keyboardStatusInvocation = TryInvokeKeyboardStatus(
+            invocationClient,
+            hpWmiSnapshot,
+            HpBiosWmiCommandCatalog.Definitions,
+            keyboardStatusGate);
+        HpKeyboardStatusReadOnlyProbeResult keyboardStatusResult = HpKeyboardStatusReadOnlyProbeResult.FromInvocation(keyboardStatusInvocation);
+        HpKeyboardBacklightStatus keyboardBacklightStatus = HpKeyboardBacklightStatus.Resolve(
+            keyboardStatusGate,
+            keyboardStatusResult);
         var fanMaxGetInvocation = TryInvokeFanMaxGet(
             invocationClient,
             hpWmiSnapshot,
@@ -207,7 +227,15 @@ public static class HpVictusCapabilityProbe
             hpWmiInvocationRequiresElevation,
             hpWmiInvocationBlockedReason,
             hpWmiRecommendedNextStep,
-            errors.ToArray());
+            errors.ToArray())
+        {
+            KeyboardStatusInvocationAllowed = keyboardStatusInvocationAllowed,
+            KeyboardStatusInvocationAttempted = keyboardStatusInvocation.Invoked,
+            KeyboardStatusInvocationSucceeded = keyboardStatusInvocation.Success,
+            KeyboardStatusReturnedByteCount = keyboardStatusInvocation.ReturnedByteCount ?? 0,
+            KeyboardStatusInvocationError = FirstNonEmpty(keyboardStatusInvocation.Errors),
+            KeyboardBacklightStatus = keyboardBacklightStatus
+        };
     }
 
     public static string WriteReport(HpVictusCapabilitySnapshot snapshot)
@@ -419,6 +447,34 @@ public static class HpVictusCapabilityProbe
             hpWmiSnapshot);
     }
 
+    private static HpWmiInvocationResult TryInvokeKeyboardStatus(
+        HpWmiInvocationClient invocationClient,
+        HpWmiReadOnlySnapshot hpWmiSnapshot,
+        IEnumerable<HpBiosWmiCommandDefinition> definitions,
+        HpKeyboardStatusReadOnlyProbeGateResult exactDeviceGate)
+    {
+        HpBiosWmiCommandDefinition? definition = definitions.FirstOrDefault(candidate =>
+            string.Equals(candidate.Name, "KeyboardStatus", StringComparison.OrdinalIgnoreCase));
+
+        if (definition is null)
+        {
+            return HpWmiInvocationResult.Rejected("KeyboardStatus", "command definition not found");
+        }
+
+        if (!exactDeviceGate.IsAccepted)
+        {
+            return HpWmiInvocationResult.Rejected(definition, "exact KeyboardStatus device gate did not match");
+        }
+
+        return invocationClient.TryInvoke(
+            new HpWmiInvocationRequest(
+                definition,
+                global::AppConfig.IsHpVictusHardwareMode(),
+                AllowKeyboardStatusAtStartup: true,
+                ExactKeyboardStatusDeviceGateAccepted: true),
+            hpWmiSnapshot);
+    }
+
     private static HpWmiInvocationResult TryInvokeFanGetLevel(
         HpWmiInvocationClient invocationClient,
         HpWmiReadOnlySnapshot hpWmiSnapshot,
@@ -455,7 +511,7 @@ public static class HpVictusCapabilityProbe
 
         if (!hpWmiReadOnlyTestMode)
         {
-            return "Only the startup SystemDesignData and FanGetCount reads are eligible in normal --hp-victus mode; all other HP WMI invocations require --hp-wmi-readonly-test and elevation";
+            return "Only the startup SystemDesignData, FanGetCount, and exact-device KeyboardStatus reads are eligible in normal --hp-victus mode; all other HP WMI invocations require --hp-wmi-readonly-test and elevation";
         }
 
         if (!processElevated)
@@ -478,7 +534,7 @@ public static class HpVictusCapabilityProbe
 
         if (!hpWmiReadOnlyTestMode)
         {
-            return "Startup may perform the approved read-only SystemDesignData and FanGetCount requests; use --hp-wmi-readonly-test only for controlled elevated developer testing of other commands.";
+            return "Startup may perform the approved read-only SystemDesignData, FanGetCount, and exact-device KeyboardStatus requests; use --hp-wmi-readonly-test only for controlled elevated developer testing of other commands.";
         }
 
         if (!processElevated)

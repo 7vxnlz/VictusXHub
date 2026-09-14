@@ -60,6 +60,11 @@ namespace GHelper
         [STAThread]
         public static void Main(string[] args)
         {
+            if (HpGpuModeReadOnlyProbeCommand.TryRun(args))
+            {
+                return;
+            }
+
             if (HpKeyboardStatusReadOnlyProbeCommand.TryRun(args))
             {
                 return;

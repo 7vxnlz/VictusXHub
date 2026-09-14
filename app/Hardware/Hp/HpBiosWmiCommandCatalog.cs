@@ -93,15 +93,16 @@ public static class HpBiosWmiCommandCatalog
             "Read-intent GPU power state command candidate. GPU power writes remain forbidden."),
 
         new(
-            "GpuMode",
+            "GpuBiosSelection",
             HpBiosWmiCommandFamily.Gpu,
             0x52,
             "hpqBIOSInt4",
             0,
             4,
-            HpBiosWmiCommandAccess.Unknown,
-            HpBiosWmiCommandSafety.Unknown,
-            "Ambiguous GPU mode command candidate. References use the same command ID around read and write flows, so this must stay blocked until separately verified."),
+            HpBiosWmiCommandAccess.ReadOnly,
+            HpBiosWmiCommandSafety.SafeReadOnlyInvocation,
+            "Exact-device developer-only read of the selected BIOS graphics configuration; applied topology remains unproven.",
+            0x01),
 
         new(
             "KeyboardType",

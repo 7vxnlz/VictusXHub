@@ -15,6 +15,7 @@ public sealed class HpWmiInvocationClient
     private const string FanGetCountCommandName = "FanGetCount";
     private const string FanMaxGetCommandName = "FanMaxGet";
     private const string FanGetLevelCommandName = "FanGetLevel";
+    private const string GpuBiosSelectionCommandName = "GpuBiosSelection";
     private const string KeyboardStatusCommandName = "KeyboardStatus";
 
     private static readonly byte[] BiosSign = [0x53, 0x45, 0x43, 0x55];
@@ -97,7 +98,7 @@ public sealed class HpWmiInvocationClient
 
         if (!IsApprovedInvocationCommand(request.CommandDefinition))
         {
-            const string reason = "only SystemDesignData, FanGetCount, FanMaxGet, FanGetLevel, and the exact KeyboardStatus contract are approved for real HP BIOS WMI invocation";
+            const string reason = "only SystemDesignData, FanGetCount, FanMaxGet, FanGetLevel, the exact GPU BIOS-selection getter, and the exact KeyboardStatus contract are approved for real HP BIOS WMI invocation";
             _log?.Invoke($"HP WMI invocation sandbox rejected '{request.CommandDefinition.Name}': {reason}");
             return HpWmiInvocationResult.Rejected(request.CommandDefinition, reason);
         }
@@ -207,7 +208,18 @@ public sealed class HpWmiInvocationClient
         string.Equals(definition.Name, FanGetCountCommandName, StringComparison.OrdinalIgnoreCase) ||
         string.Equals(definition.Name, FanMaxGetCommandName, StringComparison.OrdinalIgnoreCase) ||
         string.Equals(definition.Name, FanGetLevelCommandName, StringComparison.OrdinalIgnoreCase) ||
+        IsApprovedGpuBiosSelection(definition) ||
         IsApprovedKeyboardStatus(definition);
+
+    private static bool IsApprovedGpuBiosSelection(HpBiosWmiCommandDefinition definition) =>
+        string.Equals(definition.Name, GpuBiosSelectionCommandName, StringComparison.Ordinal) &&
+        definition.BiosCommand == 0x01 &&
+        definition.CommandId == 0x52 &&
+        string.Equals(definition.MethodName, "hpqBIOSInt4", StringComparison.Ordinal) &&
+        definition.ExpectedInputSize == 0 &&
+        definition.ExpectedOutputSize == 4 &&
+        definition.Access == HpBiosWmiCommandAccess.ReadOnly &&
+        definition.Safety == HpBiosWmiCommandSafety.SafeReadOnlyInvocation;
 
     private static bool IsApprovedKeyboardStatus(HpBiosWmiCommandDefinition definition) =>
         string.Equals(definition.Name, KeyboardStatusCommandName, StringComparison.Ordinal) &&
